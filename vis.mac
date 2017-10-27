@@ -104,5 +104,5 @@
 #/vis/viewer/zoom 700
 
 /vis/viewer/set/viewpointThetaPhi 30 30
-/vis/viewer/zoom 4
+#/vis/viewer/zoom 4
 #/vis/ogl/export LaBrSetup
