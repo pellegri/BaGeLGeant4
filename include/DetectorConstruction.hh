@@ -467,7 +467,9 @@ private:
     ////    New K600 Target Chamber - New scattering chamber, beam right side side off
     G4bool      K600_BACTAR_beamLeftSideOff_Presence;
 
-    
+    ////////////////////////////////////////////////
+    ////    ALBA shielding - Truncated Icosahedron
+    G4bool      K600_ALBA_TruncIcos_Shielding_Presence;
     
     /////////////////////////////////////
     //  K600 Target

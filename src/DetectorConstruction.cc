@@ -698,7 +698,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     ////    New K600 Target Chamber - New scattering chamber, beam right side side off
     K600_BACTAR_beamLeftSideOff_Presence = false;
 
-    
+    ////////////////////////////////////////////////
+    ////    ALBA shielding - Truncated Icosahedron
+    K600_ALBA_TruncIcos_Shielding_Presence = true;
     
     /////////////////////////////////////
     //  K600 Target
@@ -917,19 +919,19 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     
     if(K600_BACTAR_sidesOn_Presence)
     {
-        sprintf(meshPath, "../K600/Mesh-Models/STRUCTURES/BACTAR/BACTAR_sidesOn.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/BACTAR/BACTAR_sidesOn.ply");
     }
     if(K600_BACTAR_sidesOff_Presence)
     {
-        sprintf(meshPath, "../K600/Mesh-Models/STRUCTURES/BACTAR/BACTAR_sidesOff.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/BACTAR/BACTAR_sidesOff.ply");
     }
     if(K600_BACTAR_beamRightSideOff_Presence)
     {
-        sprintf(meshPath, "../K600/Mesh-Models/STRUCTURES/BACTAR/BACTAR_beamRightSideOff.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/BACTAR/BACTAR_beamRightSideOff.ply");
     }
     if(K600_BACTAR_beamLeftSideOff_Presence)
     {
-        sprintf(meshPath, "../K600/Mesh-Models/STRUCTURES/BACTAR/BACTAR_beamLightSideOff.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/BACTAR/BACTAR_beamLightSideOff.ply");
     }
 
     
@@ -958,6 +960,44 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         K600_BACTAR_TC_VisAtt->SetForceSolid(true);
         LogicBACTAR ->SetVisAttributes(K600_BACTAR_TC_VisAtt);
     }
+    
+    //////////////////////////////////////////////////////////
+    //              Scattering Chamber - CADMesh
+    //////////////////////////////////////////////////////////
+    
+    if(K600_ALBA_TruncIcos_Shielding_Presence)
+    {
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/ALBA/ALBA_shield.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/ALBA/ALBA_shield_mod.ply");
+    }
+    
+    if(K600_ALBA_TruncIcos_Shielding_Presence)
+    {
+        G4ThreeVector offset_ALBA_shield = G4ThreeVector(0*cm, 0*cm, 0*cm);
+        
+        CADMesh * mesh_ALBA_shield = new CADMesh(meshPath, meshType, mm, offset_ALBA_shield, false);
+        
+        G4VSolid * SolidALBA_shield = mesh_ALBA_shield->TessellatedMesh();
+        
+        G4LogicalVolume* LogicALBA_shield = new G4LogicalVolume(SolidALBA_shield, G4_Al_Material, "ALBA_shield", 0, 0, 0);
+        
+        new G4PVPlacement(0,               // no rotation
+                          G4ThreeVector(), // at (x,y,z)
+                          LogicALBA_shield,       // its logical volume
+                          "ALBA_shield",       // its name
+                          LogicVacuumChamber,         // its mother  volume
+                          false,           // no boolean operations
+                          0,               // copy number
+                          fCheckOverlaps); // checking overlaps
+        
+        
+        //  Visualisation
+        G4VisAttributes* K600_ALBA_shield_TruncIcos_VisAtt = new G4VisAttributes(G4Colour(0.8,0.8,0.8));
+        K600_ALBA_shield_TruncIcos_VisAtt->SetForceSolid(true);
+        LogicALBA_shield ->SetVisAttributes(K600_ALBA_shield_TruncIcos_VisAtt);
+    }
+    
+    
     
     
     //////////////////////////////////////////////////////////
@@ -2410,7 +2450,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //////////////////////////////////////////////////////////
         //              CLOVER Internal Vacuum - CADMesh
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/CLOVER-InternalVacuum/CloverInternalVacuum.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/CLOVER-InternalVacuum/CloverInternalVacuum.ply");
 
         CADMesh * mesh_CLOVERInternalVacuum = new CADMesh(meshPath, meshType, mm, offset_CLOVERInternalVacuum, false);
         
@@ -2425,7 +2465,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         ///////////////////////////////////////////////////////
         //              CLOVER Encasement - CADMesh
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Clover-Encasement/CloverEncasement.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Clover-Encasement/CloverEncasement.ply");
 
         CADMesh * mesh_CLOVEREncasement = new CADMesh(meshPath, meshType, mm, offset_CLOVEREncasement, false);
         
@@ -2437,16 +2477,16 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //////////////////////////////////////////////////////////
         //              CLOVER HPGeCrystals - CADMesh
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal1.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal1.ply");
         CADMesh * mesh_CLOVERHPGeCrystal1 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal1, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal2.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal2.ply");
         CADMesh * mesh_CLOVERHPGeCrystal2 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal2, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal3.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal3.ply");
         CADMesh * mesh_CLOVERHPGeCrystal3 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal3, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal4.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal4.ply");
         CADMesh * mesh_CLOVERHPGeCrystal4 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal4, false);
         
         G4VSolid * Solid_HPGeCrystal1 = mesh_CLOVERHPGeCrystal1->TessellatedMesh();
@@ -2484,7 +2524,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //              CLOVER Shield Body - CADMesh
         ///////////////////////////////////////////////////////
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body.ply");
         CADMesh * mesh_CLOVER_Shield_Body = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_Body, false);
         
         G4VSolid * Solid_CLOVER_Shield_Body = mesh_CLOVER_Shield_Body->TessellatedMesh();
@@ -2495,7 +2535,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //              CLOVER Shield Heavimet - CADMesh
         ///////////////////////////////////////////////////////
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield.ply");
         CADMesh * mesh_CLOVER_Shield_Heavimet = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_Heavimet, false);
         
         G4VSolid * Solid_CLOVER_Shield_Heavimet = mesh_CLOVER_Shield_Heavimet->TessellatedMesh();
@@ -2507,7 +2547,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         ///////////////////////////////////////////////////////
         
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMT-Connectors/PMT-ConnecterArray.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMT-Connectors/PMT-ConnecterArray.ply");
         CADMesh * mesh_CLOVER_Shield_PMTConArray = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMTConArray, false);
         
         G4VSolid * Solid_CLOVER_Shield_PMTConArray = mesh_CLOVER_Shield_PMTConArray->TessellatedMesh();
@@ -2519,52 +2559,52 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //      CLOVER Shield BGO Crystals - CADMesh
         ///////////////////////////////////////////////////////
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal1.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal1.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal1 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal2.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal2.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal2 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal3.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal3.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal3 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal4.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal4.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal4 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal5.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal5.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal5 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal6.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal6.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal6 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal7.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal7.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal7 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal8.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal8.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal8 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal9.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal9.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal9 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal10.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal10.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal10 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal11.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal11.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal11 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal12.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal12.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal12 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal13.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal13.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal13 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal14.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal14.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal14 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal15.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal15.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal15 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal16.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal16.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal16 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
         G4VSolid * Solid_CLOVER_Shield_BGOCrystal[16];
@@ -2596,52 +2636,52 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //      CLOVER Shield PMT's
         ////////////////////////////////////
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT1.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT1.ply");
         CADMesh * mesh_CLOVER_Shield_PMT1 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT2.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT2.ply");
         CADMesh * mesh_CLOVER_Shield_PMT2 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT3.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT3.ply");
         CADMesh * mesh_CLOVER_Shield_PMT3 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT4.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT4.ply");
         CADMesh * mesh_CLOVER_Shield_PMT4 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT5.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT5.ply");
         CADMesh * mesh_CLOVER_Shield_PMT5 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT6.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT6.ply");
         CADMesh * mesh_CLOVER_Shield_PMT6 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT7.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT7.ply");
         CADMesh * mesh_CLOVER_Shield_PMT7 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT8.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT8.ply");
         CADMesh * mesh_CLOVER_Shield_PMT8 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT9.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT9.ply");
         CADMesh * mesh_CLOVER_Shield_PMT9 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT10.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT10.ply");
         CADMesh * mesh_CLOVER_Shield_PMT10 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT11.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT11.ply");
         CADMesh * mesh_CLOVER_Shield_PMT11 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT12.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT12.ply");
         CADMesh * mesh_CLOVER_Shield_PMT12 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT13.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT13.ply");
         CADMesh * mesh_CLOVER_Shield_PMT13 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT14.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT14.ply");
         CADMesh * mesh_CLOVER_Shield_PMT14 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT15.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT15.ply");
         CADMesh * mesh_CLOVER_Shield_PMT15 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT16.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT16.ply");
         CADMesh * mesh_CLOVER_Shield_PMT16 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
         
@@ -3113,13 +3153,14 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         
         ////    STANDARD
         //LaBr3Ce_InternalVacuum_position[i] = (LaBr3Ce_Distance[i] + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*G4ThreeVector(std::sin(LaBr3Ce_theta[i]) * std::cos(LaBr3Ce_phi[i]), std::sin(LaBr3Ce_theta[i]) * std::sin(LaBr3Ce_phi[i]), std::cos(LaBr3Ce_theta[i]));
+        LaBr3Ce_InternalVacuum_position[i] = (LaBr3Ce_Distance[i] + 0.4*mm + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*G4ThreeVector(std::sin(LaBr3Ce_theta[i]) * std::cos(LaBr3Ce_phi[i]), std::sin(LaBr3Ce_theta[i]) * std::sin(LaBr3Ce_phi[i]), std::cos(LaBr3Ce_theta[i]));
         ////    TEMP
         //LaBr3Ce_InternalVacuum_position[i] = (17.0*cm + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*G4ThreeVector(std::sin(LaBr3Ce_theta[i]) * std::cos(LaBr3Ce_phi[i]), std::sin(LaBr3Ce_theta[i]) * std::sin(LaBr3Ce_phi[i]), std::cos(LaBr3Ce_theta[i]));
         //  For comparison for rates
         //LaBr3Ce_InternalVacuum_position[i] = (13.3*cm + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*G4ThreeVector(std::sin(LaBr3Ce_theta[i]) * std::cos(LaBr3Ce_phi[i]), std::sin(LaBr3Ce_theta[i]) * std::sin(LaBr3Ce_phi[i]), std::cos(LaBr3Ce_theta[i]));
         //  For comparison for peak-to-total
         //LaBr3Ce_InternalVacuum_position[i] = (13.2*cm + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*G4ThreeVector(std::sin(LaBr3Ce_theta[i]) * std::cos(LaBr3Ce_phi[i]), std::sin(LaBr3Ce_theta[i]) * std::sin(LaBr3Ce_phi[i]), std::cos(LaBr3Ce_theta[i]));
-        LaBr3Ce_InternalVacuum_position[i] = (8.9632*cm + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*G4ThreeVector(std::sin(LaBr3Ce_theta[i]) * std::cos(LaBr3Ce_phi[i]), std::sin(LaBr3Ce_theta[i]) * std::sin(LaBr3Ce_phi[i]), std::cos(LaBr3Ce_theta[i]));
+        //LaBr3Ce_InternalVacuum_position[i] = (8.9632*cm + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*G4ThreeVector(std::sin(LaBr3Ce_theta[i]) * std::cos(LaBr3Ce_phi[i]), std::sin(LaBr3Ce_theta[i]) * std::sin(LaBr3Ce_phi[i]), std::cos(LaBr3Ce_theta[i]));
         
         if(i>=20)
         {
@@ -3362,7 +3403,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
             
             G4double z_Q_Offset = 4.4*mm+ 100*cm;
             
-            G4MagneticField* PurgMagField = new MagneticFieldMapping("../K600/MagneticFieldMaps/Quadrupole_MagneticFieldMap.TABLE", z_Q_Offset);
+            G4MagneticField* PurgMagField = new MagneticFieldMapping("../K600-ALBA/MagneticFieldMaps/Quadrupole_MagneticFieldMap.TABLE", z_Q_Offset);
             fEquationMagneticField_K600_Q = new G4Mag_UsualEqRhs(PurgMagField);
             
             fieldManagerMagneticField_K600_Q = new G4FieldManager(PurgMagField);
@@ -3741,6 +3782,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         Logic_LaBr3Ce_InternalVacuum[i]->SetVisAttributes(LaBr3Ce_InternalVacuumChamber_VisAtt);
     }
 
+    
     //--------------------------------
     //  TEMP
     //  LaBr3Ce - LaBr3Ce Pentagonal
@@ -3839,6 +3881,7 @@ void DetectorConstruction::SetupTruncatedIcosahedron()
     vertices_truncatedIcosahedron.push_back(G4ThreeVector(-C1,  -C2,  0.5));
     vertices_truncatedIcosahedron.push_back(G4ThreeVector(-C1,  -C2, -0.5));
     
+    //------------------------------------------------
     verticesPerFace_truncatedIcosahedron.push_back(std::vector<double>{0,  2, 18, 42, 38, 14});
     verticesPerFace_truncatedIcosahedron.push_back(std::vector<double>{1,  3, 17, 41, 37, 13});
     verticesPerFace_truncatedIcosahedron.push_back(std::vector<double>{2,  0, 12, 36, 40, 16});
@@ -3897,7 +3940,7 @@ void DetectorConstruction::SetupTruncatedIcosahedron()
     }
     
     //----------------------------------------------------------------------------
-    double smallestAngle = 0.0; // deg
+    double smallestAngle_hexgonal = 0.0; // deg
     for(int i=0; i<(int) vertex_hexagonFaces_truncatedIcosahedron.size(); i++)
     {
         for(int j=i+1; j<(int) vertex_hexagonFaces_truncatedIcosahedron.size(); j++)
@@ -3906,18 +3949,48 @@ void DetectorConstruction::SetupTruncatedIcosahedron()
             
             if(i==0 && j==1)
             {
-                smallestAngle = angle;
+                smallestAngle_hexgonal = angle;
             }
-            else if(angle<smallestAngle)
+            else if(angle<smallestAngle_hexgonal)
             {
-                smallestAngle = angle;
+                smallestAngle_hexgonal = angle;
             }
         }
     }
     
-    G4cout << "smallestAngle (hexagonal) [deg]: " << smallestAngle << std::endl;
+    G4cout.precision(15);
+    
+    G4cout << "smallestAngle_hexgonal [deg]: " << smallestAngle_hexgonal << std::endl;
     
     //----------------------------------------------------------------------------
+    double smallestAngle_pentagonal = 0.0;
+    for(int i=0; i<(int) vertex_pentagonFaces_truncatedIcosahedron.size(); i++)
+    {
+        for(int j=i+1; j<(int) vertex_pentagonFaces_truncatedIcosahedron.size(); j++)
+        {
+            double angle = vertex_pentagonFaces_truncatedIcosahedron[i].angle(vertex_pentagonFaces_truncatedIcosahedron[j])/deg;
+            
+            if(i==0 && j==1)
+            {
+                smallestAngle_pentagonal = angle;
+                G4cout << "i: " << i << G4endl;
+                G4cout << "j: " << j << G4endl;
+                G4cout << G4endl;
+            }
+            else if(angle<smallestAngle_pentagonal)
+            {
+                smallestAngle_pentagonal = angle;
+                G4cout << "i: " << i << G4endl;
+                G4cout << "j: " << j << G4endl;
+                G4cout << G4endl;
+            }
+        }
+    }
+    
+    G4cout << "smallestAngle_pentagonal [deg]: " << smallestAngle_pentagonal << std::endl;
+    
+    //----------------------------------------------------------------------------
+    double smallestAngle_hexagonal_pentagonal = 0.0;
     for(int i=0; i<(int) vertex_hexagonFaces_truncatedIcosahedron.size(); i++)
     {
         for(int j=0; j<(int) vertex_pentagonFaces_truncatedIcosahedron.size(); j++)
@@ -3926,16 +3999,42 @@ void DetectorConstruction::SetupTruncatedIcosahedron()
             
             if(i==0 && j==0)
             {
-                smallestAngle = angle;
+                smallestAngle_hexagonal_pentagonal = angle;
             }
-            else if(angle<smallestAngle)
+            else if(angle<smallestAngle_hexagonal_pentagonal)
             {
-                smallestAngle = angle;
+                smallestAngle_hexagonal_pentagonal = angle;
             }
         }
     }
     
-    G4cout << "smallestAngle (pentagonal) [deg]: " << smallestAngle << std::endl;
+    G4cout << "smallestAngle_hexagonal_pentagonal [deg]: " << smallestAngle_hexagonal_pentagonal << std::endl;
+
+    //----------------------------------------------------------------------------
+    //      Modifying the orientation of the truncated icosahedron
+    for(int i=0; i<(int) vertex_allFaces_truncatedIcosahedron.size(); i++)
+    {
+        std::get<1>(vertex_allFaces_truncatedIcosahedron[i]).rotateY(90.0*deg);
+        std::get<1>(vertex_allFaces_truncatedIcosahedron[i]).rotateX(smallestAngle_pentagonal/2.0*deg);
+        std::get<1>(vertex_allFaces_truncatedIcosahedron[i]).rotateZ(90.0*deg);
+    }
+    
+    for(int i=0; i<(int) vertex_pentagonFaces_truncatedIcosahedron.size(); i++)
+    {
+        vertex_pentagonFaces_truncatedIcosahedron[i].rotateY(90.0*deg);
+        vertex_pentagonFaces_truncatedIcosahedron[i].rotateX(smallestAngle_pentagonal/2.0*deg);
+        vertex_pentagonFaces_truncatedIcosahedron[i].rotateZ(90.0*deg);
+        
+    }
+
+    for(int i=0; i<(int) vertex_hexagonFaces_truncatedIcosahedron.size(); i++)
+    {
+        vertex_hexagonFaces_truncatedIcosahedron[i].rotateY(90.0*deg);
+        vertex_hexagonFaces_truncatedIcosahedron[i].rotateX(smallestAngle_pentagonal/2.0*deg);
+        vertex_hexagonFaces_truncatedIcosahedron[i].rotateZ(90.0*deg);
+    }
+    
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
