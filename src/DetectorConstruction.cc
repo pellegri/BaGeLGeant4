@@ -967,7 +967,9 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     
     if(K600_ALBA_TruncIcos_Shielding_Presence)
     {
+        //  Without tolerances
         //sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/ALBA/ALBA_shield.ply");
+        //  With tolerances
         sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/ALBA/ALBA_shield_mod.ply");
     }
     
