@@ -336,8 +336,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     ////    ISOTROPIC - Inverse Transform Method
     
     
-    //G4double theta = acos(1 - (2.0*G4UniformRand()))/deg; // 0.0->180.0
-    G4double theta = acos(1 - (1.0*G4UniformRand()))/deg; // 0.0->90.0 deg
+    G4double theta = acos(1 - (2.0*G4UniformRand()))/deg; // 0.0->180.0
+    //G4double theta = acos(1 - (1.0*G4UniformRand()))/deg; // 0.0->90.0 deg
     //G4double theta = acos(1 - (1.0*G4UniformRand() + 1.0))/deg; // 90.0->180.0 deg
 
     ////    Collimator - 2.0 deg range

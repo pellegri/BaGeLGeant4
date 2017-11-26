@@ -39,6 +39,7 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+#include <vector>
 
 class G4Run;
 
@@ -68,6 +69,23 @@ public:
     
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
+    
+    std::vector<int> laBr3Ce_iD;
+    std::vector<double> laBr3Ce_energy;
+    std::vector<double> laBr3Ce_theta;
+    std::vector<double> laBr3Ce_phi;
+    std::vector<double> laBr3Ce_xPos;
+    std::vector<double> laBr3Ce_yPos;
+    std::vector<double> laBr3Ce_zPos;
+    
+    void SetLaBr3Ce_IDs(std::vector<int> vec) {laBr3Ce_iD = vec;};
+    void SetLaBr3Ce_Energies(std::vector<double> vec) {laBr3Ce_energy = vec;};
+    void SetLaBr3Ce_Thetas(std::vector<double> vec) {laBr3Ce_theta = vec;};
+    void SetLaBr3Ce_Phis(std::vector<double> vec) {laBr3Ce_phi = vec;};
+    void SetLaBr3Ce_xPos(std::vector<double> vec) {laBr3Ce_xPos = vec;};
+    void SetLaBr3Ce_yPos(std::vector<double> vec) {laBr3Ce_yPos = vec;};
+    void SetLaBr3Ce_zPos(std::vector<double> vec) {laBr3Ce_zPos = vec;};
+    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

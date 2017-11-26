@@ -35,7 +35,6 @@
 //
 
 #include "EventAction.hh"
-#include "RunAction.hh"
 #include "Analysis.hh"
 
 #include "G4RunManager.hh"
@@ -52,8 +51,9 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction()
+EventAction::EventAction(RunAction* runAction)
 : G4UserEventAction(),
+fRunAction(runAction),
 fEnergyAbs(0.),
 fEnergyGap(0.),
 fTrackLAbs(0.),
@@ -160,6 +160,15 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
             }
         }
     }
+    
+    //------------------------------------------------
+    LaBr3Ce_Number_vec.clear();
+    LaBr3Ce_Energy_vec.clear();
+    LaBr3Ce_Theta_vec.clear();
+    LaBr3Ce_Phi_vec.clear();
+    LaBr3Ce_xPos_vec.clear();
+    LaBr3Ce_yPos_vec.clear();
+    LaBr3Ce_zPos_vec.clear();
     
     for(G4int i=0; i<20; i++)
     {
@@ -459,8 +468,8 @@ void EventAction::EndOfEventAction(const G4Event* event)
     //
     ////////////////////////////////////////////////////
     
-    GainLaBr3Ce = 1.0;
-    OffsetLaBr3Ce = 0.0;
+    //GainLaBr3Ce = 1.0;
+    //OffsetLaBr3Ce = 0.0;
     bool eventTriggered_LaBr3Ce = false;
     int eventN_LaBr3Ce = 0;
 
@@ -468,63 +477,69 @@ void EventAction::EndOfEventAction(const G4Event* event)
     {
         for(G4int k=0; k<LaBr3Ce_TotalTimeSamples; k++)
         {
-            
             if(G4RandGauss::shoot(LaBr3Ce_EDep[i][k], 0.7) >= LaBr3Ce_LaBr3CeCrystal_ThresholdEnergy)
             {
-                if(eventN_LaBr3Ce==0)
-                {
-                    eventTriggered_LaBr3Ce = true;
-                }
+                //------------------------------------------------
+                LaBr3Ce_Number_vec.push_back(i);
+
+                //------------------------------------------------
+                LaBr3Ce_EWpositionX[i][k] *= (1.0/LaBr3Ce_EDep[i][k]);
+                LaBr3Ce_EWpositionY[i][k] *= (1.0/LaBr3Ce_EDep[i][k]);
+                LaBr3Ce_EWpositionZ[i][k] *= (1.0/LaBr3Ce_EDep[i][k]);
                 
-                if(eventN_LaBr3Ce<3)
+                LaBr3Ce_xPos_vec.push_back(LaBr3Ce_EWpositionX[i][k]);
+                LaBr3Ce_yPos_vec.push_back(LaBr3Ce_EWpositionY[i][k]);
+                LaBr3Ce_zPos_vec.push_back(LaBr3Ce_EWpositionZ[i][k]);
+                
+                //------------------------------------------------
+                double normVector, theta, phi;
+                
+                normVector = pow(pow(LaBr3Ce_EWpositionX[i][k],2) + pow(LaBr3Ce_EWpositionY[i][k],2) + pow(LaBr3Ce_EWpositionZ[i][k],2) , 0.5);
+                theta = acos(LaBr3Ce_EWpositionZ[i][k]/normVector)/deg;
+                
+                if(LaBr3Ce_EWpositionX[i][k]==0)
                 {
-                    LaBr3Ce_EDep[i][k] = abs(G4RandGauss::shoot(LaBr3Ce_EDep[i][k], 1.7));
+                    if(LaBr3Ce_EWpositionY[i][k]==0) phi = 0;
+                    if(LaBr3Ce_EWpositionY[i][k]>0) phi = 90;
+                    if(LaBr3Ce_EWpositionY[i][k]<0) phi = 270;
+                }
+                else
+                {
+                    phi = atan(LaBr3Ce_EWpositionY[i][k]/LaBr3Ce_EWpositionX[i][k])/deg;
                     
-                    analysisManager->FillNtupleIColumn(0, eventN_LaBr3Ce*4, i);
-                    analysisManager->FillNtupleDColumn(0, (eventN_LaBr3Ce*4)+1, LaBr3Ce_EDep[i][k]);
+                    if(LaBr3Ce_EWpositionX[i][k]>0 && LaBr3Ce_EWpositionY[i][k]>0) phi = phi; // deg
+                    if(LaBr3Ce_EWpositionX[i][k]<0 && LaBr3Ce_EWpositionY[i][k]>0) phi = phi + 180.; // deg
+                    if(LaBr3Ce_EWpositionX[i][k]<0 && LaBr3Ce_EWpositionY[i][k]<0) phi = phi + 180.; // deg
+                    if(LaBr3Ce_EWpositionX[i][k]>0 && LaBr3Ce_EWpositionY[i][k]<0) phi = phi + 360.; // deg
                 }
-                
+
+                LaBr3Ce_Theta_vec.push_back(theta);
+                LaBr3Ce_Phi_vec.push_back(phi);
+
+                //------------------------------------------------
+                LaBr3Ce_EDep[i][k] = abs(G4RandGauss::shoot(LaBr3Ce_EDep[i][k], 1.7));
+                LaBr3Ce_Energy_vec.push_back(LaBr3Ce_EDep[i][k]);
+
                 eventN_LaBr3Ce++;
             }
-            
-            
-            /*
-            if(LaBr3Ce_EDep[i][k]>0.0)
-            {
-                eventTriggered_LaBr3Ce = true;
-            }
-            */
         }
     }
     
-    
-    if(eventTriggered_LaBr3Ce)
+    if(eventN_LaBr3Ce>0)
     {
-        /*
-        analysisManager->FillNtupleIColumn(0, 0, 0);
-        analysisManager->FillNtupleDColumn(0, 1, 2.0);
-        
-        analysisManager->AddNtupleRow(0);
-        */
+        analysisManager->FillNtupleIColumn(0, 0, eventN_LaBr3Ce);
+
+        fRunAction->SetLaBr3Ce_IDs(LaBr3Ce_Number_vec);
+        fRunAction->SetLaBr3Ce_Energies(LaBr3Ce_Energy_vec);
+        fRunAction->SetLaBr3Ce_Thetas(LaBr3Ce_Theta_vec);
+        fRunAction->SetLaBr3Ce_Phis(LaBr3Ce_Phi_vec);
+        fRunAction->SetLaBr3Ce_xPos(LaBr3Ce_xPos_vec);
+        fRunAction->SetLaBr3Ce_yPos(LaBr3Ce_yPos_vec);
+        fRunAction->SetLaBr3Ce_zPos(LaBr3Ce_zPos_vec);
         
         analysisManager->AddNtupleRow(0);
     }
     
-    
-    /*
-    //analysisManager->FillNtupleIColumn(0, 0, 100);
-    analysisManager->FillNtupleIColumn(0, 0, 50);
-    analysisManager->FillNtupleIColumn(0, 1, 50);
-
-    //analysisManager->FillNtupleDColumn(0, 0, 100.);
-    analysisManager->FillNtupleDColumn(0, 2, 50.);
-    analysisManager->FillNtupleDColumn(0, 3, 50.);
-
-    analysisManager->AddNtupleRow(0);
-    */
-
-    
-    //cout << "Here is the recoilExcitationEnergy:    " << recoilExcitationEnergy << endl;
     
     ////////////////////////////////////////////////////////
     //

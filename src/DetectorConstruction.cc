@@ -355,8 +355,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     ////////////////////////////
     ////    CLOVER SETUP
     
-    CLOVER_AllPresent_Override = false;
-    CLOVER_AllAbsent_Override = true;
+    CLOVER_AllPresent_Override = true;
+    CLOVER_AllAbsent_Override = false;
     
     CLOVER_Shield_AllPresent_Override = false;
     CLOVER_Shield_AllAbsent_Override = true;
@@ -513,10 +513,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     
     //------------------------------------------------
     //      MANUAL SETUP: Unneccesary if SetupPreconfiguredVersion() is used
-    /*
-    LaBr3Ce_AllPresent_Override = false;
-    LaBr3Ce_AllAbsent_Override = false;
     
+    LaBr3Ce_AllPresent_Override = false;
+    LaBr3Ce_AllAbsent_Override = true;
+    
+    /*
     LaBr3CeSetupVersion = 1;
     LaBR3Ce_SetGlobalDistance = false;
     LaBR3Ce_automaticOrientation = false;
@@ -564,7 +565,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //SetupPreconfiguredVersion(8);
     
     //  LaBR3Ce_GlobalDistance = 10.0*cm;
-    SetupPreconfiguredVersion(9);
+    //SetupPreconfiguredVersion(9);
 
     //------------------------------------------------
     
@@ -700,7 +701,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
     ////////////////////////////////////////////////
     ////    ALBA shielding - Truncated Icosahedron
-    K600_ALBA_TruncIcos_Shielding_Presence = true;
+    K600_ALBA_TruncIcos_Shielding_Presence = false;
     
     /////////////////////////////////////
     //  K600 Target
@@ -2720,13 +2721,29 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     
     for(G4int i=0; i<numberOf_CLOVER; i++)
     {
+        //--------------------------------------------
         CLOVER_position[i] = (CLOVER_Distance[i])*G4ThreeVector(sin(CLOVER_theta[i]) * cos(CLOVER_phi[i]), sin(CLOVER_theta[i]) * sin(CLOVER_phi[i]), cos(CLOVER_theta[i]));
-        
-        CLOVER_transform[i] = G4Transform3D(CLOVER_rotm[i],CLOVER_position[i]);
-        
         CLOVER_Shield_position[i] = (CLOVER_Distance[i])*G4ThreeVector(sin(CLOVER_theta[i]) * cos(CLOVER_phi[i]), sin(CLOVER_theta[i]) * sin(CLOVER_phi[i]), cos(CLOVER_theta[i]));
         
+        //CLOVER_transform[i] = G4Transform3D(CLOVER_rotm[i],CLOVER_position[i]);
+        //CLOVER_Shield_transform[i] = CLOVER_transform[i];
+        
+        //--------------------------------------------
+        G4ThreeVector positionVector = CLOVER_position[i].unit();
+        
+        G4ThreeVector positionVector_z = positionVector.unit();
+        G4ThreeVector positionVector_y = (positionVector.orthogonal()).unit();
+        G4ThreeVector positionVector_x = (positionVector_y.cross(positionVector_z)).unit();
+        positionVector_z = -positionVector_z;
+        positionVector_y = -positionVector_y;
+        
+        G4RotationMatrix rotmPrime(positionVector_x, positionVector_y, positionVector_z);
+        
+        CLOVER_rotm[i] = rotmPrime;
+        
+        CLOVER_transform[i] = G4Transform3D(CLOVER_rotm[i],CLOVER_position[i]);
         CLOVER_Shield_transform[i] = CLOVER_transform[i];
+        
         
         /////////////////////////////
         //          CLOVER

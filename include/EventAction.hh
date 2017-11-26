@@ -40,6 +40,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "RunAction.hh"
 
 #include <fstream>
 using namespace std;
@@ -153,9 +154,11 @@ const G4double tanThetaU = 1.191753593;
 class EventAction : public G4UserEventAction
 {
 public:
-    EventAction();
+    EventAction(RunAction *runAction);
     virtual ~EventAction();
     
+    RunAction*  fRunAction;
+
     virtual void  BeginOfEventAction(const G4Event* event);
     virtual void    EndOfEventAction(const G4Event* event);
     
@@ -225,10 +228,24 @@ public:
     //      LaBr3Ce
     G4double GainLaBr3Ce;
     G4double OffsetLaBr3Ce;
-    
+
+    std::vector<int> LaBr3Ce_Number_vec;
+    std::vector<double> LaBr3Ce_Energy_vec;
+    std::vector<double> LaBr3Ce_Theta_vec;
+    std::vector<double> LaBr3Ce_Phi_vec;
+    std::vector<double> LaBr3Ce_xPos_vec;
+    std::vector<double> LaBr3Ce_yPos_vec;
+    std::vector<double> LaBr3Ce_zPos_vec;
+
     G4double    LaBr3Ce_EDep[20][LaBr3Ce_TotalTimeSamples];
+    G4double    LaBr3Ce_EWpositionX[20][LaBr3Ce_TotalTimeSamples];
+    G4double    LaBr3Ce_EWpositionY[20][LaBr3Ce_TotalTimeSamples];
+    G4double    LaBr3Ce_EWpositionZ[20][LaBr3Ce_TotalTimeSamples];
     
     void AddEnergyLaBr3Ce_LaBr3CeCrystal(G4int i, G4int k, G4double a)	{LaBr3Ce_EDep[i][k] += a;};
+    void AddEWpositionX_LaBr3Ce_LaBr3CeCrystal(G4int i, G4int k, G4double a) {LaBr3Ce_EWpositionX[i][k] += a;};
+    void AddEWpositionY_LaBr3Ce_LaBr3CeCrystal(G4int i, G4int k, G4double a) {LaBr3Ce_EWpositionY[i][k] += a;};
+    void AddEWpositionZ_LaBr3Ce_LaBr3CeCrystal(G4int i, G4int k, G4double a) {LaBr3Ce_EWpositionZ[i][k] += a;};
 
     
     /////////////////////////////////////////

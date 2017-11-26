@@ -193,7 +193,8 @@ RunAction::RunAction()
     //analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Energy");
     //analysisManager->CreateNtupleDColumn(0, "Theta");
     //analysisManager->CreateNtupleDColumn(0, "Phi");
-
+    
+    /*
     analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_Number_0");
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Energy_0");
     analysisManager->CreateNtupleDColumn(0, "Theta_0");
@@ -208,7 +209,30 @@ RunAction::RunAction()
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Energy_2");
     analysisManager->CreateNtupleDColumn(0, "Theta_2");
     analysisManager->CreateNtupleDColumn(0, "Phi_2");
+    */
+    
+    analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_EventFold");
+    analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_Number", laBr3Ce_iD);
+    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Energy", laBr3Ce_energy);
+    analysisManager->CreateNtupleDColumn(0, "Theta", laBr3Ce_theta);
+    analysisManager->CreateNtupleDColumn(0, "Phi", laBr3Ce_phi);
+    analysisManager->CreateNtupleDColumn(0, "xPos", laBr3Ce_xPos); // cm (relative to the target/origin)
+    analysisManager->CreateNtupleDColumn(0, "yPos", laBr3Ce_yPos); // cm (relative to the target/origin)
+    analysisManager->CreateNtupleDColumn(0, "zPos", laBr3Ce_zPos); // cm (relative to the target/origin)
+    
+    
+    
+    //--------
 
+    //std::vector<G4int> myVec = {1, 2, 3};
+    //myVec = {1, 2, 3};
+    
+    //analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_Number", myVec);
+    //analysisManager->CreateNtupleXColumn(0, "LaBr3Ce_Energy");
+    //analysisManager->CreateNtupleXColumn(0, "Theta");
+    //analysisManager->CreateNtupleXColumn(0, "Phi");
+
+    
     
     //analysisManager->CreateNtupleDColumn("CAKENo[2]");
     //analysisManager->CreateNtupleDColumn("CAKE_RowNo[2]");

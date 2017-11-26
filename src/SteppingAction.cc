@@ -369,11 +369,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     }
     
     ////////////////////////////////////////////////
-    //              LEPS DETECTOR ARRAY
+    //              LaBr3Ce DETECTOR ARRAY
     ////////////////////////////////////////////////
     
     if((interactiontime < LaBr3Ce_TotalSampledTime) && (volumeName == "LaBr3CeHPGeCrystal"))
     {
+        worldPosition = preStepPoint->GetPosition();
         channelID = volume->GetCopyNo();
         
         LaBr3CeNo = channelID;
@@ -381,14 +382,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
         iTS = interactiontime/LaBr3Ce_SamplingTime;
         edepLaBr3Ce_LaBr3CeCrystal = aStep->GetTotalEnergyDeposit()/keV;
         
-        /*
-        xPosW = worldPosition.x()/m;
-        yPosW = worldPosition.y()/m;
-        zPosW = worldPosition.z()/m;
-        */
-        
         fEventAction->AddEnergyLaBr3Ce_LaBr3CeCrystal(LaBr3CeNo, iTS, edepLaBr3Ce_LaBr3CeCrystal);
-        //fEventAction->AddEnergyLaBr3Ce_LaBr3CeCrystal(LaBr3CeNo, iTS, 1.0);
+        fEventAction->AddEWpositionX_LaBr3Ce_LaBr3CeCrystal(LaBr3CeNo, iTS, edepLaBr3Ce_LaBr3CeCrystal*worldPosition.x()/cm);
+        fEventAction->AddEWpositionY_LaBr3Ce_LaBr3CeCrystal(LaBr3CeNo, iTS, edepLaBr3Ce_LaBr3CeCrystal*worldPosition.y()/cm);
+        fEventAction->AddEWpositionZ_LaBr3Ce_LaBr3CeCrystal(LaBr3CeNo, iTS, edepLaBr3Ce_LaBr3CeCrystal*worldPosition.z()/cm);
     }
 
     //if (volumeName=="CAKE_Assembly" && !fEventAction->GA_GetLineOfSight() )   G4cout << "Here is the CAKE_Assembly Hit!" << G4endl;

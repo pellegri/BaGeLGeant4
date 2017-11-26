@@ -82,14 +82,14 @@ void ActionInitialization::Build() const
     SetUserAction(new SteppingAction(fDetConstruction,eventAction));
     */
     
-    
-    EventAction* eventAction = new EventAction;
+    RunAction* runAction = new RunAction;
+    EventAction* eventAction = new EventAction(runAction);
     PrimaryGeneratorAction* primaryGeneratorAction = new PrimaryGeneratorAction(eventAction);
     
     SetUserAction(primaryGeneratorAction);
     SetUserAction(eventAction);
 
-    SetUserAction(new RunAction);
+    SetUserAction(runAction);
     
     SetUserAction(new SteppingAction(fDetConstruction,eventAction));
     
