@@ -356,11 +356,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     ////    CLOVER SETUP
     
     CLOVER_AllPresent_Override = false;
-    CLOVER_AllAbsent_Override = true;
+    CLOVER_AllAbsent_Override = false;
     
     CLOVER_Shield_AllPresent_Override = false;
     CLOVER_Shield_AllAbsent_Override = true;
     
+    /*
     //  CLOVER 1
     CLOVER_Presence[0] = true;
     CLOVER_Shield_Presence[0] = true;
@@ -423,7 +424,120 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CLOVER_Distance[8] = 10*cm;
     CLOVER_phi[8] = -45*deg;
     CLOVER_theta[8] = 90*deg;
+    */
     
+    //  CLOVER 1
+    CLOVER_Presence[0] = true;
+    CLOVER_Shield_Presence[0] = true;
+    CLOVER_Distance[0] = 10.5*cm;
+    CLOVER_phi[0] = 0*deg;
+    CLOVER_theta[0] = 44.9*deg;
+    
+    //  CLOVER 2
+    CLOVER_Presence[1] = true;
+    CLOVER_Shield_Presence[1] = true;
+    CLOVER_Distance[1] = 10.5*cm;
+    CLOVER_phi[1] = 144*deg;
+    CLOVER_theta[1] = 44.9*deg;
+    
+    //  CLOVER 3
+    CLOVER_Presence[2] = true;
+    CLOVER_Shield_Presence[2] = true;
+    CLOVER_Distance[2] = 10.5*cm;
+    CLOVER_phi[2] = 72*deg;
+    CLOVER_theta[2] = 71.7*deg;
+    
+    //  CLOVER 4
+    CLOVER_Presence[3] = true;
+    CLOVER_Shield_Presence[3] = true;
+    CLOVER_Distance[3] = 10.5*cm;
+    CLOVER_phi[3] = 144*deg;
+    CLOVER_theta[3] = 86.7*deg;
+    
+    //  CLOVER 5
+    CLOVER_Presence[4] = true;
+    CLOVER_Shield_Presence[4] = true;
+    CLOVER_Distance[4] = 10.5*cm;
+    CLOVER_phi[4] = 216*deg;
+    CLOVER_theta[4] = 71.7*deg;
+    
+    //  CLOVER 6
+    CLOVER_Presence[5] = true;
+    CLOVER_Shield_Presence[5] = true;
+    CLOVER_Distance[5] = 10.5*cm;
+    CLOVER_phi[5] = 288*deg;
+    CLOVER_theta[5] = 71.7*deg;
+    
+    //  CLOVER 7
+    CLOVER_Presence[6] = true;
+    CLOVER_Shield_Presence[6] = true;
+    CLOVER_Distance[6] = 10.5*cm;
+    CLOVER_phi[6] = 36*deg;
+    CLOVER_theta[6] = 93.3*deg;
+    
+    //  CLOVER 8
+    CLOVER_Presence[7] = true;
+    CLOVER_Shield_Presence[7] = true;
+    CLOVER_Distance[7] = 10.5*cm;
+    CLOVER_phi[7] = 108*deg;
+    CLOVER_theta[7] = 93.3*deg;
+    
+    //  CLOVER 9
+    CLOVER_Presence[8] = true;
+    CLOVER_Shield_Presence[8] = true;
+    CLOVER_Distance[8] = 10.5*cm;
+    CLOVER_phi[8] = 180*deg;
+    CLOVER_theta[8] = 93.3*deg;
+
+    //  CLOVER 10
+    CLOVER_Presence[9] = true;
+    CLOVER_Shield_Presence[9] = true;
+    CLOVER_Distance[9] = 10.5*cm;
+    CLOVER_phi[9] = 252*deg;
+    CLOVER_theta[9] = 93.3*deg;
+    
+    //  CLOVER 11
+    CLOVER_Presence[10] = true;
+    CLOVER_Shield_Presence[10] = true;
+    CLOVER_Distance[10] = 10.5*cm;
+    CLOVER_phi[10] = 324*deg;
+    CLOVER_theta[10] = 108.3*deg;
+    
+    //  CLOVER 12
+    CLOVER_Presence[11] = true;
+    CLOVER_Shield_Presence[11] = true;
+    CLOVER_Distance[11] = 10.5*cm;
+    CLOVER_phi[11] = 36*deg;
+    CLOVER_theta[11] = 135.1*deg;
+    
+    //  CLOVER 13
+    CLOVER_Presence[12] = true;
+    CLOVER_Shield_Presence[12] = true;
+    CLOVER_Distance[12] = 10.5*cm;
+    CLOVER_phi[12] = 108*deg;
+    CLOVER_theta[12] = 135.1*deg;
+    
+    //  CLOVER 14
+    CLOVER_Presence[13] = true;
+    CLOVER_Shield_Presence[13] = true;
+    CLOVER_Distance[13] = 10.5*cm;
+    CLOVER_phi[13] = 180.*deg;
+    CLOVER_theta[13] = 150.1*deg;
+    
+    //  CLOVER 15
+    CLOVER_Presence[14] = true;
+    CLOVER_Shield_Presence[14] = true;
+    CLOVER_Distance[14] = 10.5*cm;
+    CLOVER_phi[14] = 252*deg;
+    CLOVER_theta[14] = 135.1*deg;
+    
+    //  CLOVER 16
+    CLOVER_Presence[15] = true;
+    CLOVER_Shield_Presence[15] = true;
+    CLOVER_Distance[15] = 10.5*cm;
+    CLOVER_phi[15] = 324*deg;
+    CLOVER_theta[15] = 150.1*deg;
+
     
     for (G4int i=0; i<numberOf_CLOVER; i++)
     {
@@ -553,7 +667,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //SetupPreconfiguredVersion(8);
     
     //  LaBR3Ce_GlobalDistance = 10.0*cm;
-    SetupPreconfiguredVersion(9);
+    //SetupPreconfiguredVersion(9);
 
     //------------------------------------------------
     
@@ -2436,7 +2550,17 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     G4LogicalVolume * Logic_CLOVER_Encasement;
     G4LogicalVolume * Logic_CLOVER_HPGeCrystal[4];
     
-    if( CLOVER_Presence[0] || CLOVER_Presence[1] || CLOVER_Presence[2] || CLOVER_Presence[3] || CLOVER_Presence[4] || CLOVER_Presence[5] || CLOVER_Presence[6] || CLOVER_Presence[7] )
+    bool useCLOVER = false;
+    
+    for(G4int i=0; i<numberOf_CLOVER; i++)
+    {
+        if(CLOVER_Presence[i])
+        {
+            useCLOVER = true;
+        }
+    }
+    
+    if(useCLOVER)
     {
         //////////////////////////////////////////////////////////
         //              CLOVER Internal Vacuum - CADMesh
@@ -2464,6 +2588,10 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         
         Logic_CLOVER_Encasement = new G4LogicalVolume(Solid_CLOVEREncasement, G4_Al_Material, "LogicCLOVERCloverEncasement", 0, 0, 0);
         
+        G4VisAttributes* CLOVER_Encasement_VisAtt = new G4VisAttributes(G4Colour(0.7, 0.7, 0.7));
+        CLOVER_Encasement_VisAtt->SetForceSolid(true);
+        Logic_CLOVER_Encasement->SetVisAttributes(CLOVER_Encasement_VisAtt);
+
         
         //////////////////////////////////////////////////////////
         //              CLOVER HPGeCrystals - CADMesh
@@ -2509,7 +2637,17 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     G4LogicalVolume* Logic_CLOVER_Shield_BGOCrystal[16];
     G4LogicalVolume* Logic_CLOVER_Shield_PMT[16];
     
-    if( CLOVER_Shield_Presence[0] || CLOVER_Shield_Presence[1] || CLOVER_Shield_Presence[2] || CLOVER_Shield_Presence[3] || CLOVER_Shield_Presence[4] || CLOVER_Shield_Presence[5] || CLOVER_Shield_Presence[6] || CLOVER_Shield_Presence[7] || CLOVER_Shield_Presence[8])
+    bool useCLOVER_Shield = false;
+    
+    for(G4int i=0; i<numberOf_CLOVER; i++)
+    {
+        if(CLOVER_Shield_Presence[i])
+        {
+            useCLOVER_Shield = true;
+        }
+    }
+
+    if(useCLOVER_Shield)
     {
         ///////////////////////////////////////////////////////
         //              CLOVER Shield Body - CADMesh
