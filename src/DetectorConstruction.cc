@@ -355,7 +355,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     ////////////////////////////
     ////    CLOVER SETUP
     
-    CLOVER_AllPresent_Override = false;
+    CLOVER_AllPresent_Override = true;
     CLOVER_AllAbsent_Override = false;
     
     CLOVER_Shield_AllPresent_Override = false;
@@ -3284,7 +3284,6 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     //               LaBr3Ce INITIALIZATION
     ////////////////////////////////////////////////////
     
-    //numberOf_LaBr3Ce
     for(G4int i=0; i<numberOf_LaBr3Ce; i++)
     {
         G4RotationMatrix    LaBr3Ce_relativeInternalVacuum_rotm;
@@ -3951,6 +3950,32 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     return PhysiWorld;
     
     
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+std::vector<std::tuple<int, double, double>> DetectorConstruction::GetAngles_CLOVER()
+{
+    std::vector<std::tuple<int, double, double>> angles;
+    
+    for(G4int i=0; i<numberOf_CLOVER; i++)
+    {
+        angles.push_back(std::make_tuple(i, CLOVER_theta[i]/deg, CLOVER_phi[i]/deg));
+    }
+    
+    return angles;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+std::vector<std::tuple<int, double, double>> DetectorConstruction::GetAngles_ALBA_LaBr3Ce()
+{
+    std::vector<std::tuple<int, double, double>> angles;
+    
+    for(G4int i=0; i<numberOf_LaBr3Ce; i++)
+    {
+        angles.push_back(std::make_tuple(i, LaBr3Ce_theta[i]*57.2958, LaBr3Ce_phi[i]*57.2958));
+    }
+    
+    return angles;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

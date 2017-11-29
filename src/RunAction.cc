@@ -112,144 +112,28 @@ RunAction::RunAction()
     // Creating ntuple
     analysisManager->CreateNtuple("DataTreeSim", "K600 Spectrometer - Coincident Events");
     
-    /*
-    ////    VDC Detectors
-    analysisManager->CreateNtupleDColumn(0, "VDC1_Xpos");
-    analysisManager->CreateNtupleDColumn(0, "VDC1_Y");
-    analysisManager->CreateNtupleDColumn(0, "VDC1_ThetaFP");
-    analysisManager->CreateNtupleDColumn(0, "VDC1_ThetaSCAT");
-     
-    analysisManager->CreateNtupleDColumn(0, "VDC2_Xpos");
-    analysisManager->CreateNtupleDColumn(0, "VDC2_Y");
-    analysisManager->CreateNtupleDColumn(0, "VDC2_ThetaFP");
-    analysisManager->CreateNtupleDColumn(0, "VDC2_ThetaSCAT");
-     
-    ////    "True points of traversal"
-    ////    VDC1
-    analysisManager->CreateNtupleDColumn(0, "X1_Xpos");
-    analysisManager->CreateNtupleDColumn(0, "X1_Ypos");
-    analysisManager->CreateNtupleDColumn(0, "U1_Xpos");
-    analysisManager->CreateNtupleDColumn(0, "U1_Ypos");
-    ////    VDC2
-    analysisManager->CreateNtupleDColumn(0, "X2_Xpos");
-    analysisManager->CreateNtupleDColumn(0, "X2_Ypos");
-    analysisManager->CreateNtupleDColumn(0, "U2_Xpos");
-    analysisManager->CreateNtupleDColumn(0, "U2_Ypos");
-    */
     
-    ////    LEPS Detectors
-    /*
-    analysisManager->CreateNtupleIColumn("LEPS1_trig");
-    analysisManager->CreateNtupleIColumn("LEPS2_trig");
-    */
-    
-    /*
-    analysisManager->CreateNtupleIColumn(0, "LEPS3_trig");
-    analysisManager->CreateNtupleIColumn(0, "LEPS4_trig");
-    analysisManager->CreateNtupleIColumn(0, "LEPS5_trig");
-    analysisManager->CreateNtupleIColumn(0, "LEPS6_trig");
-    */
-    
-    /*
-    analysisManager->CreateNtupleIColumn(0, "LEPS1_CrystalNo");
-    analysisManager->CreateNtupleIColumn(0, "LEPS2_CrystalNo");
-    analysisManager->CreateNtupleIColumn(0, "LEPS3_CrystalNo");
-    analysisManager->CreateNtupleIColumn(0, "LEPS4_CrystalNo");
-    analysisManager->CreateNtupleIColumn(0, "LEPS5_CrystalNo");
-    analysisManager->CreateNtupleIColumn(0, "LEPS6_CrystalNo");
-    */
-    
-    /*
-    analysisManager->CreateNtupleDColumn("LEPS1_Energy");
-    analysisManager->CreateNtupleDColumn("LEPS2_Energy");
-    //analysisManager->CreateNtupleDColumn(0, "LEPS3_Energy");
-    */
+    //--------------------------------
+    //      CLOVER Detectors
+    analysisManager->CreateNtupleIColumn(0, "CLOVER_EventFold");
+    analysisManager->CreateNtupleIColumn(0, "CLOVER_Number", CLOVER_iD);
+    analysisManager->CreateNtupleDColumn(0, "CLOVER_Energy", CLOVER_energy);
+    analysisManager->CreateNtupleDColumn(0, "CLOVER_DetectorTheta", CLOVER_detectorTheta);
+    analysisManager->CreateNtupleDColumn(0, "CLOVER_DetectorPhi", CLOVER_detectorPhi);
 
-    
-    /*
-    analysisManager->CreateNtupleDColumn(0, "LEPS3_Energy");
-    analysisManager->CreateNtupleDColumn(0, "LEPS4_Energy");
-    analysisManager->CreateNtupleDColumn(0, "LEPS5_Energy");
-    analysisManager->CreateNtupleDColumn(0, "LEPS6_Energy");
-    */
-
-    ////    CAKE Detectors
-    /*
-    analysisManager->CreateNtupleIColumn(0, "CAKENo");
-    analysisManager->CreateNtupleIColumn(0, "CAKE_RowNo");
-    analysisManager->CreateNtupleIColumn(0, "CAKE_SectorNo");
-    
-    analysisManager->CreateNtupleDColumn(0, "CAKE_Energy");
-    analysisManager->CreateNtupleDColumn(0, "Theta");
-    analysisManager->CreateNtupleDColumn(0, "Phi");
-    analysisManager->CreateNtupleDColumn(0, "Ex");
-
-    analysisManager->CreateNtupleSColumn(0, "DecayMode");
-    */
-    
-    ////    LaBr3Ce Detectors
-
-    //analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_No");
-    //analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Energy");
-    //analysisManager->CreateNtupleDColumn(0, "Theta");
-    //analysisManager->CreateNtupleDColumn(0, "Phi");
-    
-    /*
-    analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_Number_0");
-    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Energy_0");
-    analysisManager->CreateNtupleDColumn(0, "Theta_0");
-    analysisManager->CreateNtupleDColumn(0, "Phi_0");
-
-    analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_Number_1");
-    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Energy_1");
-    analysisManager->CreateNtupleDColumn(0, "Theta_1");
-    analysisManager->CreateNtupleDColumn(0, "Phi_1");
-
-    analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_Number_2");
-    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Energy_2");
-    analysisManager->CreateNtupleDColumn(0, "Theta_2");
-    analysisManager->CreateNtupleDColumn(0, "Phi_2");
-    */
-    
+    //--------------------------------
+    //      LaBr3Ce Detectors
     analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_EventFold");
     analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_Number", laBr3Ce_iD);
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Energy", laBr3Ce_energy);
-    analysisManager->CreateNtupleDColumn(0, "Theta", laBr3Ce_theta);
-    analysisManager->CreateNtupleDColumn(0, "Phi", laBr3Ce_phi);
-    analysisManager->CreateNtupleDColumn(0, "xPos", laBr3Ce_xPos); // cm (relative to the target/origin)
-    analysisManager->CreateNtupleDColumn(0, "yPos", laBr3Ce_yPos); // cm (relative to the target/origin)
-    analysisManager->CreateNtupleDColumn(0, "zPos", laBr3Ce_zPos); // cm (relative to the target/origin)
+    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_DetectorTheta", laBr3Ce_detectorTheta);
+    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_DetectorPhi", laBr3Ce_detectorPhi);
+    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Theta", laBr3Ce_theta);
+    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Phi", laBr3Ce_phi);
+    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_xPos", laBr3Ce_xPos); // cm (relative to the target/origin)
+    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_yPos", laBr3Ce_yPos); // cm (relative to the target/origin)
+    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_zPos", laBr3Ce_zPos); // cm (relative to the target/origin)
     
-    
-    
-    //--------
-
-    //std::vector<G4int> myVec = {1, 2, 3};
-    //myVec = {1, 2, 3};
-    
-    //analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_Number", myVec);
-    //analysisManager->CreateNtupleXColumn(0, "LaBr3Ce_Energy");
-    //analysisManager->CreateNtupleXColumn(0, "Theta");
-    //analysisManager->CreateNtupleXColumn(0, "Phi");
-
-    
-    
-    //analysisManager->CreateNtupleDColumn("CAKENo[2]");
-    //analysisManager->CreateNtupleDColumn("CAKE_RowNo[2]");
-    //analysisManager->CreateNtupleDColumn("CAKE_SectorNo[2]");
-    //analysisManager->CreateNtupleDColumn(0, "CAKE_t[1]");
-    
-    /*
-     ////    PADDLE Detectors
-     analysisManager->CreateNtupleDColumn(0, "pad1_E");
-     analysisManager->CreateNtupleDColumn(0, "pad1_tof");
-     analysisManager->CreateNtupleDColumn(0, "pad2_E");
-     analysisManager->CreateNtupleDColumn(0, "pad2_tof");
-     
-     ////    HAGAR Detector
-     analysisManager->CreateNtupleDColumn("HAGAR_E");
-     //analysisManager->CreateNtupleDColumn("HAGAR_t");
-     */
     
     analysisManager->FinishNtuple(0);
     

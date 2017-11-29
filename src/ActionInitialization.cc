@@ -83,7 +83,7 @@ void ActionInitialization::Build() const
     */
     
     RunAction* runAction = new RunAction;
-    EventAction* eventAction = new EventAction(runAction);
+    EventAction* eventAction = new EventAction(runAction, fDetConstruction);
     PrimaryGeneratorAction* primaryGeneratorAction = new PrimaryGeneratorAction(eventAction);
     
     SetUserAction(primaryGeneratorAction);

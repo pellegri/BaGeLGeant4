@@ -34,6 +34,7 @@
 //      email: likevincw@gmail.com
 //
 
+#include "DetectorConstruction.hh"
 #include "EventAction.hh"
 #include "Analysis.hh"
 
@@ -51,7 +52,7 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* runAction)
+EventAction::EventAction(RunAction* runAction, DetectorConstruction* detectorConstruction)
 : G4UserEventAction(),
 fRunAction(runAction),
 fEnergyAbs(0.),
@@ -67,7 +68,10 @@ GainPADDLE(0),
 OffsetPADDLE(0),
 GainLEPS(1.0),
 OffsetLEPS(0.0)
-{}
+{    
+    angles_CLOVER = detectorConstruction->GetAngles_CLOVER();
+    angles_ALBA_LaBr3Ce = detectorConstruction->GetAngles_ALBA_LaBr3Ce();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -123,9 +127,13 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     }
     
     
-    /////////////////////////////////////////////////////
-    
-    for(G4int i=0; i<9; i++)
+    //------------------------------------------------
+    CLOVER_Number_vec.clear();
+    CLOVER_Energy_vec.clear();
+    CLOVER_DetectorTheta_vec.clear();
+    CLOVER_DetectorPhi_vec.clear();
+
+    for(G4int i=0; i<numberOf_CLOVER; i++)
     {
         for (G4int k=0; k<CLOVER_TotalTimeSamples; k++)
         {
@@ -164,13 +172,15 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     //------------------------------------------------
     LaBr3Ce_Number_vec.clear();
     LaBr3Ce_Energy_vec.clear();
+    LaBr3Ce_DetectorTheta_vec.clear();
+    LaBr3Ce_DetectorPhi_vec.clear();
     LaBr3Ce_Theta_vec.clear();
     LaBr3Ce_Phi_vec.clear();
     LaBr3Ce_xPos_vec.clear();
     LaBr3Ce_yPos_vec.clear();
     LaBr3Ce_zPos_vec.clear();
     
-    for(G4int i=0; i<20; i++)
+    for(G4int i=0; i<numberOf_LaBr3Ce; i++)
     {
         for(G4int k=0; k<LaBr3Ce_TotalTimeSamples; k++)
         {
@@ -178,6 +188,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
         }
     }
     
+    //------------------------------------------------
     for(G4int i=0; i<5; i++)
     {
         for(G4int k = 0; k<CAKE_TotalTimeSamples; k++)
@@ -368,8 +379,9 @@ void EventAction::EndOfEventAction(const G4Event* event)
     //                CLOVER DETECTOR ARRAY
     //
     ////////////////////////////////////////////////////////
-    
-    for(G4int i=0; i<9; i++)
+    int eventN_CLOVER = 0;
+
+    for(G4int i=0; i<numberOf_CLOVER; i++)
     {
         for(G4int k=0; k<CLOVER_TotalTimeSamples; k++)
         {
@@ -407,6 +419,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
                         //analysisManager->FillH1(19, GainCLOVER*CLOVER_EDep[i][k] +  OffsetCLOVER);
                     }
                     
+                    /*
                     else if(CLOVER_HPGeCrystal_EDep[i][j][k] != 0)
                     {
                         //      For each Clover
@@ -415,11 +428,28 @@ void EventAction::EndOfEventAction(const G4Event* event)
                         //      For the Entire Clover Array
                         //analysisManager->FillH1(19, GainCLOVER*CLOVER_HPGeCrystal_EDep[i][j][k] +  OffsetCLOVER);
                     }
+                    */
+                    
+                    CLOVER_Number_vec.push_back(i);
+                    CLOVER_Energy_vec.push_back(CLOVER_EDep[i][k]);
+                    CLOVER_DetectorTheta_vec.push_back(std::get<1>(angles_CLOVER[i]));
+                    CLOVER_DetectorPhi_vec.push_back(std::get<2>(angles_CLOVER[i]));
+                                    
+                    eventN_CLOVER++;
                 }
             }
         }
     }
     
+    if(eventN_CLOVER>0)
+    {
+        analysisManager->FillNtupleIColumn(0, 0, eventN_CLOVER);
+
+        fRunAction->SetCLOVER_IDs(CLOVER_Number_vec);
+        fRunAction->SetCLOVER_Energies(CLOVER_Energy_vec);
+        fRunAction->SetCLOVER_DetectorThetas(CLOVER_DetectorTheta_vec);
+        fRunAction->SetCLOVER_DetectorPhis(CLOVER_DetectorPhi_vec);
+    }
     
     
     ////////////////////////////////////////////////////
@@ -470,10 +500,9 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     //GainLaBr3Ce = 1.0;
     //OffsetLaBr3Ce = 0.0;
-    bool eventTriggered_LaBr3Ce = false;
     int eventN_LaBr3Ce = 0;
 
-    for(G4int i=0; i<20; i++)
+    for(G4int i=0; i<numberOf_LaBr3Ce; i++)
     {
         for(G4int k=0; k<LaBr3Ce_TotalTimeSamples; k++)
         {
@@ -481,7 +510,9 @@ void EventAction::EndOfEventAction(const G4Event* event)
             {
                 //------------------------------------------------
                 LaBr3Ce_Number_vec.push_back(i);
-
+                LaBr3Ce_DetectorTheta_vec.push_back(std::get<1>(angles_ALBA_LaBr3Ce[i]));
+                LaBr3Ce_DetectorPhi_vec.push_back(std::get<2>(angles_ALBA_LaBr3Ce[i]));
+                
                 //------------------------------------------------
                 LaBr3Ce_EWpositionX[i][k] *= (1.0/LaBr3Ce_EDep[i][k]);
                 LaBr3Ce_EWpositionY[i][k] *= (1.0/LaBr3Ce_EDep[i][k]);
@@ -527,19 +558,27 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     if(eventN_LaBr3Ce>0)
     {
-        analysisManager->FillNtupleIColumn(0, 0, eventN_LaBr3Ce);
+        analysisManager->FillNtupleIColumn(0, 5, eventN_LaBr3Ce);
 
         fRunAction->SetLaBr3Ce_IDs(LaBr3Ce_Number_vec);
         fRunAction->SetLaBr3Ce_Energies(LaBr3Ce_Energy_vec);
+        fRunAction->SetLaBr3Ce_DetectorThetas(LaBr3Ce_DetectorTheta_vec);
+        fRunAction->SetLaBr3Ce_DetectorPhis(LaBr3Ce_DetectorPhi_vec);
         fRunAction->SetLaBr3Ce_Thetas(LaBr3Ce_Theta_vec);
         fRunAction->SetLaBr3Ce_Phis(LaBr3Ce_Phi_vec);
         fRunAction->SetLaBr3Ce_xPos(LaBr3Ce_xPos_vec);
         fRunAction->SetLaBr3Ce_yPos(LaBr3Ce_yPos_vec);
         fRunAction->SetLaBr3Ce_zPos(LaBr3Ce_zPos_vec);
-        
+    }
+    
+    //--------------------------------------------------------------------------------
+    //      Combined data taking for both the LaBr3Ce and CLOVER detectors
+    if(eventN_LaBr3Ce>0 || eventN_CLOVER>0)
+    {
         analysisManager->AddNtupleRow(0);
     }
     
+
     
     ////////////////////////////////////////////////////////
     //

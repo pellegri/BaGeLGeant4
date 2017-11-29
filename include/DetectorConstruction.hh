@@ -116,11 +116,9 @@ public:
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructField();
     
-    // get methods
-    //
-    //const G4VPhysicalVolume* GetAbsorberPV() const;
-    //const G4VPhysicalVolume* GetGapPV() const;
-    
+    std::vector<std::tuple<int, double, double>> GetAngles_ALBA_LaBr3Ce();
+    std::vector<std::tuple<int, double, double>> GetAngles_CLOVER();
+
 private:
     // methods
     //
@@ -295,7 +293,6 @@ private:
     
     //  CLOVER HPGe Crystals
     G4VPhysicalVolume*  PhysiCLOVER_HPGeCrystal;
-    
     
     /////////////////////////////////////
     //          LEPS DETECTORS

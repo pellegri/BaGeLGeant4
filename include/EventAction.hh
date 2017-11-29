@@ -37,6 +37,7 @@
 #ifndef EventAction_h
 #define EventAction_h 1
 
+#include "DetectorConstruction.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UserEventAction.hh"
 #include "globals.hh"
@@ -83,7 +84,7 @@ const G4double      PADDLE_TotalSampledTime = PADDLE_SamplingTime * PADDLE_Total
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ///////////////     CLOVER Detectors - PIXIE16 Sampling     ///////////////////
-const G4bool        Activate_CLOVER_ADDBACK = false;
+const G4bool        Activate_CLOVER_ADDBACK = true;
 const G4bool        Activate_CLOVER_ComptonSupression = false;
 
 const G4double      CLOVER_SamplingTime = 10; // ns
@@ -154,7 +155,7 @@ const G4double tanThetaU = 1.191753593;
 class EventAction : public G4UserEventAction
 {
 public:
-    EventAction(RunAction *runAction);
+    EventAction(RunAction *runAction, DetectorConstruction *detectorConstruction);
     virtual ~EventAction();
     
     RunAction*  fRunAction;
@@ -193,19 +194,26 @@ public:
     
     ////////////////////////
     //      CLOVERS
+    //G4int nCLOVER_detectors;
     G4double GainCLOVER;
     G4double OffsetCLOVER;
     
-    G4double    CLOVER_HPGeCrystal_EDep[8][4][CLOVER_TotalTimeSamples];
-    G4bool      CLOVER_HPGeCrystal_EDepVETO[8][4][CLOVER_TotalTimeSamples];
-    G4double    CLOVER_EDep[8][CLOVER_TotalTimeSamples];
+    std::vector<int> CLOVER_Number_vec;
+    std::vector<double> CLOVER_Energy_vec;
+    std::vector<double> CLOVER_DetectorTheta_vec;
+    std::vector<double> CLOVER_DetectorPhi_vec;
+    
+    G4double    CLOVER_HPGeCrystal_EDep[numberOf_CLOVER][4][CLOVER_TotalTimeSamples];
+    G4bool      CLOVER_HPGeCrystal_EDepVETO[numberOf_CLOVER][4][CLOVER_TotalTimeSamples];
+    G4double    CLOVER_EDep[numberOf_CLOVER][CLOVER_TotalTimeSamples];
     
     void AddEnergyCLOVER_HPGeCrystal(G4int i, G4int j, G4int k, G4double a)	{CLOVER_HPGeCrystal_EDep[i][j][k] += a;};
     
+    std::vector<std::tuple<int, double, double>> angles_CLOVER;
     
     /////////////////////////////////////////
     //      CLOVER Shield BGO Crystals
-    G4double    CLOVER_BGO_EDep[8][16][CLOVER_Shield_BGO_TotalTimeSamples+CLOVER_ComptonSupression_TimeWindow];
+    G4double    CLOVER_BGO_EDep[numberOf_CLOVER_Shields][16][CLOVER_Shield_BGO_TotalTimeSamples+CLOVER_ComptonSupression_TimeWindow];
     
     void AddEnergyBGODetectors(G4int i, G4int j, G4int k, G4double a)	{CLOVER_BGO_EDep[i][j][k] += a;};
     
@@ -226,11 +234,14 @@ public:
     
     ////////////////////////
     //      LaBr3Ce
+    //G4int nLaBr3Ce_detectors;
     G4double GainLaBr3Ce;
     G4double OffsetLaBr3Ce;
 
     std::vector<int> LaBr3Ce_Number_vec;
     std::vector<double> LaBr3Ce_Energy_vec;
+    std::vector<double> LaBr3Ce_DetectorTheta_vec;
+    std::vector<double> LaBr3Ce_DetectorPhi_vec;
     std::vector<double> LaBr3Ce_Theta_vec;
     std::vector<double> LaBr3Ce_Phi_vec;
     std::vector<double> LaBr3Ce_xPos_vec;
@@ -247,6 +258,7 @@ public:
     void AddEWpositionY_LaBr3Ce_LaBr3CeCrystal(G4int i, G4int k, G4double a) {LaBr3Ce_EWpositionY[i][k] += a;};
     void AddEWpositionZ_LaBr3Ce_LaBr3CeCrystal(G4int i, G4int k, G4double a) {LaBr3Ce_EWpositionZ[i][k] += a;};
 
+    std::vector<std::tuple<int, double, double>> angles_ALBA_LaBr3Ce;
     
     /////////////////////////////////////////
     //          PADDLE DETECTORS

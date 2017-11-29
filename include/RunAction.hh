@@ -70,8 +70,24 @@ public:
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
     
+    //--------------------------------------------------------------------------------
+    //      CLOVER detectors
+    std::vector<int> CLOVER_iD;
+    std::vector<double> CLOVER_energy;
+    std::vector<double> CLOVER_detectorTheta;
+    std::vector<double> CLOVER_detectorPhi;
+    
+    void SetCLOVER_IDs(std::vector<int> vec) {CLOVER_iD = vec;};
+    void SetCLOVER_Energies(std::vector<double> vec) {CLOVER_energy = vec;};
+    void SetCLOVER_DetectorThetas(std::vector<double> vec) {CLOVER_detectorTheta = vec;};
+    void SetCLOVER_DetectorPhis(std::vector<double> vec) {CLOVER_detectorPhi = vec;};
+
+    //--------------------------------------------------------------------------------
+    //      LaBr3Ce detectors
     std::vector<int> laBr3Ce_iD;
     std::vector<double> laBr3Ce_energy;
+    std::vector<double> laBr3Ce_detectorTheta;
+    std::vector<double> laBr3Ce_detectorPhi;
     std::vector<double> laBr3Ce_theta;
     std::vector<double> laBr3Ce_phi;
     std::vector<double> laBr3Ce_xPos;
@@ -82,10 +98,12 @@ public:
     void SetLaBr3Ce_Energies(std::vector<double> vec) {laBr3Ce_energy = vec;};
     void SetLaBr3Ce_Thetas(std::vector<double> vec) {laBr3Ce_theta = vec;};
     void SetLaBr3Ce_Phis(std::vector<double> vec) {laBr3Ce_phi = vec;};
+    void SetLaBr3Ce_DetectorThetas(std::vector<double> vec) {laBr3Ce_detectorTheta = vec;};
+    void SetLaBr3Ce_DetectorPhis(std::vector<double> vec) {laBr3Ce_detectorPhi = vec;};
     void SetLaBr3Ce_xPos(std::vector<double> vec) {laBr3Ce_xPos = vec;};
     void SetLaBr3Ce_yPos(std::vector<double> vec) {laBr3Ce_yPos = vec;};
     void SetLaBr3Ce_zPos(std::vector<double> vec) {laBr3Ce_zPos = vec;};
-    
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
