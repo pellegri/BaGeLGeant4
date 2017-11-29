@@ -87,75 +87,16 @@ fEventAction(eventAction)
     
     G4int n_particle = 1;
     fParticleGun  = new G4ParticleGun(n_particle);
-    
-    //G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("He3");
-    //G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("neutron");
-    //G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("mu-");
     G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
-    //G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("e-");
-    //G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("alpha");
-    //G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("proton");
-    //G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
-
     fParticleGun->SetParticleDefinition(particleDefinition);
-    
-    //fParticleGun->SetParticleEnergy(0.*MeV);
-    //fParticleGun->SetParticleEnergy(0.100*MeV);
-    //fParticleGun->SetParticleEnergy(1.332*MeV);
-    //fParticleGun->SetParticleEnergy(82.0*keV);
-    
-    //fParticleGun->SetParticleEnergy(200.*MeV);
-    //fParticleGun->SetParticleEnergy(22.5*MeV);
-    //fParticleGun->SetParticleEnergy(50.0*MeV);
-    //fParticleGun->SetParticleEnergy(4*GeV);
-    //fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-    
-    //----------------------------------------
-    //      LaBr3(Ce) Simulations
-    //fParticleGun->SetParticleEnergy(0.25*MeV); // 2.0e+06 events
-    //fParticleGun->SetParticleEnergy(0.5*MeV); // 2.0e+06 events
-    //fParticleGun->SetParticleEnergy(1.0*MeV); // 2.0e+06 events
-    //fParticleGun->SetParticleEnergy(2.0*MeV); // 2.0e+06 events
-    fParticleGun->SetParticleEnergy(5.0*MeV); // 5.0e+06 events
-    //fParticleGun->SetParticleEnergy(10.0*MeV); // 5.0e+06 events
-    //fParticleGun->SetParticleEnergy(15.0*MeV); // 10.0e+06 events
-    //fParticleGun->SetParticleEnergy(20.0*MeV); // 10.0e+06 events
-    
-    //fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.*m,1.90*m));
-    //fParticleGun->SetParticlePosition(G4ThreeVector(0.,57.5*mm,1.6*m));
-    //fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
-    //fParticleGun->SetParticlePosition(G4ThreeVector(0.,57.5*mm,2.10*m));
-    
+    fParticleGun->SetParticleEnergy(0.511*MeV);
     fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
-    //fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-1.*mm));
-    //fParticleGun->SetParticlePosition(G4ThreeVector(2000.*mm,0.,3000.0*mm));
-    
-    //fParticleGun->SetParticlePosition(G4ThreeVector(-3.*m, 0., -3.8*m));
-    
-    
-    /*
-    ////////    4He, +1 charge
-    G4int Z = 6, A = 12;
-    //G4int Z = 2, A = 4;
-
-    //G4double ionCharge   = 1.*eplus;
-    G4double ionCharge   = 0.*eplus;
-    G4double excitEnergy = 12.049*MeV;
-     
-    //G4ParticleDefinition* ion = G4ParticleTable::GetParticleTable()->GetIon(Z,A,excitEnergy);
-    G4ParticleDefinition* ion = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
-    //ion->SetPDGLifeTime(1*ns);
-    fParticleGun->SetParticleDefinition(ion);
-    fParticleGun->SetParticleCharge(ionCharge);
-    */
-
     
     ////========================================================////
     ////    Initialise a pre-calculated angular distribution
     G4String angDist_name = "a0_15097_16O";
     
     initialiseAngDist_interpolated(angDist_name);
-
     
     ////    Distributions - From AngCor
     initialiseAngCor_alpha0_0plus_0plus_12049_L0();
@@ -349,9 +290,15 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     my = sin(theta*deg)*sin(phi*deg);
     mz = cos(theta*deg);
     
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(mx, my, mz));
+    G4ThreeVector direction_gamma0(mx, my, mz);
+    G4ThreeVector direction_gamma1 = -direction_gamma0;
     
-    
+    fParticleGun->SetParticleMomentumDirection(direction_gamma0);
+    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
+
+    fParticleGun->SetParticleMomentumDirection(direction_gamma1);
+    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
+
     
     /*
     int nParticles = 3;
@@ -1163,7 +1110,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     //create vertex
     //
-    fParticleGun->GeneratePrimaryVertex(anEvent);
+    //fParticleGun->GeneratePrimaryVertex(anEvent);
     
     
     
