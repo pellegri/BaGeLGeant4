@@ -355,11 +355,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     ////////////////////////////
     ////    CLOVER SETUP
     
-    CLOVER_AllPresent_Override = true;
+    CLOVER_AllPresent_Override = false;
     CLOVER_AllAbsent_Override = false;
     
     CLOVER_Shield_AllPresent_Override = false;
-    CLOVER_Shield_AllAbsent_Override = true;
+    CLOVER_Shield_AllAbsent_Override = false;
     
     /*
     //  CLOVER 1
@@ -542,8 +542,17 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     for(G4int i=0; i<numberOf_CLOVER; i++)
     {
         CLOVER_Presence[i] = false;
+        CLOVER_Shield_Presence[i] = false;
     }
     
+    CLOVER_Presence[0] = false;
+    CLOVER_Shield_Presence[0] = true;
+    CLOVER_Distance[0] = 0.0*cm;
+    CLOVER_phi[0] = 0*deg;
+    CLOVER_theta[0] = 0*deg;
+    */
+    
+    /*
     CLOVER_Presence[0] = true;
     CLOVER_Presence[1] = true;
     CLOVER_Presence[2] = true;
@@ -865,6 +874,7 @@ void DetectorConstruction::DefineMaterials()
     nistManager->FindOrBuildMaterial("G4_MYLAR");
     nistManager->FindOrBuildMaterial("G4_W");
     nistManager->FindOrBuildMaterial("G4_Ar");
+    nistManager->FindOrBuildMaterial("G4_Pb");
     nistManager->FindOrBuildMaterial("G4_C");
     nistManager->FindOrBuildMaterial("G4_CARBON_DIOXIDE");
     nistManager->FindOrBuildMaterial("G4_SODIUM_IODIDE");
@@ -928,6 +938,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     G4Material* G4_W_Material = G4Material::GetMaterial("G4_W");
     G4Material* G4_Ar_Material = G4Material::GetMaterial("G4_Ar");
     G4Material* G4_C_Material = G4Material::GetMaterial("G4_C");
+    G4Material* G4_Pb_Material = G4Material::GetMaterial("G4_Pb");
     
     ////    NIST Defined Materials and Compounds
     G4Material* G4_Galactic_Material = G4Material::GetMaterial("G4_Galactic");
@@ -1111,7 +1122,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         
         G4VSolid * SolidALBA_shield = mesh_ALBA_shield->TessellatedMesh();
         
-        G4LogicalVolume* LogicALBA_shield = new G4LogicalVolume(SolidALBA_shield, G4_Al_Material, "ALBA_shield", 0, 0, 0);
+        G4LogicalVolume* LogicALBA_shield = new G4LogicalVolume(SolidALBA_shield, G4_Pb_Material, "ALBA_shield", 0, 0, 0);
         
         new G4PVPlacement(0,               // no rotation
                           G4ThreeVector(), // at (x,y,z)
@@ -2680,7 +2691,8 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //              CLOVER Shield Body - CADMesh
         ///////////////////////////////////////////////////////
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified.ply");
         CADMesh * mesh_CLOVER_Shield_Body = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_Body, false);
         
         G4VSolid * Solid_CLOVER_Shield_Body = mesh_CLOVER_Shield_Body->TessellatedMesh();
@@ -2691,7 +2703,8 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //              CLOVER Shield Heavimet - CADMesh
         ///////////////////////////////////////////////////////
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield_Modified.ply");
         CADMesh * mesh_CLOVER_Shield_Heavimet = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_Heavimet, false);
         
         G4VSolid * Solid_CLOVER_Shield_Heavimet = mesh_CLOVER_Shield_Heavimet->TessellatedMesh();
@@ -2715,6 +2728,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //      CLOVER Shield BGO Crystals - CADMesh
         ///////////////////////////////////////////////////////
         
+        /*
         sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal1.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal1 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
@@ -2762,6 +2776,56 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         
         sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal16.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal16 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        */
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_1.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal1 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_2.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal2 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_3.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal3 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_4.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal4 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_5.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal5 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_6.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal6 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_7.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal7 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_8.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal8 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_9.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal9 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_10.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal10 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_11.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal11 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_12.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal12 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_13.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal13 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_14.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal14 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_15.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal15 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_16.ply");
+        CADMesh * mesh_CLOVER_Shield_BGOCrystal16 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
+
         
         G4VSolid * Solid_CLOVER_Shield_BGOCrystal[16];
         
@@ -2925,20 +2989,10 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //CLOVER_rotm[i] = rotmPrime.transform(rotm_AlongDetectorAxis);
         */
         
-        
         //--------------------------------------------
-        
-        G4ThreeVector initialXAxis(1.0, 0.0, 0.0); //
-        G4ThreeVector initialYAxis(0.0, 1.0, 0.0); //
-        G4ThreeVector initialZAxis(0.0, 1.0, 1.0); //
-        
         G4ThreeVector requiredFinalXaxis = G4ThreeVector(cos(CLOVER_theta[i])*cos(CLOVER_phi[i]), cos(CLOVER_theta[i])*sin(CLOVER_phi[i]), -sin(CLOVER_theta[i])); // unit vector of theta
         G4ThreeVector requiredFinalZaxis = -positionVector;
         G4ThreeVector requiredFinalYaxis = requiredFinalZaxis.cross(requiredFinalXaxis).unit();
-        
-        //G4ThreeVector requiredFinalZaxis = -positionVector;
-        //G4ThreeVector requiredFinalXaxis = requiredFinalZaxis.perp();
-        //G4ThreeVector requiredFinalYaxis = -requiredFinalXaxis.cross(requiredFinalZaxis).unit();
 
         G4RotationMatrix rotmPrime2;
         rotmPrime2.rotateAxes(requiredFinalXaxis, requiredFinalYaxis, requiredFinalZaxis);
@@ -2982,7 +3036,6 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                               i,               // copy number
                               fCheckOverlaps); // checking overlaps
         
-            /*
             for (int j=0; j<4; j++)
             {
                 PhysiCLOVER_HPGeCrystal = new G4PVPlacement(0,               // no rotation
@@ -2995,8 +3048,6 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                                                             fCheckOverlaps); // checking overlaps
                 
             }
-            */
-            
             
             new G4PVPlacement(CLOVER_transform[i],
                               Logic_CLOVER_InternalVacuum[i],
@@ -3022,6 +3073,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
             
             for (int j=0; j<16; j++)
             {
+                
                 PhysiCLOVER_Shield_BGOCrystal = new G4PVPlacement(CLOVER_Shield_transform[i],
                                                                   Logic_CLOVER_Shield_BGOCrystal[j],
                                                                   "CLOVER_Shield_BGOCrystal",
@@ -3029,6 +3081,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                                                                   false,
                                                                   i*16 + j,
                                                                   fCheckOverlaps);
+                
                 
                 PhysiCLOVER_Shield_PMT = new G4PVPlacement(CLOVER_Shield_transform[i],
                                                            Logic_CLOVER_Shield_PMT[j],
@@ -3040,6 +3093,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                 
             }
             
+            /*
             new G4PVPlacement(CLOVER_Shield_transform[i],
                               Logic_CLOVER_Shield_PMTConArray,
                               "CLOVER_Shield_PMTConArray",       // its name
@@ -3047,6 +3101,8 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                               false,           // no boolean operations
                               i,               // copy number
                               fCheckOverlaps); // checking overlaps
+            */
+            
             
             new G4PVPlacement(CLOVER_Shield_transform[i],
                               Logic_CLOVER_Shield_Heavimet,
@@ -3055,6 +3111,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                               false,           // no boolean operations
                               i,               // copy number
                               fCheckOverlaps); // checking overlaps
+            
             
         }
     }
