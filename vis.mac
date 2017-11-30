@@ -1,7 +1,7 @@
 # Use these open statements to open selected visualization
 #
 # Use this open statement to create an OpenGL view:
-#/vis/open OGL 800x600-0+0
+/vis/open OGL 800x600-0+0
 #/vis/open OGL 1600x1200-0+0
 # Use to the the lighting origin
 /vis/viewer/set/lightsThetaPhi 40 140
@@ -108,3 +108,6 @@
 /vis/viewer/set/viewpointThetaPhi 30 30
 #/vis/viewer/zoom 4
 #/vis/ogl/export LaBrSetup
+
+/vis/viewer/set/viewpointThetaPhi 135 60
+/vis/viewer/zoom 0.3

@@ -538,6 +538,27 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CLOVER_phi[15] = 324*deg;
     CLOVER_theta[15] = 150.1*deg;
 
+    /*
+    for(G4int i=0; i<numberOf_CLOVER; i++)
+    {
+        CLOVER_Presence[i] = false;
+    }
+    
+    //  CLOVER 12
+    CLOVER_Presence[11] = true;
+    CLOVER_Shield_Presence[11] = true;
+    CLOVER_Distance[11] = 10.5*cm;
+    CLOVER_phi[11] = 60*deg;
+    CLOVER_theta[11] = 135.0*deg;
+
+    //  CLOVER 13
+    CLOVER_Presence[12] = true;
+    CLOVER_Shield_Presence[12] = true;
+    CLOVER_Distance[12] = 10.5*cm;
+    CLOVER_phi[12] = 0*deg;
+    CLOVER_theta[12] = 135.0*deg;
+    */
+    
     
     for (G4int i=0; i<numberOf_CLOVER; i++)
     {
@@ -2851,9 +2872,6 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         CLOVER_position[i] = (CLOVER_Distance[i])*G4ThreeVector(sin(CLOVER_theta[i]) * cos(CLOVER_phi[i]), sin(CLOVER_theta[i]) * sin(CLOVER_phi[i]), cos(CLOVER_theta[i]));
         CLOVER_Shield_position[i] = (CLOVER_Distance[i])*G4ThreeVector(sin(CLOVER_theta[i]) * cos(CLOVER_phi[i]), sin(CLOVER_theta[i]) * sin(CLOVER_phi[i]), cos(CLOVER_theta[i]));
         
-        //CLOVER_transform[i] = G4Transform3D(CLOVER_rotm[i],CLOVER_position[i]);
-        //CLOVER_Shield_transform[i] = CLOVER_transform[i];
-        
         //--------------------------------------------
         G4ThreeVector positionVector = CLOVER_position[i].unit();
         
@@ -2865,8 +2883,34 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         
         G4RotationMatrix rotmPrime(positionVector_x, positionVector_y, positionVector_z);
         
-        CLOVER_rotm[i] = rotmPrime;
+        //--------------------------------------------
+        G4ThreeVector initialXAxis(1.0, 0.0, 0.0); //
+        G4ThreeVector initialYAxis(0.0, 1.0, 0.0); //
+        G4ThreeVector rotatedXAxis = rotmPrime*initialXAxis;
         
+        //      Sides of the detector to be parallel to the vertical axis
+        //G4ThreeVector requiredFinalXaxis = positionVector.cross(initialYAxis).unit();
+        //      Detector orientated to be along constant-phi lines
+        G4ThreeVector requiredFinalXaxis = G4ThreeVector(-sin(CLOVER_phi[i]), cos(CLOVER_phi[i]), 0.0); // Unit vector of phi
+        //G4ThreeVector requiredFinalXaxis = G4ThreeVector(cos(CLOVER_theta[i])*cos(CLOVER_phi[i]), cos(CLOVER_theta[i])*sin(CLOVER_phi[i]), -sin(CLOVER_theta[i])); // unit vector of theta
+
+        G4double requiredRotationAngle = rotatedXAxis.angle(requiredFinalXaxis)/deg;
+        
+        /*
+        if(CLOVER_Presence[i])
+        {
+            G4cout << "requiredFinalXaxis.x(): " << requiredFinalXaxis.x() << G4endl;
+            G4cout << "requiredFinalXaxis.y(): " << requiredFinalXaxis.y() << G4endl;
+            G4cout << "requiredFinalXaxis.z(): " << requiredFinalXaxis.z() << G4endl;
+            G4cout << "requiredRotationAngle: " << requiredRotationAngle << G4endl;
+            G4cout << G4endl;
+        }
+        */
+        
+        G4RotationMatrix rotm_AlongDetectorAxis(-positionVector, (requiredRotationAngle)*deg);
+        
+        //--------------------------------------------
+        CLOVER_rotm[i] = rotm_AlongDetectorAxis*rotmPrime;
         CLOVER_transform[i] = G4Transform3D(CLOVER_rotm[i],CLOVER_position[i]);
         CLOVER_Shield_transform[i] = CLOVER_transform[i];
         
@@ -2882,10 +2926,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                               false,           // no boolean operations
                               i,               // copy number
                               fCheckOverlaps); // checking overlaps
-            
-            
-            
-            
+        
             
             for (int j=0; j<4; j++)
             {
@@ -4130,7 +4171,7 @@ void DetectorConstruction::SetupTruncatedIcosahedron()
     
     G4cout.precision(15);
     
-    G4cout << "smallestAngle_hexgonal [deg]: " << smallestAngle_hexgonal << std::endl;
+    G4cout << "smallestAngle_hexgonal [deg]: " << smallestAngle_hexgonal << G4endl;
     
     //----------------------------------------------------------------------------
     double smallestAngle_pentagonal = 0.0;
@@ -4157,7 +4198,7 @@ void DetectorConstruction::SetupTruncatedIcosahedron()
         }
     }
     
-    G4cout << "smallestAngle_pentagonal [deg]: " << smallestAngle_pentagonal << std::endl;
+    G4cout << "smallestAngle_pentagonal [deg]: " << smallestAngle_pentagonal << G4endl;
     
     //----------------------------------------------------------------------------
     double smallestAngle_hexagonal_pentagonal = 0.0;
@@ -4178,7 +4219,7 @@ void DetectorConstruction::SetupTruncatedIcosahedron()
         }
     }
     
-    G4cout << "smallestAngle_hexagonal_pentagonal [deg]: " << smallestAngle_hexagonal_pentagonal << std::endl;
+    G4cout << "smallestAngle_hexagonal_pentagonal [deg]: " << smallestAngle_hexagonal_pentagonal << G4endl;
 
     //----------------------------------------------------------------------------
     //      Modifying the orientation of the truncated icosahedron

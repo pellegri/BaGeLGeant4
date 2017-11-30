@@ -87,7 +87,8 @@ fEventAction(eventAction)
     
     G4int n_particle = 1;
     fParticleGun  = new G4ParticleGun(n_particle);
-    G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
+    G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
+    //G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
     fParticleGun->SetParticleDefinition(particleDefinition);
     fParticleGun->SetParticleEnergy(0.511*MeV);
     fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
@@ -275,16 +276,16 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     ////////////////////////////////////////////////////
     ////    ISOTROPIC - Inverse Transform Method
-    
-    
+    /*
     G4double theta = acos(1 - (2.0*G4UniformRand()))/deg; // 0.0->180.0
     //G4double theta = acos(1 - (1.0*G4UniformRand()))/deg; // 0.0->90.0 deg
     //G4double theta = acos(1 - (1.0*G4UniformRand() + 1.0))/deg; // 90.0->180.0 deg
 
     ////    Collimator - 2.0 deg range
     //G4double theta = acos(1 - (6.09173503004822869e-04*G4UniformRand()))/deg; // deg
-
+    
     G4double phi = 360.0*G4UniformRand(); // deg
+    //G4double phi = 180.0*G4UniformRand(); // deg
     
     mx = sin(theta*deg)*cos(phi*deg);
     my = sin(theta*deg)*sin(phi*deg);
@@ -295,10 +296,110 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
     fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
-
+    
     fParticleGun->SetParticleMomentumDirection(direction_gamma1);
     fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
+    */
+    
+    //--------------------------------------------------------
+    //      TEST (Vertical Alignment)
+    /*
+    G4double theta = 135.0; // 0.0->180.0
+    G4double phi = 60.0; // deg
 
+    mx = sin(theta*deg)*cos(phi*deg);
+    my = sin(theta*deg)*sin(phi*deg);
+    mz = cos(theta*deg);
+
+    my = 2.0*G4UniformRand()-1.0;
+    
+    G4ThreeVector direction_gamma0(mx, my, mz);
+    fParticleGun->SetParticleMomentumDirection(direction_gamma0);
+    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
+    */
+    
+    //--------------------------------------------------------
+    //      TEST (Along constant phi planes)
+    
+    static int particleN = 0;
+
+    //----------------------------
+    G4double phi = 0.0; // deg
+    G4double theta = 0.0; // deg
+    
+    double CLOVER_phi[16];
+    double CLOVER_theta[16];
+    
+    CLOVER_phi[0] = 0*deg;
+    CLOVER_theta[0] = 44.9*deg;
+    
+    CLOVER_phi[1] = 144*deg;
+    CLOVER_theta[1] = 44.9*deg;
+    
+    CLOVER_phi[2] = 72*deg;
+    CLOVER_theta[2] = 71.7*deg;
+    
+    CLOVER_phi[3] = 144*deg;
+    CLOVER_theta[3] = 86.7*deg;
+    
+    CLOVER_phi[4] = 216*deg;
+    CLOVER_theta[4] = 71.7*deg;
+    
+    CLOVER_phi[5] = 288*deg;
+    CLOVER_theta[5] = 71.7*deg;
+    
+    CLOVER_phi[6] = 36*deg;
+    CLOVER_theta[6] = 93.3*deg;
+    
+    CLOVER_phi[7] = 108*deg;
+    CLOVER_theta[7] = 93.3*deg;
+    
+    CLOVER_phi[8] = 180*deg;
+    CLOVER_theta[8] = 93.3*deg;
+    
+    CLOVER_phi[9] = 252*deg;
+    CLOVER_theta[9] = 93.3*deg;
+    
+    CLOVER_phi[10] = 324*deg;
+    CLOVER_theta[10] = 108.3*deg;
+    
+    CLOVER_phi[11] = 36*deg;
+    CLOVER_theta[11] = 135.1*deg;
+    
+    CLOVER_phi[12] = 108*deg;
+    CLOVER_theta[12] = 135.1*deg;
+    
+    CLOVER_phi[13] = 180.*deg;
+    CLOVER_theta[13] = 150.1*deg;
+    
+    CLOVER_phi[14] = 252*deg;
+    CLOVER_theta[14] = 135.1*deg;
+    
+    CLOVER_phi[15] = 324*deg;
+    CLOVER_theta[15] = 150.1*deg;
+
+
+    //----------------------------
+    for(int i=0; i<16; i++)
+    {
+        if(particleN>=i*100 && particleN<(i+1)*100)
+        {
+            phi = CLOVER_phi[i];
+            theta = CLOVER_theta[i] + (20.0*G4UniformRand() - 10.0)*deg;
+        }
+    }
+    
+    particleN++;
+    
+    mx = sin(theta)*cos(phi);
+    my = sin(theta)*sin(phi);
+    mz = cos(theta);
+        
+    G4ThreeVector direction_gamma0(mx, my, mz);
+    fParticleGun->SetParticleMomentumDirection(direction_gamma0);
+    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
+    
+    
     
     /*
     int nParticles = 3;
