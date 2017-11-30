@@ -327,8 +327,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4double phi = 0.0; // deg
     G4double theta = 0.0; // deg
     
-    double CLOVER_phi[16];
-    double CLOVER_theta[16];
+    G4double CLOVER_phi[16];
+    G4double CLOVER_theta[16];
     
     CLOVER_phi[0] = 0*deg;
     CLOVER_theta[0] = 44.9*deg;
@@ -386,6 +386,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         {
             phi = CLOVER_phi[i];
             theta = CLOVER_theta[i] + (20.0*G4UniformRand() - 10.0)*deg;
+            //theta = CLOVER_theta[i];
         }
     }
     
@@ -394,7 +395,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     mx = sin(theta)*cos(phi);
     my = sin(theta)*sin(phi);
     mz = cos(theta);
-        
+    
+    //my += 0.2*G4UniformRand()-0.1;
+
     G4ThreeVector direction_gamma0(mx, my, mz);
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
     fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)

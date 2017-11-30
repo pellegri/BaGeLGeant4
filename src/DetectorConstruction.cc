@@ -544,6 +544,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
         CLOVER_Presence[i] = false;
     }
     
+    CLOVER_Presence[0] = true;
+    CLOVER_Presence[1] = true;
+    CLOVER_Presence[2] = true;
+    */
+    
+    /*
     //  CLOVER 12
     CLOVER_Presence[11] = true;
     CLOVER_Shield_Presence[11] = true;
@@ -2882,19 +2888,24 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         positionVector_y = -positionVector_y;
         
         G4RotationMatrix rotmPrime(positionVector_x, positionVector_y, positionVector_z);
+        //G4RotationMatrix rotmPrime(-positionVector);
         
         //--------------------------------------------
+        /*
         G4ThreeVector initialXAxis(1.0, 0.0, 0.0); //
         G4ThreeVector initialYAxis(0.0, 1.0, 0.0); //
         G4ThreeVector rotatedXAxis = rotmPrime*initialXAxis;
         
+        G4ThreeVector requiredFinalXaxis;
+        
         //      Sides of the detector to be parallel to the vertical axis
-        //G4ThreeVector requiredFinalXaxis = positionVector.cross(initialYAxis).unit();
+        //requiredFinalXaxis = positionVector.cross(initialYAxis).unit();
         //      Detector orientated to be along constant-phi lines
-        G4ThreeVector requiredFinalXaxis = G4ThreeVector(-sin(CLOVER_phi[i]), cos(CLOVER_phi[i]), 0.0); // Unit vector of phi
-        //G4ThreeVector requiredFinalXaxis = G4ThreeVector(cos(CLOVER_theta[i])*cos(CLOVER_phi[i]), cos(CLOVER_theta[i])*sin(CLOVER_phi[i]), -sin(CLOVER_theta[i])); // unit vector of theta
+        //requiredFinalXaxis = G4ThreeVector(-sin(CLOVER_phi[i]*deg), cos(CLOVER_phi[i]*deg), 0.0); // Unit vector of phi
+        requiredFinalXaxis = G4ThreeVector(cos(CLOVER_theta[i])*cos(CLOVER_phi[i]), cos(CLOVER_theta[i])*sin(CLOVER_phi[i]), -sin(CLOVER_theta[i])); // unit vector of theta
 
         G4double requiredRotationAngle = rotatedXAxis.angle(requiredFinalXaxis)/deg;
+        */
         
         /*
         if(CLOVER_Presence[i])
@@ -2907,11 +2918,55 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         }
         */
         
+        /*
         G4RotationMatrix rotm_AlongDetectorAxis(-positionVector, (requiredRotationAngle)*deg);
         
+        //CLOVER_rotm[i] = rotm_AlongDetectorAxis*rotmPrime;
+        //CLOVER_rotm[i] = rotmPrime.transform(rotm_AlongDetectorAxis);
+        */
+        
+        
         //--------------------------------------------
-        CLOVER_rotm[i] = rotm_AlongDetectorAxis*rotmPrime;
-        CLOVER_transform[i] = G4Transform3D(CLOVER_rotm[i],CLOVER_position[i]);
+        
+        G4ThreeVector initialXAxis(1.0, 0.0, 0.0); //
+        G4ThreeVector initialYAxis(0.0, 1.0, 0.0); //
+        G4ThreeVector initialZAxis(0.0, 1.0, 1.0); //
+        
+        G4ThreeVector requiredFinalXaxis = G4ThreeVector(cos(CLOVER_theta[i])*cos(CLOVER_phi[i]), cos(CLOVER_theta[i])*sin(CLOVER_phi[i]), -sin(CLOVER_theta[i])); // unit vector of theta
+        G4ThreeVector requiredFinalZaxis = -positionVector;
+        G4ThreeVector requiredFinalYaxis = requiredFinalZaxis.cross(requiredFinalXaxis).unit();
+        
+        //G4ThreeVector requiredFinalZaxis = -positionVector;
+        //G4ThreeVector requiredFinalXaxis = requiredFinalZaxis.perp();
+        //G4ThreeVector requiredFinalYaxis = -requiredFinalXaxis.cross(requiredFinalZaxis).unit();
+
+        G4RotationMatrix rotmPrime2;
+        rotmPrime2.rotateAxes(requiredFinalXaxis, requiredFinalYaxis, requiredFinalZaxis);
+        //rotmPrime2.rotateUz(requiredFinalZaxis);
+        
+        //G4double requiredRotationAngle = rotatedXAxis.angle(requiredFinalXaxis)/deg;
+        
+        /*
+         G4RotationMatrix rotm_AlongDetectorAxis(-positionVector, (requiredRotationAngle)*deg);
+         
+         CLOVER_rotm[i] = rotm_AlongDetectorAxis*rotmPrime;
+         */
+        
+        
+        //G4RotationMatrix *rotmPrime2 = new G4RotationMatrix;
+        //(initialXAxis, initialYAxis, initialZAxis);
+        //rotmPrime2->rotateAxes(requiredFinalXaxis, requiredFinalYaxis, requiredFinalZaxis);
+        
+        //--------------------------------------------
+        //CLOVER_rotm[i] = rotmPrime;
+        //CLOVER_rotm[i] = rotm_AlongDetectorAxis*rotmPrime;
+        //CLOVER_rotm[i] = rotmPrime;
+        //CLOVER_rotm[i] = rotmPrime2;
+        //CLOVER_transform[i] = G4Transform3D(CLOVER_rotm[i],CLOVER_position[i]);
+        
+        
+        CLOVER_transform[i] = G4Transform3D(rotmPrime2, CLOVER_position[i]);
+        
         CLOVER_Shield_transform[i] = CLOVER_transform[i];
         
         
@@ -2927,7 +2982,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                               i,               // copy number
                               fCheckOverlaps); // checking overlaps
         
-            
+            /*
             for (int j=0; j<4; j++)
             {
                 PhysiCLOVER_HPGeCrystal = new G4PVPlacement(0,               // no rotation
@@ -2940,6 +2995,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                                                             fCheckOverlaps); // checking overlaps
                 
             }
+            */
             
             
             new G4PVPlacement(CLOVER_transform[i],
