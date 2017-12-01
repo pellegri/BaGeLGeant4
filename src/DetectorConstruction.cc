@@ -1036,7 +1036,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     
     G4ThreeVector positionVacuumChamber = G4ThreeVector(0,0,0);
     
-    G4Box* SolidVacuumChamber = new G4Box("VacuumChamber", (100./2)*cm, (100./2)*cm, (100./2)*cm);
+    G4Box* SolidVacuumChamber = new G4Box("VacuumChamber", (200./2)*cm, (200./2)*cm, (200./2)*cm);
     
     G4LogicalVolume* LogicVacuumChamber = new G4LogicalVolume(SolidVacuumChamber, G4_Galactic_Material,"VacuumChamber",0,0,0);
     
