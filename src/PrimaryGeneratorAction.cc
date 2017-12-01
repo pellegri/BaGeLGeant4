@@ -87,8 +87,8 @@ fEventAction(eventAction)
     
     G4int n_particle = 1;
     fParticleGun  = new G4ParticleGun(n_particle);
-    G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
-    //G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
+    //G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
+    G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
     fParticleGun->SetParticleDefinition(particleDefinition);
     fParticleGun->SetParticleEnergy(0.511*MeV);
     fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
@@ -276,7 +276,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     ////////////////////////////////////////////////////
     ////    ISOTROPIC - Inverse Transform Method
-    /*
+    
     G4double theta = acos(1 - (2.0*G4UniformRand()))/deg; // 0.0->180.0
     //G4double theta = acos(1 - (1.0*G4UniformRand()))/deg; // 0.0->90.0 deg
     //G4double theta = acos(1 - (1.0*G4UniformRand() + 1.0))/deg; // 90.0->180.0 deg
@@ -299,7 +299,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     fParticleGun->SetParticleMomentumDirection(direction_gamma1);
     fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
-    */
+    
     
     //--------------------------------------------------------
     //      TEST (Vertical Alignment)
@@ -320,7 +320,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     //--------------------------------------------------------
     //      TEST (Along constant phi planes)
-    
+    /*
     static int particleN = 0;
 
     //----------------------------
@@ -401,7 +401,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4ThreeVector direction_gamma0(mx, my, mz);
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
     fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
-    
+    */
     
     
     /*
