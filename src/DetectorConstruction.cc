@@ -2693,9 +2693,9 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         
         //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body.ply");
         //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified2_tol_10um.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified2_tol_10um.ply");
         //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified3_tol_10um.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified4_tol_10um.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified4_tol_10um.ply");
         
         CADMesh * mesh_CLOVER_Shield_Body = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_Body, false);
         
