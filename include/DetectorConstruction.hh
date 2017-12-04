@@ -88,8 +88,8 @@ const G4int     numberOf_CAKE = 5;
 const G4int     numberOf_W1 = 4;
 
 ///////////////     CLOVER DETECTORS     ///////////////////
-const G4int     numberOf_CLOVER = 16;
-const G4int     numberOf_CLOVER_Shields = 16;
+const G4int     numberOf_CLOVER = 17;
+const G4int     numberOf_CLOVER_Shields = 17;
 
 ///////////////     TIGRESS DETECTORS     ///////////////////
 const G4int     numberOf_TIGRESS = 1;

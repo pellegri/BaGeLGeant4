@@ -163,7 +163,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     VDC_rotm[1].rotateY(VDC_RotationY[1]*deg);
     
     
-    for (G4int i=0; i<numberOf_VDC; i++)
+    for(G4int i=0; i<numberOf_VDC; i++)
     {
         if(VDC_AllPresent_Override) VDC_Presence[i] = true;
         if(VDC_AllAbsent_Override) VDC_Presence[i] = false;
@@ -287,7 +287,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
      CAKE_rotm[4].rotateZ((-38.571 + 4*72)*deg);
      */
     
-    for (G4int i=0; i<numberOf_CAKE; i++)
+    for(G4int i=0; i<numberOf_CAKE; i++)
     {
         if(CAKE_AllPresent_Override) CAKE_Presence[i] = true;
         if(CAKE_AllAbsent_Override) CAKE_Presence[i] = false;
@@ -327,7 +327,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     W1_rotm[3].rotateX(90.0*deg);
     W1_rotm[3].rotateZ(270.0*deg);
     
-    for (G4int i=0; i<numberOf_W1; i++)
+    for(G4int i=0; i<numberOf_W1; i++)
     {
         if(W1_AllPresent_Override) W1_Presence[i] = true;
         if(W1_AllAbsent_Override) W1_Presence[i] = false;
@@ -429,115 +429,184 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //  CLOVER 1
     CLOVER_Presence[0] = true;
     CLOVER_Shield_Presence[0] = true;
-    CLOVER_Distance[0] = 10.8*cm;
+    CLOVER_Distance[0] = 10.6*cm;
     CLOVER_phi[0] = 0*deg;
-    CLOVER_theta[0] = 44.9*deg;
+    CLOVER_theta[0] = 44.38*deg;
     
     //  CLOVER 2
     CLOVER_Presence[1] = true;
     CLOVER_Shield_Presence[1] = true;
-    CLOVER_Distance[1] = 10.8*cm;
+    CLOVER_Distance[1] = 10.6*cm;
     CLOVER_phi[1] = 144*deg;
-    CLOVER_theta[1] = 44.9*deg;
+    CLOVER_theta[1] = 44.38*deg;
     
     //  CLOVER 3
     CLOVER_Presence[2] = true;
     CLOVER_Shield_Presence[2] = true;
-    CLOVER_Distance[2] = 10.8*cm;
+    CLOVER_Distance[2] = 10.6*cm;
     CLOVER_phi[2] = 72*deg;
-    CLOVER_theta[2] = 71.7*deg;
+    CLOVER_theta[2] = 72.19*deg;
     
     //  CLOVER 4
     CLOVER_Presence[3] = true;
     CLOVER_Shield_Presence[3] = true;
-    CLOVER_Distance[3] = 10.8*cm;
+    CLOVER_Distance[3] = 10.6*cm;
     CLOVER_phi[3] = 144*deg;
-    CLOVER_theta[3] = 86.7*deg;
+    CLOVER_theta[3] = 86.19*deg;
     
     //  CLOVER 5
     CLOVER_Presence[4] = true;
     CLOVER_Shield_Presence[4] = true;
-    CLOVER_Distance[4] = 10.8*cm;
+    CLOVER_Distance[4] = 10.6*cm;
     CLOVER_phi[4] = 216*deg;
-    CLOVER_theta[4] = 71.7*deg;
+    CLOVER_theta[4] = 72.19*deg;
     
     //  CLOVER 6
     CLOVER_Presence[5] = true;
     CLOVER_Shield_Presence[5] = true;
-    CLOVER_Distance[5] = 10.8*cm;
+    CLOVER_Distance[5] = 10.6*cm;
     CLOVER_phi[5] = 288*deg;
-    CLOVER_theta[5] = 71.7*deg;
+    CLOVER_theta[5] = 72.19*deg;
     
     //  CLOVER 7
     CLOVER_Presence[6] = true;
     CLOVER_Shield_Presence[6] = true;
-    CLOVER_Distance[6] = 10.8*cm;
+    CLOVER_Distance[6] = 10.6*cm;
     CLOVER_phi[6] = 36*deg;
-    CLOVER_theta[6] = 93.3*deg;
+    CLOVER_theta[6] = 93.81*deg;
     
     //  CLOVER 8
     CLOVER_Presence[7] = true;
     CLOVER_Shield_Presence[7] = true;
-    CLOVER_Distance[7] = 10.8*cm;
+    CLOVER_Distance[7] = 10.6*cm;
     CLOVER_phi[7] = 108*deg;
-    CLOVER_theta[7] = 93.3*deg;
+    CLOVER_theta[7] = 93.81*deg;
     
     //  CLOVER 9
     CLOVER_Presence[8] = true;
     CLOVER_Shield_Presence[8] = true;
-    CLOVER_Distance[8] = 10.8*cm;
+    CLOVER_Distance[8] = 10.6*cm;
     CLOVER_phi[8] = 180*deg;
-    CLOVER_theta[8] = 93.3*deg;
-
+    CLOVER_theta[8] = 93.81*deg;
+    
     //  CLOVER 10
     CLOVER_Presence[9] = true;
     CLOVER_Shield_Presence[9] = true;
-    CLOVER_Distance[9] = 10.8*cm;
+    CLOVER_Distance[9] = 10.6*cm;
     CLOVER_phi[9] = 252*deg;
-    CLOVER_theta[9] = 93.3*deg;
+    CLOVER_theta[9] = 93.81*deg;
     
     //  CLOVER 11
     CLOVER_Presence[10] = true;
     CLOVER_Shield_Presence[10] = true;
-    CLOVER_Distance[10] = 10.8*cm;
+    CLOVER_Distance[10] = 10.6*cm;
     CLOVER_phi[10] = 324*deg;
-    CLOVER_theta[10] = 108.3*deg;
+    CLOVER_theta[10] = 107.81*deg;
     
     //  CLOVER 12
     CLOVER_Presence[11] = true;
     CLOVER_Shield_Presence[11] = true;
-    CLOVER_Distance[11] = 10.8*cm;
+    CLOVER_Distance[11] = 10.6*cm;
     CLOVER_phi[11] = 36*deg;
-    CLOVER_theta[11] = 135.1*deg;
+    CLOVER_theta[11] = 135.62*deg;
     
     //  CLOVER 13
     CLOVER_Presence[12] = true;
     CLOVER_Shield_Presence[12] = true;
-    CLOVER_Distance[12] = 10.8*cm;
+    CLOVER_Distance[12] = 10.6*cm;
     CLOVER_phi[12] = 108*deg;
-    CLOVER_theta[12] = 135.1*deg;
+    CLOVER_theta[12] = 135.62*deg;
     
     //  CLOVER 14
     CLOVER_Presence[13] = true;
     CLOVER_Shield_Presence[13] = true;
-    CLOVER_Distance[13] = 10.8*cm;
+    CLOVER_Distance[13] = 10.6*cm;
     CLOVER_phi[13] = 180.*deg;
-    CLOVER_theta[13] = 150.1*deg;
+    CLOVER_theta[13] = 149.37*deg;
     
     //  CLOVER 15
     CLOVER_Presence[14] = true;
     CLOVER_Shield_Presence[14] = true;
-    CLOVER_Distance[14] = 10.8*cm;
+    CLOVER_Distance[14] = 10.6*cm;
     CLOVER_phi[14] = 252*deg;
-    CLOVER_theta[14] = 135.1*deg;
+    CLOVER_theta[14] = 135.62*deg;
     
     //  CLOVER 16
     CLOVER_Presence[15] = true;
     CLOVER_Shield_Presence[15] = true;
-    CLOVER_Distance[15] = 10.8*cm;
+    CLOVER_Distance[15] = 10.6*cm;
     CLOVER_phi[15] = 324*deg;
-    CLOVER_theta[15] = 150.1*deg;
+    CLOVER_theta[15] = 149.37*deg;
+    
+    //  CLOVER 17
+    CLOVER_Presence[16] = true;
+    CLOVER_Shield_Presence[16] = true;
+    CLOVER_Distance[16] = 10.6*cm;
+    CLOVER_phi[16] = 216*deg;
+    CLOVER_theta[16] = 30.63*deg;
 
+    
+    for(G4int i=0; i<numberOf_CLOVER; i++)
+    {
+        double smallestPolarAngleDifference;
+        std::vector<int> detNs;
+        
+        double x, y, z;
+        
+        x = sin(CLOVER_theta[i])*cos(CLOVER_phi[i]);
+        y = sin(CLOVER_theta[i])*sin(CLOVER_phi[i]);
+        z = cos(CLOVER_theta[i]);
+        
+        G4ThreeVector v1(x, y, z);
+        
+        bool initialComparison = false;
+        
+        for(G4int j=0; j<numberOf_CLOVER; j++)
+        {
+            double angle;
+            G4ThreeVector v2;
+            
+            if(i!=j)
+            {
+                x = sin(CLOVER_theta[j])*cos(CLOVER_phi[j]);
+                y = sin(CLOVER_theta[j])*sin(CLOVER_phi[j]);
+                z = cos(CLOVER_theta[j]);
+                
+                v2 = G4ThreeVector(x, y, z);
+            }
+            
+            angle = v1.angle(v2)/deg;
+
+            if(!initialComparison || angle<smallestPolarAngleDifference)
+            {
+                detNs.clear();
+                detNs.push_back(j);
+                smallestPolarAngleDifference = angle;
+                
+                initialComparison = true;
+            }
+            else if(abs(angle-smallestPolarAngleDifference)<=0.1)
+            {
+                detNs.push_back(j);
+                
+                if(angle<smallestPolarAngleDifference)
+                {
+                    smallestPolarAngleDifference = angle;
+                }
+            }
+        }
+        
+        //std::cout << "CLOVER " << i << ", smallestAngle (with detector " << detN_1 << "): " << smallestPolarAngleDifference << std::endl;
+        
+        std::cout << "CLOVER " << i << ", smallestAngle (with detectors";
+        
+        for(int j=0; j<(int) detNs.size(); j++)
+        {
+            std::cout << ", " << detNs[j] ;
+        }
+        std::cout << "): " << smallestPolarAngleDifference << std::endl;
+    }
+    
     /*
     for(G4int i=0; i<numberOf_CLOVER; i++)
     {
@@ -575,7 +644,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     */
     
     
-    for (G4int i=0; i<numberOf_CLOVER; i++)
+    for(G4int i=0; i<numberOf_CLOVER; i++)
     {
         if(CLOVER_AllPresent_Override) CLOVER_Presence[i] = true;
         if(CLOVER_AllAbsent_Override) CLOVER_Presence[i] = false;
@@ -637,7 +706,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     LEPS_theta[5] = 180*deg;
     LEPS_rotm[5].rotateY(0.*deg);
     
-    for (G4int i=0; i<numberOf_LEPS; i++)
+    for(G4int i=0; i<numberOf_LEPS; i++)
     {
         if( LEPS_AllPresent_Override == true ) LEPS_Presence[i] = true;
         if( LEPS_AllAbsent_Override == true ) LEPS_Presence[i] = false;
@@ -2851,7 +2920,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         Solid_CLOVER_Shield_BGOCrystal[15] = mesh_CLOVER_Shield_BGOCrystal16->TessellatedMesh();
         
         
-        for (G4int k=0; k<16; k++)
+        for(G4int k=0; k<16; k++)
         {
             Logic_CLOVER_Shield_BGOCrystal[k] = new G4LogicalVolume(Solid_CLOVER_Shield_BGOCrystal[k], G4_BGO_Material,"LogicCLOVERShieldBGOCrystal",0,0,0);
         }
@@ -2928,7 +2997,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         Solid_CLOVER_Shield_PMT[14] = mesh_CLOVER_Shield_PMT15->TessellatedMesh();
         Solid_CLOVER_Shield_PMT[15] = mesh_CLOVER_Shield_PMT16->TessellatedMesh();
         
-        for (G4int k=0; k<16; k++)
+        for(G4int k=0; k<16; k++)
         {
             Logic_CLOVER_Shield_PMT[k] = new G4LogicalVolume(Solid_CLOVER_Shield_PMT[k], G4_Al_Material,"LogicCLOVERShieldPMT",0,0,0);
         }
@@ -2949,6 +3018,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //--------------------------------------------
         G4ThreeVector positionVector = CLOVER_position[i].unit();
         
+        /*
         G4ThreeVector positionVector_z = positionVector.unit();
         G4ThreeVector positionVector_y = (positionVector.orthogonal()).unit();
         G4ThreeVector positionVector_x = (positionVector_y.cross(positionVector_z)).unit();
@@ -2957,6 +3027,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         
         G4RotationMatrix rotmPrime(positionVector_x, positionVector_y, positionVector_z);
         //G4RotationMatrix rotmPrime(-positionVector);
+        */
         
         //--------------------------------------------
         /*
@@ -3040,7 +3111,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                               i,               // copy number
                               fCheckOverlaps); // checking overlaps
         
-            for (int j=0; j<4; j++)
+            for(int j=0; j<4; j++)
             {
                 PhysiCLOVER_HPGeCrystal = new G4PVPlacement(0,               // no rotation
                                                             G4ThreeVector(0,0,0), // at (x,y,z)
@@ -3078,17 +3149,21 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                               i,               // copy number
                               fCheckOverlaps); // checking overlaps
             
-            for (int j=0; j<16; j++)
+            for(int j=0; j<16; j++)
             {
+             
+                sprintf(volumeName, "CLOVER_%d_Shield_BGOCrystal%d", i, j);
                 
                 PhysiCLOVER_Shield_BGOCrystal = new G4PVPlacement(CLOVER_Shield_transform[i],
                                                                   Logic_CLOVER_Shield_BGOCrystal[j],
-                                                                  "CLOVER_Shield_BGOCrystal",
+                                                                  volumeName,
                                                                   LogicVacuumChamber,
                                                                   false,
                                                                   i*16 + j,
                                                                   fCheckOverlaps);
                 
+                
+                sprintf(volumeName, "CLOVER_%d_Shield_PMT%d", i, j);
                 
                 PhysiCLOVER_Shield_PMT = new G4PVPlacement(CLOVER_Shield_transform[i],
                                                            Logic_CLOVER_Shield_PMT[j],
