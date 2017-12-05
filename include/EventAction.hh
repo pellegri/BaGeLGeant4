@@ -168,6 +168,8 @@ public:
     
     G4int       evtNb;
     
+    G4double initialParticleKineticEnergy;
+    void SetInitialParticleKineticEnergy(G4double a) {initialParticleKineticEnergy = a;};
     
     /////////////////////
     //      CAKE

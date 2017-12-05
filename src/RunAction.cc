@@ -112,6 +112,7 @@ RunAction::RunAction()
     // Creating ntuple
     analysisManager->CreateNtuple("DataTreeSim", "K600 Spectrometer - Coincident Events");
     
+    analysisManager->CreateNtupleDColumn(0, "InitialParticleKineticEnergy");
     
     //--------------------------------
     //      CLOVER Detectors

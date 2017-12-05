@@ -90,7 +90,8 @@ fEventAction(eventAction)
     //G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
     G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
     fParticleGun->SetParticleDefinition(particleDefinition);
-    fParticleGun->SetParticleEnergy(0.511*MeV);
+    //fParticleGun->SetParticleEnergy(0.511*MeV);
+    fParticleGun->SetParticleEnergy(1.332*MeV);
     fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
     
     ////========================================================////
@@ -273,6 +274,55 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(mx, my, mz));
     */
 
+    ////////////////////////////////////////////////////
+    //      Particle Energy
+    static int particleN = 0;
+    int nParticlesPerEnergy = 1000000;
+    
+    G4double initialParticleKineticEnergy = 0.0*MeV;
+    
+    if(particleN>=(0*nParticlesPerEnergy) && particleN<(1*nParticlesPerEnergy))
+    {
+        initialParticleKineticEnergy = 0.25*MeV;
+    }
+    else if(particleN>=(1*nParticlesPerEnergy) && particleN<(2*nParticlesPerEnergy))
+    {
+        initialParticleKineticEnergy = 0.5*MeV;
+    }
+    else if(particleN>=(2*nParticlesPerEnergy) && particleN<(3*nParticlesPerEnergy))
+    {
+        initialParticleKineticEnergy = 1*MeV;
+    }
+    else if(particleN>=(3*nParticlesPerEnergy) && particleN<(4*nParticlesPerEnergy))
+    {
+        initialParticleKineticEnergy = 1.332*MeV;
+    }
+    else if(particleN>=(4*nParticlesPerEnergy) && particleN<(5*nParticlesPerEnergy))
+    {
+        initialParticleKineticEnergy = 2*MeV;
+    }
+    else if(particleN>=(5*nParticlesPerEnergy) && particleN<(6*nParticlesPerEnergy))
+    {
+        initialParticleKineticEnergy = 5*MeV;
+    }
+    else if(particleN>=(6*nParticlesPerEnergy) && particleN<(7*nParticlesPerEnergy))
+    {
+        initialParticleKineticEnergy = 10*MeV;
+    }
+    else if(particleN>=(7*nParticlesPerEnergy) && particleN<(8*nParticlesPerEnergy))
+    {
+        initialParticleKineticEnergy = 15*MeV;
+    }
+    else if(particleN>=(8*nParticlesPerEnergy) && particleN<(9*nParticlesPerEnergy))
+    {
+        initialParticleKineticEnergy = 20*MeV;
+    }
+
+    particleN++;
+
+    fParticleGun->SetParticleEnergy(initialParticleKineticEnergy);
+    fEventAction->SetInitialParticleKineticEnergy(initialParticleKineticEnergy);
+    
     
     ////////////////////////////////////////////////////
     ////    ISOTROPIC - Inverse Transform Method
@@ -297,8 +347,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
     fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
     
-    fParticleGun->SetParticleMomentumDirection(direction_gamma1);
-    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
+    
+    //fParticleGun->SetParticleMomentumDirection(direction_gamma1);
+    //fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
     
     
     //--------------------------------------------------------

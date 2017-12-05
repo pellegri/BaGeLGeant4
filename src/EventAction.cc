@@ -371,9 +371,14 @@ void EventAction::EndOfEventAction(const G4Event* event)
         }
     }
     
-    
-    
-    
+    ////////////////////////////////////////////////////////
+    //
+    //          Initial Particle Kinetic Energy
+    //
+    ////////////////////////////////////////////////////////
+
+    analysisManager->FillNtupleDColumn(0, 0, initialParticleKineticEnergy);
+
     ////////////////////////////////////////////////////////
     //
     //                CLOVER DETECTOR ARRAY
@@ -443,7 +448,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     if(eventN_CLOVER>0)
     {
-        analysisManager->FillNtupleIColumn(0, 0, eventN_CLOVER);
+        analysisManager->FillNtupleIColumn(0, 1, eventN_CLOVER);
 
         fRunAction->SetCLOVER_IDs(CLOVER_Number_vec);
         fRunAction->SetCLOVER_Energies(CLOVER_Energy_vec);
@@ -558,7 +563,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     if(eventN_LaBr3Ce>0)
     {
-        analysisManager->FillNtupleIColumn(0, 5, eventN_LaBr3Ce);
+        analysisManager->FillNtupleIColumn(0, 6, eventN_LaBr3Ce);
 
         fRunAction->SetLaBr3Ce_IDs(LaBr3Ce_Number_vec);
         fRunAction->SetLaBr3Ce_Energies(LaBr3Ce_Energy_vec);
