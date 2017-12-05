@@ -73,11 +73,13 @@ public:
     //--------------------------------------------------------------------------------
     //      CLOVER detectors
     std::vector<int> CLOVER_iD;
+    std::vector<int> CLOVER_nCrystalsTriggered;
     std::vector<double> CLOVER_energy;
     std::vector<double> CLOVER_detectorTheta;
     std::vector<double> CLOVER_detectorPhi;
     
     void SetCLOVER_IDs(std::vector<int> vec) {CLOVER_iD = vec;};
+    void SetCLOVER_NCrystalsTriggered(std::vector<int> vec) {CLOVER_nCrystalsTriggered = vec;};
     void SetCLOVER_Energies(std::vector<double> vec) {CLOVER_energy = vec;};
     void SetCLOVER_DetectorThetas(std::vector<double> vec) {CLOVER_detectorTheta = vec;};
     void SetCLOVER_DetectorPhis(std::vector<double> vec) {CLOVER_detectorPhi = vec;};

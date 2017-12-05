@@ -201,6 +201,7 @@ public:
     G4double OffsetCLOVER;
     
     std::vector<int> CLOVER_Number_vec;
+    std::vector<int> CLOVER_NCrystalTriggered_vec;
     std::vector<double> CLOVER_Energy_vec;
     std::vector<double> CLOVER_DetectorTheta_vec;
     std::vector<double> CLOVER_DetectorPhi_vec;
