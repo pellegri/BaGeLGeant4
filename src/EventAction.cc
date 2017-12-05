@@ -390,10 +390,14 @@ void EventAction::EndOfEventAction(const G4Event* event)
     {
         for(G4int k=0; k<CLOVER_TotalTimeSamples; k++)
         {
+            bool triggered = false;
+            
             for(G4int j=0; j<4; j++)
             {
                 if(G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 0.7) >= CLOVER_HPGeCrystal_ThresholdEnergy)
                 {
+                    triggered = true;
+                    
                     CLOVER_HPGeCrystal_EDep[i][j][k] = G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 1.7);
                     
                     if(Activate_CLOVER_ComptonSupression)
@@ -435,13 +439,25 @@ void EventAction::EndOfEventAction(const G4Event* event)
                     }
                     */
                     
+                    /*
                     CLOVER_Number_vec.push_back(i);
                     CLOVER_Energy_vec.push_back(CLOVER_EDep[i][k]);
                     CLOVER_DetectorTheta_vec.push_back(std::get<1>(angles_CLOVER[i]));
                     CLOVER_DetectorPhi_vec.push_back(std::get<2>(angles_CLOVER[i]));
                                     
                     eventN_CLOVER++;
+                    */
                 }
+            }
+            
+            if(triggered)
+            {
+                CLOVER_Number_vec.push_back(i);
+                CLOVER_Energy_vec.push_back(CLOVER_EDep[i][k]);
+                CLOVER_DetectorTheta_vec.push_back(std::get<1>(angles_CLOVER[i]));
+                CLOVER_DetectorPhi_vec.push_back(std::get<2>(angles_CLOVER[i]));
+                
+                eventN_CLOVER++;
             }
         }
     }
