@@ -277,7 +277,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     ////////////////////////////////////////////////////
     //      Particle Energy
     static int particleN = 0;
-    int nParticlesPerEnergy = 1000000;
+    int nParticlesPerEnergy = 10000;
     
     G4double initialParticleKineticEnergy = 0.0*MeV;
     

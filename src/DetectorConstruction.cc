@@ -607,13 +607,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
         std::cout << "): " << smallestPolarAngleDifference << std::endl;
     }
     
-    /*
+    
     for(G4int i=0; i<numberOf_CLOVER; i++)
     {
         CLOVER_Presence[i] = false;
         CLOVER_Shield_Presence[i] = false;
     }
-    */
+    
     
     /*
     CLOVER_Presence[0] = true;
@@ -632,14 +632,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CLOVER_theta[0] = 0*deg;
     */
     
-    /*
-    //  Dandelion equivalent crystal distance
+    
+    //  PK
     CLOVER_Presence[0] = true;
-    CLOVER_Shield_Presence[0] = true;
+    CLOVER_Shield_Presence[0] = false;
     CLOVER_Distance[0] = 10.6*cm;
     CLOVER_phi[0] = 0*deg;
     CLOVER_theta[0] = 0*deg;
-    */
+    
     
     for(G4int i=0; i<numberOf_CLOVER; i++)
     {
