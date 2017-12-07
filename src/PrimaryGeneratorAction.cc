@@ -135,7 +135,7 @@ fEventAction(eventAction)
 
     double energyMin = 0.0;
     double energyMax = 25.0;
-    double energyDivision = ((energyMax-energyMin)/energyDivision);
+    double energyDivision = ((energyMax-energyMin)/nEnergies);
     
     for(int i=0; i<nEnergies; i++)
     {
