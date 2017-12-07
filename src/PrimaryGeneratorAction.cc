@@ -124,6 +124,29 @@ fEventAction(eventAction)
     //G4double decayParticleEnergy = (11.520-7.16192)*(12.0/16.0);
     //fParticleGun->SetParticleEnergy(decayParticleEnergy*MeV);
 
+    
+    //----------------------------------------------------
+    particleN = 0;
+    nEnergies = 0;
+    
+    //----------------------------------------------------
+    nEnergies += 250;
+    nParticlesPerEnergy = 2000000; // 502000000 particles to be simulated
+
+    double energyMin = 0.0;
+    double energyMax = 25.0;
+    double energyDivision = ((energyMax-energyMin)/energyDivision);
+    
+    for(int i=0; i<nEnergies; i++)
+    {
+        initialKineticEnergies.push_back((i+1)*energyDivision*MeV);
+    }
+    
+    //----------------------------------------------------
+    //  The "+1" is for the specific 1.332 MeV gamma ray simulation
+    initialKineticEnergies.push_back(1.332*MeV);
+    nEnergies++;
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -276,52 +299,19 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     ////////////////////////////////////////////////////
     //      Particle Energy
-    static int particleN = 0;
-    int nParticlesPerEnergy = 1000000;
-    
     G4double initialParticleKineticEnergy = 0.0*MeV;
     
-    if(particleN>=(0*nParticlesPerEnergy) && particleN<(1*nParticlesPerEnergy))
-    {
-        initialParticleKineticEnergy = 0.25*MeV;
-    }
-    else if(particleN>=(1*nParticlesPerEnergy) && particleN<(2*nParticlesPerEnergy))
-    {
-        initialParticleKineticEnergy = 0.5*MeV;
-    }
-    else if(particleN>=(2*nParticlesPerEnergy) && particleN<(3*nParticlesPerEnergy))
-    {
-        initialParticleKineticEnergy = 1*MeV;
-    }
-    else if(particleN>=(3*nParticlesPerEnergy) && particleN<(4*nParticlesPerEnergy))
-    {
-        initialParticleKineticEnergy = 1.332*MeV;
-    }
-    else if(particleN>=(4*nParticlesPerEnergy) && particleN<(5*nParticlesPerEnergy))
-    {
-        initialParticleKineticEnergy = 2*MeV;
-    }
-    else if(particleN>=(5*nParticlesPerEnergy) && particleN<(6*nParticlesPerEnergy))
-    {
-        initialParticleKineticEnergy = 5*MeV;
-    }
-    else if(particleN>=(6*nParticlesPerEnergy) && particleN<(7*nParticlesPerEnergy))
-    {
-        initialParticleKineticEnergy = 10*MeV;
-    }
-    else if(particleN>=(7*nParticlesPerEnergy) && particleN<(8*nParticlesPerEnergy))
-    {
-        initialParticleKineticEnergy = 15*MeV;
-    }
-    else if(particleN>=(8*nParticlesPerEnergy) && particleN<(9*nParticlesPerEnergy))
-    {
-        initialParticleKineticEnergy = 20*MeV;
-    }
+    int energyN = (int) GetParticleN()/nParticlesPerEnergy;
 
-    particleN++;
-
-    initialParticleKineticEnergy = 1.332*MeV;
-    
+    if(energyN>=nEnergies)
+    {
+        initialParticleKineticEnergy = 30.0*MeV;
+    }
+    else
+    {
+        initialParticleKineticEnergy = initialKineticEnergies[energyN];
+    }
+        
     fParticleGun->SetParticleEnergy(initialParticleKineticEnergy);
     fEventAction->SetInitialParticleKineticEnergy(initialParticleKineticEnergy);
     
@@ -344,7 +334,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     mz = cos(theta*deg);
     
     G4ThreeVector direction_gamma0(mx, my, mz);
-    G4ThreeVector direction_gamma1 = -direction_gamma0;
+    //G4ThreeVector direction_gamma1 = -direction_gamma0;
     
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
     fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
@@ -603,7 +593,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         //function += pow( (0.590203)*(1.0/4.0)*sqrt(5.0/M_PI)*(3*cos(angDist_theta)*cos(angDist_theta) - 1), 2.0);
         //function *= sin(angDist_theta);
 
-        function = evaluateAngDist_interpolated(angDist_theta)*sin(angDist_theta*deg);
+        function = EvaluateAngDist_interpolated(angDist_theta)*sin(angDist_theta*deg);
         //function = 0.01*angDist_theta;
         
         //if(angDist_theta>90.0) G4cout << "PROBLEM: angDist_theta>90.0" << G4endl;
@@ -660,7 +650,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         
         
         angDist_theta = i;
-        function = evaluateAngDist_interpolated(angDist_theta);
+        function = EvaluateAngDist_interpolated(angDist_theta);
 
         //G4cout << "function, " << angDist_theta << ":    " << function << G4endl;
         

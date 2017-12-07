@@ -41,6 +41,7 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 #include "G4ThreeVector.hh"
+#include <mutex>
 
 class G4ParticleGun;
 class G4Event;
@@ -52,6 +53,9 @@ class EventAction;
 /// perpendicular to the input face. The type of the particle
 /// can be changed via the G4 build-in commands of G4ParticleGun class
 /// (see the macros provided with this example).
+
+static std::mutex particleN_mutex;  // protects particleN
+static int particleN;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
@@ -71,7 +75,7 @@ public:
     
     void initialiseAngDist_interpolated(G4String name_angDist);
     
-    G4double evaluateAngDist_interpolated(G4double chosenTheta);
+    G4double EvaluateAngDist_interpolated(G4double chosenTheta);
 
     
 private:
@@ -97,14 +101,26 @@ private:
     G4ThreeVector ejectileDirection;
     G4ThreeVector recoilDirection;
     
+    //------------------------------------------------
+    int nEnergies;
+    int nParticlesPerEnergy;
 
+    std::vector<G4double> initialKineticEnergies;
 
-    
+    int GetParticleN();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double PrimaryGeneratorAction::evaluateAngDist_interpolated(G4double chosenTheta) {
+inline int PrimaryGeneratorAction::GetParticleN() {
+    
+    std::lock_guard<std::mutex> lock(particleN_mutex);
+    return particleN++;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double PrimaryGeneratorAction::EvaluateAngDist_interpolated(G4double chosenTheta) {
 
     G4double result = 0.0;
 
