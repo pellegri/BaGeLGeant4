@@ -139,7 +139,7 @@ fEventAction(eventAction)
     
     for(int i=0; i<nEnergies; i++)
     {
-        initialKineticEnergies.push_back((i+1)*energyDivision*MeV);
+        initialKineticEnergies.push_back(((i+1)*energyDivision)*MeV);
     }
     
     //----------------------------------------------------
