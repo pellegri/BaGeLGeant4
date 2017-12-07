@@ -2643,9 +2643,12 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     
     //G4double CLOVERtoShield_displacement = 10.0;  // cm
 
-    //  Minimum closest distance the CLOVER can placed away from the HEAVIMET to not clash
-    G4double CLOVERtoShield_displacement = 7.8;  // cm
+    //  Minimum closest distance the CLOVER can placed away from the HEAVIMET to not clash (with CloverEncasement.ply)
+    //G4double CLOVERtoShield_displacement = 7.8;  // cm
     
+    //  Measured closest distance the CLOVER can placed away from the HEAVIMET (to be used with CloverEncasement_approx.ply
+    G4double CLOVERtoShield_displacement = 7.3;  // cm
+
     G4ThreeVector offset_CLOVERInternalVacuum = G4ThreeVector(0*cm, 0*cm, -CLOVERtoShield_displacement*cm);
     G4ThreeVector offset_CLOVEREncasement = G4ThreeVector(0*cm, 0*cm, -CLOVERtoShield_displacement*cm);
     G4ThreeVector offset_CLOVERHPGeCrystal1 = G4ThreeVector(0*cm, 0*cm, -CLOVERtoShield_displacement*cm);
@@ -2672,22 +2675,28 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //////////////////////////////////////////////////////////
         //              CLOVER Internal Vacuum - CADMesh
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/CLOVER-InternalVacuum/CloverInternalVacuum.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/CLOVER-InternalVacuum/CloverInternalVacuum.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/CLOVER-InternalVacuum/CloverInternalVacuum_approx.ply");
 
         CADMesh * mesh_CLOVERInternalVacuum = new CADMesh(meshPath, meshType, mm, offset_CLOVERInternalVacuum, false);
         
         G4VSolid * Solid_CLOVERInternalVacuum = mesh_CLOVERInternalVacuum->TessellatedMesh();
         
+        G4VisAttributes* CLOVER_InternalVacuum_VisAtt = new G4VisAttributes(G4Colour(0.7, 0.7, 0.7));
+        CLOVER_InternalVacuum_VisAtt->SetVisibility(false);
+
         for(G4int i=0; i<numberOf_CLOVER; i++)
         {
             Logic_CLOVER_InternalVacuum[i] = new G4LogicalVolume(Solid_CLOVERInternalVacuum, G4_Galactic_Material, "LogicCLOVERInternalVacuum", 0, 0, 0);
+            Logic_CLOVER_InternalVacuum[i]->SetVisAttributes(CLOVER_InternalVacuum_VisAtt);
         }
         
         
         ///////////////////////////////////////////////////////
         //              CLOVER Encasement - CADMesh
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Clover-Encasement/CloverEncasement.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Clover-Encasement/CloverEncasement.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Clover-Encasement/CloverEncasement_new_approx.ply");
 
         CADMesh * mesh_CLOVEREncasement = new CADMesh(meshPath, meshType, mm, offset_CLOVEREncasement, false);
         
@@ -2725,6 +2734,13 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         Logic_CLOVER_HPGeCrystal[2] = new G4LogicalVolume(Solid_HPGeCrystal3, G4_Ge_Material,"LogicCLOVERHPGeCrystal",0,0,0);
         Logic_CLOVER_HPGeCrystal[3] = new G4LogicalVolume(Solid_HPGeCrystal4, G4_Ge_Material,"LogicCLOVERHPGeCrystal",0,0,0);
         
+        G4VisAttributes* CLOVER_HPGeCrystals_VisAtt = new G4VisAttributes(G4Colour(0.9, 0.9, 0.0));
+        CLOVER_InternalVacuum_VisAtt->SetForceSolid(true);
+        
+        Logic_CLOVER_HPGeCrystal[0]->SetVisAttributes(CLOVER_HPGeCrystals_VisAtt);
+        Logic_CLOVER_HPGeCrystal[1]->SetVisAttributes(CLOVER_HPGeCrystals_VisAtt);
+        Logic_CLOVER_HPGeCrystal[2]->SetVisAttributes(CLOVER_HPGeCrystals_VisAtt);
+        Logic_CLOVER_HPGeCrystal[3]->SetVisAttributes(CLOVER_HPGeCrystals_VisAtt);
     }
     
     
@@ -2772,18 +2788,26 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         
         Logic_CLOVER_Shield_Body = new G4LogicalVolume(Solid_CLOVER_Shield_Body, G4_Al_Material, "LogicCLOVERShieldBody", 0, 0, 0);
         
+        G4VisAttributes* CLOVER_ShieldBody_VisAtt = new G4VisAttributes(G4Colour(0.6, 0.6, 0.6));
+        CLOVER_ShieldBody_VisAtt->SetForceSolid(true);
+        Logic_CLOVER_Shield_Body->SetVisAttributes(CLOVER_ShieldBody_VisAtt);
+        
         ///////////////////////////////////////////////////////
         //              CLOVER Shield Heavimet - CADMesh
         ///////////////////////////////////////////////////////
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield_Modified.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield_Modified.ply");
         CADMesh * mesh_CLOVER_Shield_Heavimet = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_Heavimet, false);
         
         G4VSolid * Solid_CLOVER_Shield_Heavimet = mesh_CLOVER_Shield_Heavimet->TessellatedMesh();
         
         Logic_CLOVER_Shield_Heavimet = new G4LogicalVolume(Solid_CLOVER_Shield_Heavimet, Heavimet_Material, "LogicCLOVERShieldHeavimet", 0, 0, 0);
         
+        G4VisAttributes* CLOVER_Shield_HEAVIMET_VisAtt = new G4VisAttributes(G4Colour(0.4, 0.2, 0.2));
+        CLOVER_Shield_HEAVIMET_VisAtt->SetForceSolid(true);
+        Logic_CLOVER_Shield_Heavimet->SetVisAttributes(CLOVER_Shield_HEAVIMET_VisAtt);
+
         ///////////////////////////////////////////////////////
         //      CLOVER Shield PMT Connecter Array - CADMesh
         ///////////////////////////////////////////////////////
