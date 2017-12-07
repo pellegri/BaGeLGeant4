@@ -396,7 +396,8 @@ void EventAction::EndOfEventAction(const G4Event* event)
             
             for(G4int j=0; j<4; j++)
             {
-                if(G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 0.7) >= CLOVER_HPGeCrystal_ThresholdEnergy)
+                //  0.849257 corresponds to a 2 keV FWHM
+                if(G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 0.849257) >= CLOVER_HPGeCrystal_ThresholdEnergy)
                 {
                     nCrystalsTriggered++;
                     triggered = true;

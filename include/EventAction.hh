@@ -121,7 +121,7 @@ const G4double      VDC2_X_WIRE_ThresholdEnergy = 10.;   // keV
 const G4double      CAKE_AA_ThresholdEnergy = .5;   // MeV
 
 ///////////////     CLOVER - Energy Threshold     ///////////////////
-const G4double      CLOVER_HPGeCrystal_ThresholdEnergy = 6.;   // keV
+const G4double      CLOVER_HPGeCrystal_ThresholdEnergy = 25.;   // keV
 
 ///////////////     CLOVER BGO Anti-Compton Shield - Energy Threshold     ///////////////////
 const G4double      CLOVER_BGO_ThresholdEnergy = 5.;  //keV
