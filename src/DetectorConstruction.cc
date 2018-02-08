@@ -2712,16 +2712,20 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //////////////////////////////////////////////////////////
         //              CLOVER HPGeCrystals - CADMesh
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal1.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal1.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal1_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal1 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal1, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal2.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal2.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal2_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal2 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal2, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal3.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal3.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal3_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal3 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal3, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal4.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal4.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal4_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal4 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal4, false);
         
         G4VSolid * Solid_HPGeCrystal1 = mesh_CLOVERHPGeCrystal1->TessellatedMesh();
