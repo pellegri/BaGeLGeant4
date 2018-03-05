@@ -359,7 +359,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
     */
     
-    if(energyN<(int initialKineticEnergies.size()))
+    if(energyN<((int) initialKineticEnergies.size()))
     {
         initialParticleKineticEnergy = initialKineticEnergies[energyN];
     }
