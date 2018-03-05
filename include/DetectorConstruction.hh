@@ -380,6 +380,8 @@ private:
     //  Shield PMT Tubes
     G4VPhysicalVolume*  PhysiCLOVER_Shield_PMT;
     
+    //  Boolean to use Walid's definition of the CLOVER crystal
+    bool useCLOVER_Walid;
     
     //////////////////////////////////////
     //          K600 SPECTROMETER

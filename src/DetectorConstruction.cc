@@ -92,6 +92,8 @@
 #include "MagneticFieldMapping.hh"
 //#include "G4BlineTracer.hh"
 
+#include "GeometryConstructionDANDELION3.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreadLocal G4GlobalMagFieldMessenger* DetectorConstruction::fMagFieldMessenger = 0;
@@ -361,6 +363,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CLOVER_Shield_AllPresent_Override = false;
     CLOVER_Shield_AllAbsent_Override = false;
     
+    //--------------------------------
+    useCLOVER_Walid = false;
+    
+    if(useCLOVER_Walid)
+    {
+        DefineHPGeCrystal_Walid();
+    }
+    
     /*
     //  CLOVER 1
     CLOVER_Presence[0] = true;
@@ -607,13 +617,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
         std::cout << "): " << smallestPolarAngleDifference << std::endl;
     }
     
-    /*
+    
     for(G4int i=0; i<numberOf_CLOVER; i++)
     {
         CLOVER_Presence[i] = false;
         CLOVER_Shield_Presence[i] = false;
     }
-    */
     
     /*
     CLOVER_Presence[0] = true;
@@ -622,6 +631,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CLOVER_phi[0] = 0*deg;
     CLOVER_theta[0] = 0*deg;
     */
+    
+    CLOVER_Presence[0] = true;
+    CLOVER_Shield_Presence[0] = true;
+    CLOVER_Distance[0] = (25.0-7.3)*cm;
+    CLOVER_phi[0] = 0*deg;
+    CLOVER_theta[0] = 0*deg;
+    
     
     /*
     //  Dandelion equivalent crystal distance
@@ -2705,7 +2721,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         Logic_CLOVER_Encasement = new G4LogicalVolume(Solid_CLOVEREncasement, G4_Al_Material, "LogicCLOVERCloverEncasement", 0, 0, 0);
         
         G4VisAttributes* CLOVER_Encasement_VisAtt = new G4VisAttributes(G4Colour(0.7, 0.7, 0.7));
-        CLOVER_Encasement_VisAtt->SetForceSolid(true);
+        //CLOVER_Encasement_VisAtt->SetForceSolid(true);
         Logic_CLOVER_Encasement->SetVisAttributes(CLOVER_Encasement_VisAtt);
 
         
@@ -2800,8 +2816,9 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //              CLOVER Shield Heavimet - CADMesh
         ///////////////////////////////////////////////////////
         
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield_Modified.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield_Modified.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_40mm_mod_10um.ply");
         CADMesh * mesh_CLOVER_Shield_Heavimet = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_Heavimet, false);
         
         G4VSolid * Solid_CLOVER_Shield_Heavimet = mesh_CLOVER_Shield_Heavimet->TessellatedMesh();
@@ -3126,7 +3143,6 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         
         CLOVER_Shield_transform[i] = CLOVER_transform[i];
         
-        
         /////////////////////////////
         //          CLOVER
         if(CLOVER_Presence[i])
@@ -3139,17 +3155,198 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                               i,               // copy number
                               fCheckOverlaps); // checking overlaps
         
-            for(int j=0; j<4; j++)
+            if(useCLOVER_Walid)
             {
-                PhysiCLOVER_HPGeCrystal = new G4PVPlacement(0,               // no rotation
-                                                            G4ThreeVector(0,0,0), // at (x,y,z)
-                                                            Logic_CLOVER_HPGeCrystal[j],
-                                                            "CLOVER_HPGeCrystal", // its name
-                                                            Logic_CLOVER_InternalVacuum[i],
-                                                            false,           // no boolean operations
-                                                            i*4 + j,               // copy number
-                                                            fCheckOverlaps); // checking overlaps
+                G4VisAttributes* CLOVER_HPGeCrystals_Walid_VisAtt = new G4VisAttributes(G4Colour(0.9, 0.9, 0.0));
+                CLOVER_HPGeCrystals_Walid_VisAtt->SetForceSolid(true);
+                Logic_HPGeCrystal_Walid->SetVisAttributes(CLOVER_HPGeCrystals_Walid_VisAtt);
                 
+                G4double length_head = (5./atan(7.1*deg)); // 5 = total enlevé vers lavant de la face tapered
+                
+                //--------------------
+                //      STANDARD
+                
+                for(int j=0; j<3; j++)
+                {
+                    //------------------------------------------------
+                    G4ThreeVector position_HPGeCrystal_Walid;
+                    //double offset = (-35.0-20.0); // mm
+                    //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
+                    
+                    //  Properly centered
+                    double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
+                    
+                    //  Walid's mistake
+                    //double offset = (28.5-length_head-20.0)-20.0-(CLOVERtoShield_displacement*10.0); // mm
+                    //double offset = (28.5-length_head-20); // mm
+
+                    if(j==0)
+                    {
+                        position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, 20.501*mm, offset*mm);
+                    }
+                    else if(j==1)
+                    {
+                        position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, -20.501*mm, offset*mm);
+                    }
+                    else if(j==2)
+                    {
+                        position_HPGeCrystal_Walid = G4ThreeVector(20.501*mm, -20.501*mm, offset*mm);
+                    }
+                    else if(j==3)
+                    {
+                        position_HPGeCrystal_Walid = G4ThreeVector(20.501*mm, 20.501*mm, offset*mm);
+                    }
+                    
+                    //------------------------------------------------
+                    G4RotationMatrix* rm_HPGeCrystal_Walid = new G4RotationMatrix();
+                    rm_HPGeCrystal_Walid->rotateZ(((j+1)*90.0)*deg);
+                    
+                    //------------------------------------------------
+                    G4Transform3D CLOVER_HPGeCrystal_Walid_transform = G4Transform3D(*rm_HPGeCrystal_Walid, position_HPGeCrystal_Walid);
+                    
+                    //------------------------------------------------
+                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(CLOVER_HPGeCrystal_Walid_transform,
+                                                                Logic_HPGeCrystal_Walid,
+                                                                "CLOVER_HPGeCrystal", // its name
+                                                                Logic_CLOVER_InternalVacuum[i],
+                                                                false,           // no boolean operations
+                                                                i*4 + j,               // copy number
+                                                                fCheckOverlaps); // checking overlaps
+                    
+                }
+
+                for(int j=3; j<4; j++)
+                {
+                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(0,               // no rotation
+                                                                G4ThreeVector(0,0,0), // at (x,y,z)
+                                                                Logic_CLOVER_HPGeCrystal[j],
+                                                                "CLOVER_HPGeCrystal", // its name
+                                                                Logic_CLOVER_InternalVacuum[i],
+                                                                false,           // no boolean operations
+                                                                i*4 + j,               // copy number
+                                                                fCheckOverlaps); // checking overlaps
+                    
+                }
+                
+                
+                /*
+                //--------------------------------------------
+                //      Test at origin (of VacuumChamber)
+                for(int j=0; j<1; j++)
+                {
+                    //------------------------------------------------
+                    G4ThreeVector position_HPGeCrystal_Walid;
+                    //double offset = -(28.5-length_head); // mm
+                    double offset = (28.5-length_head-20); // mm
+                    //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
+                    //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
+                    
+                    if(j==0)
+                    {
+                        position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, 20.501*mm, offset*mm);
+                    }
+                    else if(j==1)
+                    {
+                        position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, -20.501*mm, offset*mm);
+                    }
+                    else if(j==2)
+                    {
+                        position_HPGeCrystal_Walid = G4ThreeVector(20.501*mm, -20.501*mm, offset*mm);
+                    }
+                    else if(j==3)
+                    {
+                        position_HPGeCrystal_Walid = G4ThreeVector(20.501*mm, 20.501*mm, offset*mm);
+                    }
+                    
+                    //------------------------------------------------
+                    G4RotationMatrix* rm_HPGeCrystal_Walid = new G4RotationMatrix();
+                    rm_HPGeCrystal_Walid->rotateZ(((j+1)*90.0)*deg);
+                    
+                    //------------------------------------------------
+                    G4Transform3D CLOVER_HPGeCrystal_Walid_transform = G4Transform3D(*rm_HPGeCrystal_Walid, position_HPGeCrystal_Walid);
+                    
+                    //------------------------------------------------
+                    
+                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(CLOVER_HPGeCrystal_Walid_transform,
+                                                                Logic_HPGeCrystal_Walid,
+                                                                "CLOVER_HPGeCrystal", // its name
+                                                                LogicVacuumChamber,
+                                                                false,           // no boolean operations
+                                                                i*4 + j,               // copy number
+                                                                fCheckOverlaps); // checking overlaps
+                    
+                    
+                    
+                    offset = (CLOVERtoShield_displacement*cm+20*mm); // mm
+                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(0,               // no rotation
+                                                                G4ThreeVector(0,0,offset), // at (x,y,z)
+                                                                Logic_CLOVER_HPGeCrystal[j],
+                                                                "CLOVER_HPGeCrystal", // its name
+                                                                Logic_CLOVER_InternalVacuum[i],
+                                                                false,           // no boolean operations
+                                                                i*4 + j,               // copy number
+                                                                fCheckOverlaps); // checking overlaps
+                }
+                */
+                
+                //--------------------
+                //      TEMP
+                /*
+                for(int j=0; j<4; j++)
+                {
+                    //------------------------------------------------
+                    G4ThreeVector position_HPGeCrystal_Walid;
+                    
+                    if(j==0)
+                    {
+                        position_HPGeCrystal_Walid = G4ThreeVector(0.0, 0.0, 0.0);
+                    }
+                    else if(j==1)
+                    {
+                        position_HPGeCrystal_Walid = G4ThreeVector(0.0, 0.0, 0.0);
+                    }
+                    else if(j==2)
+                    {
+                        position_HPGeCrystal_Walid = G4ThreeVector(0.0, 0.0, 0.0);
+                    }
+                    else if(j==3)
+                    {
+                        position_HPGeCrystal_Walid = G4ThreeVector(0.0, 0.0, 0.0);
+                    }
+                    
+                    //------------------------------------------------
+                    G4RotationMatrix* rm_HPGeCrystal_Walid = new G4RotationMatrix();
+                    rm_HPGeCrystal_Walid->rotateZ((i*90.0)*deg);
+                    
+                    //------------------------------------------------
+                    G4Transform3D CLOVER_HPGeCrystal_Walid_transform = G4Transform3D(*rm_HPGeCrystal_Walid, position_HPGeCrystal_Walid);
+
+                    //------------------------------------------------
+                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(CLOVER_HPGeCrystal_Walid_transform,
+                                                                Logic_HPGeCrystal_Walid,
+                                                                "CLOVER_HPGeCrystal", // its name
+                                                                Logic_CLOVER_InternalVacuum[i],
+                                                                false,           // no boolean operations
+                                                                i*4 + j,               // copy number
+                                                                fCheckOverlaps); // checking overlaps
+                    
+                }
+                */
+            }
+            else
+            {
+                for(int j=0; j<4; j++)
+                {
+                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(0,               // no rotation
+                                                                G4ThreeVector(0,0,0), // at (x,y,z)
+                                                                Logic_CLOVER_HPGeCrystal[j],
+                                                                "CLOVER_HPGeCrystal", // its name
+                                                                Logic_CLOVER_InternalVacuum[i],
+                                                                false,           // no boolean operations
+                                                                i*4 + j,               // copy number
+                                                                fCheckOverlaps); // checking overlaps
+                    
+                }
             }
             
             new G4PVPlacement(CLOVER_transform[i],
@@ -3179,9 +3376,10 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
             
             for(int j=0; j<16; j++)
             {
-             
+                //------------------------------------------------
                 sprintf(volumeName, "CLOVER_%d_Shield_BGOCrystal%d", i, j);
                 
+                /*
                 PhysiCLOVER_Shield_BGOCrystal = new G4PVPlacement(CLOVER_Shield_transform[i],
                                                                   Logic_CLOVER_Shield_BGOCrystal[j],
                                                                   volumeName,
@@ -3189,8 +3387,17 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                                                                   false,
                                                                   i*16 + j,
                                                                   fCheckOverlaps);
+                */
                 
-                
+                PhysiCLOVER_Shield_BGOCrystal = new G4PVPlacement(CLOVER_Shield_transform[i],
+                                                                  Logic_CLOVER_Shield_BGOCrystal[j],
+                                                                  "CLOVER_Shield_BGOCrystal",
+                                                                  LogicVacuumChamber,
+                                                                  false,
+                                                                  i*16 + j,
+                                                                  fCheckOverlaps);
+
+                //------------------------------------------------
                 sprintf(volumeName, "CLOVER_%d_Shield_PMT%d", i, j);
                 
                 PhysiCLOVER_Shield_PMT = new G4PVPlacement(CLOVER_Shield_transform[i],

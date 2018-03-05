@@ -132,7 +132,10 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     CLOVER_Energy_vec.clear();
     CLOVER_DetectorTheta_vec.clear();
     CLOVER_DetectorPhi_vec.clear();
-
+    CLOVER_CrystalReflectionIndex_vec.clear();
+    
+    CLOVER_BGO_Triggered_vec.clear();
+    
     for(G4int i=0; i<numberOf_CLOVER; i++)
     {
         for (G4int k=0; k<CLOVER_TotalTimeSamples; k++)
@@ -393,17 +396,70 @@ void EventAction::EndOfEventAction(const G4Event* event)
         {
             int nCrystalsTriggered = 0;
             bool triggered = false;
+            bool triggered_BGOCrystal = false;
+            int HPGeCrystalReflectionIndex = 1;
             
             for(G4int j=0; j<4; j++)
             {
                 //  0.849257 corresponds to a 2 keV FWHM
-                if(G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 0.849257) >= CLOVER_HPGeCrystal_ThresholdEnergy)
+                //if(G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 0.849257) >= CLOVER_HPGeCrystal_ThresholdEnergy)
+                if(CLOVER_HPGeCrystal_EDep[i][j][k] >= CLOVER_HPGeCrystal_ThresholdEnergy)
                 {
                     nCrystalsTriggered++;
                     triggered = true;
                     
-                    CLOVER_HPGeCrystal_EDep[i][j][k] = G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 1.7);
+                    //CLOVER_HPGeCrystal_EDep[i][j][k] = G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 1.7);
+                    CLOVER_HPGeCrystal_EDep[i][j][k] = G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 0.849257);
                     
+                    if(Activate_CLOVER_ADDBACK && CLOVER_HPGeCrystal_EDep[i][j][k] != 0)
+                    {
+                        //      ADDBACK
+                        CLOVER_EDep[i][k] += CLOVER_HPGeCrystal_EDep[i][j][k];
+                        
+                        if(j==0 || j==2)
+                        {
+                            HPGeCrystalReflectionIndex *= 1;
+                        }
+                        else if(j==1 || j==3)
+                        {
+                            HPGeCrystalReflectionIndex *= -1;
+                        }
+                    }
+
+                    if(Activate_CLOVER_ComptonSupression)
+                    {
+                        /*
+                        for(G4int l=0; l<CLOVER_ComptonSupression_TimeWindow; l++)
+                        {
+                            if(k+l<CLOVER_TotalTimeSamples)
+                            {
+                                for(G4int m=0; m<16; m++)
+                                {
+                                    //      COMPTON SUPRESSION - VETO CLOVER Energy Depositions in anti-coincidence with BGO Shield Energy Deposition
+                                    if(CLOVER_BGO_EDep[i][m][k+l] >= CLOVER_BGO_ThresholdEnergy)
+                                    {
+                                        G4cout << "Compton Suppression!" << G4endl;
+                                        triggered_BGOCrystal = true;
+                                    }
+                                }
+                            }
+                        }
+                        */
+                        
+                        for(G4int l=0; l<CLOVER_Shield_BGO_TotalTimeSamples; l++)
+                        {
+                            for(G4int m=0; m<16; m++)
+                            {
+                                //      COMPTON SUPRESSION - VETO CLOVER Energy Depositions in anti-coincidence with BGO Shield Energy Deposition
+                                if(CLOVER_BGO_EDep[i][m][l] >= CLOVER_BGO_ThresholdEnergy)
+                                {
+                                    triggered_BGOCrystal = true;
+                                }
+                            }
+                        }
+                    }
+
+                    /*
                     if(Activate_CLOVER_ComptonSupression)
                     {
                         for(G4int l=0; l<CLOVER_ComptonSupression_TimeWindow; l++)
@@ -419,7 +475,9 @@ void EventAction::EndOfEventAction(const G4Event* event)
                         }
                         if (CLOVER_HPGeCrystal_EDepVETO[i][j][k]) CLOVER_HPGeCrystal_EDep[i][j][k] = 0;
                     }
+                    */
                     
+                    /*
                     if(Activate_CLOVER_ADDBACK && CLOVER_HPGeCrystal_EDep[i][j][k] != 0)
                     {
                         //      ADDBACK
@@ -431,6 +489,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
                         //      For the Entire Clover Array
                         //analysisManager->FillH1(19, GainCLOVER*CLOVER_EDep[i][k] +  OffsetCLOVER);
                     }
+                    */
                     
                     /*
                     else if(CLOVER_HPGeCrystal_EDep[i][j][k] != 0)
@@ -461,6 +520,9 @@ void EventAction::EndOfEventAction(const G4Event* event)
                 CLOVER_Energy_vec.push_back(CLOVER_EDep[i][k]);
                 CLOVER_DetectorTheta_vec.push_back(std::get<1>(angles_CLOVER[i]));
                 CLOVER_DetectorPhi_vec.push_back(std::get<2>(angles_CLOVER[i]));
+                CLOVER_CrystalReflectionIndex_vec.push_back(HPGeCrystalReflectionIndex);
+                
+                CLOVER_BGO_Triggered_vec.push_back(triggered_BGOCrystal);
                 
                 eventN_CLOVER++;
             }
@@ -476,9 +538,14 @@ void EventAction::EndOfEventAction(const G4Event* event)
         fRunAction->SetCLOVER_Energies(CLOVER_Energy_vec);
         fRunAction->SetCLOVER_DetectorThetas(CLOVER_DetectorTheta_vec);
         fRunAction->SetCLOVER_DetectorPhis(CLOVER_DetectorPhi_vec);
+        fRunAction->SetCLOVER_CrystalReflectionIndices(CLOVER_CrystalReflectionIndex_vec);
+
+        fRunAction->SetCLOVER_BGOCrystalsTriggered(CLOVER_BGO_Triggered_vec);
+        
+        analysisManager->AddNtupleRow(0);
     }
     
-    
+
     ////////////////////////////////////////////////////
     //
     //              LEPS DETECTOR ARRAY

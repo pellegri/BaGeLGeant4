@@ -85,12 +85,12 @@ const G4double      PADDLE_TotalSampledTime = PADDLE_SamplingTime * PADDLE_Total
 
 ///////////////     CLOVER Detectors - PIXIE16 Sampling     ///////////////////
 const G4bool        Activate_CLOVER_ADDBACK = true;
-const G4bool        Activate_CLOVER_ComptonSupression = false;
+const G4bool        Activate_CLOVER_ComptonSupression = true;
 
 const G4double      CLOVER_SamplingTime = 10; // ns
 const G4int         CLOVER_TotalTimeSamples = 10; //
 const G4double      CLOVER_TotalSampledTime = CLOVER_SamplingTime * CLOVER_TotalTimeSamples; // ns
-const G4int         CLOVER_ComptonSupression_TimeWindow = 3; // Amount of CLOVER Time Samples
+const G4int         CLOVER_ComptonSupression_TimeWindow = 1; // Amount of CLOVER Time Samples
 
 ///////////////     CLOVER BGO Anti-Compton Shield - PIXIE16 Sampling    ///////////////////
 const G4double      CLOVER_Shield_BGO_SamplingTime = CLOVER_SamplingTime; // ns
@@ -121,10 +121,10 @@ const G4double      VDC2_X_WIRE_ThresholdEnergy = 10.;   // keV
 const G4double      CAKE_AA_ThresholdEnergy = .5;   // MeV
 
 ///////////////     CLOVER - Energy Threshold     ///////////////////
-const G4double      CLOVER_HPGeCrystal_ThresholdEnergy = 25.;   // keV
+const G4double      CLOVER_HPGeCrystal_ThresholdEnergy = 40.;   // keV
 
 ///////////////     CLOVER BGO Anti-Compton Shield - Energy Threshold     ///////////////////
-const G4double      CLOVER_BGO_ThresholdEnergy = 5.;  //keV
+const G4double      CLOVER_BGO_ThresholdEnergy = 10.;  //keV
 
 ///////////////     LEPS - Energy Threshold     ///////////////////
 const G4double      LEPS_HPGeCrystal_ThresholdEnergy = 6.;   // keV
@@ -205,7 +205,8 @@ public:
     std::vector<double> CLOVER_Energy_vec;
     std::vector<double> CLOVER_DetectorTheta_vec;
     std::vector<double> CLOVER_DetectorPhi_vec;
-    
+    std::vector<int> CLOVER_CrystalReflectionIndex_vec;
+
     G4double    CLOVER_HPGeCrystal_EDep[numberOf_CLOVER][4][CLOVER_TotalTimeSamples];
     G4bool      CLOVER_HPGeCrystal_EDepVETO[numberOf_CLOVER][4][CLOVER_TotalTimeSamples];
     G4double    CLOVER_EDep[numberOf_CLOVER][CLOVER_TotalTimeSamples];
@@ -216,7 +217,10 @@ public:
     
     /////////////////////////////////////////
     //      CLOVER Shield BGO Crystals
-    G4double    CLOVER_BGO_EDep[numberOf_CLOVER_Shields][16][CLOVER_Shield_BGO_TotalTimeSamples+CLOVER_ComptonSupression_TimeWindow];
+    
+    std::vector<int> CLOVER_BGO_Triggered_vec;
+    
+    G4double    CLOVER_BGO_EDep[numberOf_CLOVER_Shields][16][CLOVER_Shield_BGO_TotalTimeSamples];
     
     void AddEnergyBGODetectors(G4int i, G4int j, G4int k, G4double a)	{CLOVER_BGO_EDep[i][j][k] += a;};
     

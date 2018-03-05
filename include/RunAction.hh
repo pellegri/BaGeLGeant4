@@ -77,12 +77,18 @@ public:
     std::vector<double> CLOVER_energy;
     std::vector<double> CLOVER_detectorTheta;
     std::vector<double> CLOVER_detectorPhi;
-    
+    std::vector<int> CLOVER_CrystalReflectionIndex;
+
+    std::vector<int> CLOVER_BGOCrystalsTriggered;
+
     void SetCLOVER_IDs(std::vector<int> vec) {CLOVER_iD = vec;};
     void SetCLOVER_NCrystalsTriggered(std::vector<int> vec) {CLOVER_nCrystalsTriggered = vec;};
     void SetCLOVER_Energies(std::vector<double> vec) {CLOVER_energy = vec;};
     void SetCLOVER_DetectorThetas(std::vector<double> vec) {CLOVER_detectorTheta = vec;};
     void SetCLOVER_DetectorPhis(std::vector<double> vec) {CLOVER_detectorPhi = vec;};
+    void SetCLOVER_CrystalReflectionIndices(std::vector<int> vec) {CLOVER_CrystalReflectionIndex = vec;};
+
+    void SetCLOVER_BGOCrystalsTriggered(std::vector<int> vec) {CLOVER_BGOCrystalsTriggered = vec;};
 
     //--------------------------------------------------------------------------------
     //      LaBr3Ce detectors

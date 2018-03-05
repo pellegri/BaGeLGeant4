@@ -92,8 +92,10 @@ fEventAction(eventAction)
     fParticleGun->SetParticleDefinition(particleDefinition);
     //fParticleGun->SetParticleEnergy(0.511*MeV);
     fParticleGun->SetParticleEnergy(1.332*MeV);
-    fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
     
+    //fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+    fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,25.*cm));
+
     ////========================================================////
     ////    Initialise a pre-calculated angular distribution
     G4String angDist_name = "a0_15097_16O";
@@ -130,6 +132,7 @@ fEventAction(eventAction)
     nEnergies = 0;
     
     //----------------------------------------------------
+    /*
     nEnergies += 250;
     nParticlesPerEnergy = 2000000; // 502000000 particles to be simulated
 
@@ -146,7 +149,28 @@ fEventAction(eventAction)
     //  The "+1" is for the specific 1.332 MeV gamma ray simulation
     initialKineticEnergies.push_back(1.332*MeV);
     nEnergies++;
+    */
     
+    
+    //----------------------------------------------------
+    nParticlesPerEnergy = 5000000;
+    
+    initialKineticEnergies.push_back(100.0*keV);
+    initialKineticEnergies.push_back(133.2*keV);
+    initialKineticEnergies.push_back(200.0*keV);
+    initialKineticEnergies.push_back(400.0*keV);
+    initialKineticEnergies.push_back(700.0*keV);
+    initialKineticEnergies.push_back(1.0*MeV);
+    initialKineticEnergies.push_back(1.332*MeV);
+    initialKineticEnergies.push_back(2.0*MeV);
+    initialKineticEnergies.push_back(4.0*MeV);
+    initialKineticEnergies.push_back(7.0*MeV);
+    initialKineticEnergies.push_back(10.0*MeV);
+    initialKineticEnergies.push_back(13.32*MeV);
+    initialKineticEnergies.push_back(20.0*MeV);
+
+    //- gamma energies are 100, 133.2, 200, 400, 700, 1000, 1332, 2000, 4000, 7000, 10000, 13320, 20000 keV
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -299,11 +323,14 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     ////////////////////////////////////////////////////
     //      Particle Energy
+    
+    /*
+    //--------------------------------------------------------------------
     G4double initialParticleKineticEnergy = 0.0*MeV;
     
     int energyN = (int) GetParticleN()/nParticlesPerEnergy;
 
-    if(energyN>=nEnergies)
+    if(energyN>=(int initialKineticEnergies.size()))
     {
         initialParticleKineticEnergy = 30.0*MeV;
     }
@@ -314,8 +341,43 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         
     fParticleGun->SetParticleEnergy(initialParticleKineticEnergy);
     fEventAction->SetInitialParticleKineticEnergy(initialParticleKineticEnergy);
+    */
     
+    //--------------------------------------------------------------------
+    G4double initialParticleKineticEnergy = 0.0*MeV;
     
+    int energyN = (int) GetParticleN()/nParticlesPerEnergy;
+    
+    /*
+    if(energyN>=(int initialKineticEnergies.size()))
+    {
+        initialParticleKineticEnergy = 30.0*MeV;
+    }
+    else
+    {
+        initialParticleKineticEnergy = initialKineticEnergies[energyN];
+    }
+    */
+    
+    if(energyN<(int initialKineticEnergies.size()))
+    {
+        initialParticleKineticEnergy = initialKineticEnergies[energyN];
+    }
+    else
+    {
+        initialParticleKineticEnergy = 30.0*MeV;
+    }
+    
+    fParticleGun->SetParticleEnergy(initialParticleKineticEnergy);
+    fEventAction->SetInitialParticleKineticEnergy(initialParticleKineticEnergy);
+    
+    //--------------------------------------------------------------------
+    /*
+    fParticleGun->SetParticleEnergy(1.0*MeV);
+    fEventAction->SetInitialParticleKineticEnergy(1.0*MeV);
+    */
+    
+
     ////////////////////////////////////////////////////
     ////    ISOTROPIC - Inverse Transform Method
     

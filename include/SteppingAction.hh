@@ -105,7 +105,8 @@ private:
     
     ////    CLOVER BGO-Crystal, Compton Supression Shield
     G4double    edepCLOVER_BGOCrystal;
-    
+    G4int       CLOVER_BGOCrystalNo;
+
     ////    LEPS DETECTOR
     G4double    edepLEPS_HPGeCrystal;
     G4int       LEPSNo;

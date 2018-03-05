@@ -176,7 +176,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
             
             
             //  X WireChamber
-            if( (WireChamberNo==0) || (WireChamberNo==2) )
+            if((WireChamberNo==0) || (WireChamberNo==2) )
             {
                 xPosL = localPosition.x()/mm;
                 yPosL = localPosition.y()/mm;
@@ -186,7 +186,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
                 
                 while(cellNo<198 && !CompletedVDCFilling)
                 {
-                    if( (xPosL > (-99+cellNo)*4) && (xPosL <= (-98+cellNo)*4) )
+                    if((xPosL > (-99+cellNo)*4) && (xPosL <= (-98+cellNo)*4) )
                     {
                         if(WireChamberNo==0) channelID = cellNo;
                         if(WireChamberNo==2) channelID = cellNo + 341;
@@ -198,7 +198,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
                         {
                             hit_StoredChannelNo = fEventAction->GetVDC_ObservablesChannelID(bufferNo);
                             
-                            if( (hit_StoredChannelNo < 0) || (hit_StoredChannelNo == channelID) )
+                            if((hit_StoredChannelNo < 0) || (hit_StoredChannelNo == channelID) )
                             {
                                 fEventAction->FillVDC_Observables(bufferNo, channelID, edepVDC, edepVDC*zPosL, edepVDC*interactiontime);
                                 
@@ -214,7 +214,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
             }
             
             //  U WireChamber
-            if( (WireChamberNo==1) || (WireChamberNo==3) )
+            if((WireChamberNo==1) || (WireChamberNo==3) )
             {
                 xPosL = localPosition.x()/mm;
                 yPosL = localPosition.y()/mm;
@@ -226,7 +226,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
                 
                 while(cellNo<143 && !CompletedVDCFilling)
                 {
-                    if( (xPosL > (-71.5+cellNo)*abs(xShift) + xOffset) && (xPosL <= (-70.5+cellNo)*abs(xShift) + xOffset) )
+                    if((xPosL > (-71.5+cellNo)*abs(xShift) + xOffset) && (xPosL <= (-70.5+cellNo)*abs(xShift) + xOffset) )
                     {
                         if(WireChamberNo==1) channelID = cellNo + 198;
                         if(WireChamberNo==3) channelID = cellNo + 539;
@@ -235,7 +235,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
                         {
                             hit_StoredChannelNo = fEventAction->GetVDC_ObservablesChannelID(bufferNo);
                             
-                            if( (hit_StoredChannelNo < 0) || (hit_StoredChannelNo == channelID) )
+                            if((hit_StoredChannelNo < 0) || (hit_StoredChannelNo == channelID) )
                             {
                                 fEventAction->FillVDC_Observables(bufferNo, channelID, edepVDC, edepVDC*zPosL, edepVDC*interactiontime);
                                 
@@ -278,9 +278,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     //              PADDLE DETECTORS
     ////////////////////////////////////////////////
     
-    if (interactiontime < PADDLE_TotalSampledTime)
+    if(interactiontime < PADDLE_TotalSampledTime)
     {
-        if (volumeName == "PADDLE")
+        if(volumeName == "PADDLE")
         {
             channelID = volume->GetCopyNo();
             
@@ -309,7 +309,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     
     if(interactiontime < CLOVER_TotalSampledTime)
     {
-        if (volumeName == "CLOVER_HPGeCrystal")
+        if(volumeName == "CLOVER_HPGeCrystal")
         {
             channelID = volume->GetCopyNo();
             
@@ -330,26 +330,50 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
         }
     }
     
-    /*
-     if (interactiontime < CLOVER_Shield_BGO_TotalSampledTime)
-     {
-     for(G4int i=0; i<8; i++)
-     {
-     for(G4int l=0; l<16; l++)
-     {
-     if ( volume == fDetConstruction->GetVolume_CLOVER_Shield_BGOCrystal(i, l) && interactiontime <     CLOVER_Shield_BGO_TotalSampledTime )
-     {
-     iTS = interactiontime/CLOVER_Shield_BGO_SamplingTime;
-     edepCLOVER_BGOCrystal = aStep->GetTotalEnergyDeposit()/keV;
-     
-     fEventAction->AddEnergyBGODetectors(i, l, iTS, edepCLOVER_BGOCrystal);
-     //G4cout << "Here is the edepCLOVER_BGOCrystal    "<< edepBGO << G4endl;
-     }
-     }
-     }
-     }
-     */
-    
+    if(interactiontime < CLOVER_Shield_BGO_TotalSampledTime)
+    {
+        if(volumeName == "CLOVER_Shield_BGOCrystal")
+        {
+            channelID = volume->GetCopyNo();
+            
+            CLOVERNo = channelID/16;
+            CLOVER_BGOCrystalNo = channelID%16;
+            
+            iTS = interactiontime/CLOVER_SamplingTime;
+            edepCLOVER_BGOCrystal = aStep->GetTotalEnergyDeposit()/keV;
+            
+            fEventAction->AddEnergyBGODetectors(CLOVERNo, CLOVER_BGOCrystalNo, iTS, edepCLOVER_BGOCrystal);
+            
+            /*
+            if(edepCLOVER_BGOCrystal>0.0)
+            {
+                G4cout << "edepCLOVER_BGOCrystal: " << edepCLOVER_BGOCrystal << std::endl;
+                G4cout << "iTS: " << iTS << std::endl;
+                G4cout << "CLOVERNo: " << CLOVERNo << std::endl;
+                G4cout << "CLOVER_BGOCrystalNo: " << CLOVER_BGOCrystalNo << std::endl;
+            }
+            */
+            
+        }
+        
+        /*
+        for(G4int i=0; i<numberOf_CLOVER; i++)
+        {
+            for(G4int l=0; l<16; l++)
+            {
+                if(volume == fDetConstruction->GetVolume_CLOVER_Shield_BGOCrystal(i, l) && interactiontime < CLOVER_Shield_BGO_TotalSampledTime)
+                {
+                    iTS = interactiontime/CLOVER_Shield_BGO_SamplingTime;
+                    edepCLOVER_BGOCrystal = aStep->GetTotalEnergyDeposit()/keV;
+                    
+                    fEventAction->AddEnergyBGODetectors(i, l, iTS, edepCLOVER_BGOCrystal);
+                    //G4cout << "Here is the edepCLOVER_BGOCrystal    "<< edepBGO << G4endl;
+                }
+            }
+        }
+        */
+    }
+
     ////////////////////////////////////////////////
     //              LEPS DETECTOR ARRAY
     ////////////////////////////////////////////////
@@ -388,7 +412,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
         fEventAction->AddEWpositionZ_LaBr3Ce_LaBr3CeCrystal(LaBr3CeNo, iTS, edepLaBr3Ce_LaBr3CeCrystal*worldPosition.z()/cm);
     }
 
-    //if (volumeName=="CAKE_Assembly" && !fEventAction->GA_GetLineOfSight() )   G4cout << "Here is the CAKE_Assembly Hit!" << G4endl;
+    //if(volumeName=="CAKE_Assembly" && !fEventAction->GA_GetLineOfSight() )   G4cout << "Here is the CAKE_Assembly Hit!" << G4endl;
     
     ////////////////////////////////////////////
     //              CAKE ARRAY
@@ -513,7 +537,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     
     
     ////    Here, one declares the volumes that one considers will block the particles of interest and effectively mask the relevant volume of interest.
-    if (GA_LineOfSightMODE && (volumeName == "CAKE_AA_RS" || volumeName=="CAKE_PCB" || volumeName=="CAKE_SiliconWafer" || volumeName=="W1_AA"))
+    if(GA_LineOfSightMODE && (volumeName == "CAKE_AA_RS" || volumeName=="CAKE_PCB" || volumeName=="CAKE_SiliconWafer" || volumeName=="W1_AA"))
     {
         //G4cout << "Here is the volumeName    "<< volumeName << G4endl;
         fEventAction->GA_SetLineOfSight(false);
@@ -534,15 +558,15 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
      
      // step length
      G4double stepLength = 0.;
-     if ( step->GetTrack()->GetDefinition()->GetPDGCharge() != 0. ) {
+     if(step->GetTrack()->GetDefinition()->GetPDGCharge() != 0. ) {
      stepLength = step->GetStepLength();
      }
      
-     if ( volume == fDetConstruction->GetAbsorberPV() ) {
+     if(volume == fDetConstruction->GetAbsorberPV() ) {
      fEventAction->AddAbs(edep,stepLength);
      }
      
-     if ( volume == fDetConstruction->GetGapPV() ) {
+     if(volume == fDetConstruction->GetGapPV() ) {
      fEventAction->AddGap(edep,stepLength);
      }
      */

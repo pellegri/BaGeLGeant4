@@ -122,6 +122,9 @@ RunAction::RunAction()
     analysisManager->CreateNtupleDColumn(0, "CLOVER_Energy", CLOVER_energy);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_DetectorTheta", CLOVER_detectorTheta);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_DetectorPhi", CLOVER_detectorPhi);
+    analysisManager->CreateNtupleIColumn(0, "CLOVER_CrystalReflectionIndex", CLOVER_CrystalReflectionIndex);
+
+    analysisManager->CreateNtupleIColumn(0, "CLOVER_BGOCrystalsTriggered", CLOVER_BGOCrystalsTriggered);
 
     //--------------------------------
     //      LaBr3Ce Detectors
