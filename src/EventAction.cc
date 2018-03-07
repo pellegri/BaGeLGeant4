@@ -129,7 +129,9 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     
     //------------------------------------------------
     CLOVER_Number_vec.clear();
+    CLOVER_NCrystalsTriggered_vec.clear();
     CLOVER_Energy_vec.clear();
+    CLOVER_EnergyPerCrystal_vec.clear();
     CLOVER_DetectorTheta_vec.clear();
     CLOVER_DetectorPhi_vec.clear();
     CLOVER_CrystalReflectionIndex_vec.clear();
@@ -174,7 +176,6 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     
     //------------------------------------------------
     LaBr3Ce_Number_vec.clear();
-    CLOVER_NCrystalTriggered_vec.clear();
     LaBr3Ce_Energy_vec.clear();
     LaBr3Ce_DetectorTheta_vec.clear();
     LaBr3Ce_DetectorPhi_vec.clear();
@@ -411,7 +412,9 @@ void EventAction::EndOfEventAction(const G4Event* event)
                     //CLOVER_HPGeCrystal_EDep[i][j][k] = G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 1.7);
                     CLOVER_HPGeCrystal_EDep[i][j][k] = G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 0.849257);
                     
-                    if(Activate_CLOVER_ADDBACK && CLOVER_HPGeCrystal_EDep[i][j][k] != 0)
+                    CLOVER_EnergyPerCrystal_vec.push_back(CLOVER_HPGeCrystal_EDep[i][j][k]);
+                    
+                    if(Activate_CLOVER_ADDBACK)
                     {
                         //      ADDBACK
                         CLOVER_EDep[i][k] += CLOVER_HPGeCrystal_EDep[i][j][k];
@@ -515,8 +518,9 @@ void EventAction::EndOfEventAction(const G4Event* event)
             
             if(triggered)
             {
+                //------------------------------------------------
                 CLOVER_Number_vec.push_back(i);
-                CLOVER_NCrystalTriggered_vec.push_back(nCrystalsTriggered);
+                CLOVER_NCrystalsTriggered_vec.push_back(nCrystalsTriggered);
                 CLOVER_Energy_vec.push_back(CLOVER_EDep[i][k]);
                 CLOVER_DetectorTheta_vec.push_back(std::get<1>(angles_CLOVER[i]));
                 CLOVER_DetectorPhi_vec.push_back(std::get<2>(angles_CLOVER[i]));
@@ -534,7 +538,8 @@ void EventAction::EndOfEventAction(const G4Event* event)
         analysisManager->FillNtupleIColumn(0, 1, eventN_CLOVER);
 
         fRunAction->SetCLOVER_IDs(CLOVER_Number_vec);
-        fRunAction->SetCLOVER_NCrystalsTriggered(CLOVER_NCrystalTriggered_vec);
+        fRunAction->SetCLOVER_NCrystalsTriggered(CLOVER_NCrystalsTriggered_vec);
+        fRunAction->SetCLOVER_EnergiesPerCrystal(CLOVER_EnergyPerCrystal_vec);
         fRunAction->SetCLOVER_Energies(CLOVER_Energy_vec);
         fRunAction->SetCLOVER_DetectorThetas(CLOVER_DetectorTheta_vec);
         fRunAction->SetCLOVER_DetectorPhis(CLOVER_DetectorPhi_vec);
@@ -667,10 +672,12 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     //--------------------------------------------------------------------------------
     //      Combined data taking for both the LaBr3Ce and CLOVER detectors
+    /*
     if(eventN_LaBr3Ce>0 || eventN_CLOVER>0)
     {
         analysisManager->AddNtupleRow(0);
     }
+    */
     
 
     

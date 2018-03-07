@@ -119,6 +119,7 @@ RunAction::RunAction()
     analysisManager->CreateNtupleIColumn(0, "CLOVER_EventFold");
     analysisManager->CreateNtupleIColumn(0, "CLOVER_NCrystalsTriggered", CLOVER_nCrystalsTriggered);
     analysisManager->CreateNtupleIColumn(0, "CLOVER_Number", CLOVER_iD);
+    analysisManager->CreateNtupleDColumn(0, "CLOVER_EnergyPerCrystal", CLOVER_energyPerCrystal);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_Energy", CLOVER_energy);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_DetectorTheta", CLOVER_detectorTheta);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_DetectorPhi", CLOVER_detectorPhi);

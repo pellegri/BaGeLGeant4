@@ -93,8 +93,8 @@ fEventAction(eventAction)
     //fParticleGun->SetParticleEnergy(0.511*MeV);
     fParticleGun->SetParticleEnergy(1.332*MeV);
     
-    //fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
-    fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,25.*cm));
+    fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+    //fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,25.*cm));
 
     ////========================================================////
     ////    Initialise a pre-calculated angular distribution
@@ -153,7 +153,7 @@ fEventAction(eventAction)
     
     
     //----------------------------------------------------
-    nParticlesPerEnergy = 5000000;
+    nParticlesPerEnergy = 10000000;
     
     initialKineticEnergies.push_back(100.0*keV);
     initialKineticEnergies.push_back(133.2*keV);
@@ -396,6 +396,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     mz = cos(theta*deg);
     
     G4ThreeVector direction_gamma0(mx, my, mz);
+    //G4ThreeVector direction_gamma0(0, 0, 1.);
     //G4ThreeVector direction_gamma1 = -direction_gamma0;
     
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
