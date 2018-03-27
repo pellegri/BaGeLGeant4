@@ -153,7 +153,7 @@ fEventAction(eventAction)
     
     
     //----------------------------------------------------
-    nParticlesPerEnergy = 10000000;
+    nParticlesPerEnergy = 5000000;
     
     initialKineticEnergies.push_back(100.0*keV);
     initialKineticEnergies.push_back(133.2*keV);
