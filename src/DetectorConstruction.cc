@@ -3284,6 +3284,17 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                 }
                 
                 
+                new G4PVPlacement(0,               // no rotation
+                                  G4ThreeVector(0,0,-20.0*mm-70.0*mm-10.0*mm-(CLOVERtoShield_displacement*10.0)*mm), // at (x,y,z)
+                                  Logic_CLOVER_HPGeAluminiumBackingPlate,
+                                  "CLOVER_HPGeAluminiumBackingPlate", // its name
+                                  Logic_CLOVER_InternalVacuum[i],
+                                  false,           // no boolean operations
+                                  i,               // copy number
+                                  fCheckOverlaps); // checking overlaps
+                
+                
+                
                 /*
                 //--------------------------------------------
                 //      Test at origin (of VacuumChamber)
@@ -3413,6 +3424,20 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                               fCheckOverlaps); // checking overlaps
             
         }
+        
+        /*
+        //------------------------------------------------
+        //      TEST
+        new G4PVPlacement(0,               // no rotation
+                          G4ThreeVector(0,0,-(5.0)*mm), // at (x,y,z)
+                          Logic_CLOVER_HPGeAluminiumBackingPlate,
+                          "CLOVER_HPGeCrystal", // its name
+                          LogicWorld,
+                          false,           // no boolean operations
+                          i,               // copy number
+                          fCheckOverlaps); // checking overlaps
+        */
+        
         
         /////////////////////////////
         //      CLOVER SHIELD

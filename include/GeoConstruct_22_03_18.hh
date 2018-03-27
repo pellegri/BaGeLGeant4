@@ -63,6 +63,7 @@
 
 
 G4LogicalVolume *Logic_HPGeCrystal_Walid_2;
+G4LogicalVolume *Logic_CLOVER_HPGeAluminiumBackingPlate;
 
 void DefineHPGeCrystal_Walid_2()
 {
@@ -753,6 +754,45 @@ void DefineHPGeCrystal_Walid_2()
     //G4cout << "volume =      " << volumm << "  cm3" <<"\n";
     
     
+    //------------------------------------------------
+    //      Walid's aluminium backplate
+    
+    G4Tubs*corners1 = new G4Tubs("rounded corners 3",15.5*mm,30.5*mm,82*mm,0,90*deg);
+    G4Box* longpartcap = new G4Box("reste du cap 1",50.5*mm,50.5*mm,81.75*mm);
+    
+    G4RotationMatrix* rotcorners1 = new G4RotationMatrix;
+    rotcorners1->rotateZ(-90*deg);
+    
+    G4RotationMatrix* rotdoublcorners1 = new G4RotationMatrix;
+    rotdoublcorners1->rotateZ(180*deg);
+    
+    G4UnionSolid* doublcorners1a = new G4UnionSolid("2 quarts 3",corners1,corners1,rotcorners1,G4ThreeVector(-70*mm,0*mm,0));
+    G4UnionSolid* doublecorners1b = new G4UnionSolid("4 quarts 3",doublcorners1a,doublcorners1a,rotdoublcorners1,G4ThreeVector(-70*mm,-70*mm,0*mm));
+    G4SubtractionSolid* longcap1 = new G4SubtractionSolid("long cap 1",longpartcap,doublecorners1b,0,G4ThreeVector(35*mm,35*mm,0*mm));
+
+    //------------------------------------------------
+    G4Tubs*corners2 = new G4Tubs("rounded corners 4",14*mm,30.5*mm,84*mm,0,90*deg);
+    G4Box* longpartcap2 = new G4Box("reste du cap 2",49*mm,49*mm,83*mm);
+    
+    G4RotationMatrix* rotcorners2 = new G4RotationMatrix;
+    rotcorners2->rotateZ(-90*deg);
+    
+    G4RotationMatrix* rotdoublcorners2 = new G4RotationMatrix;
+    rotdoublcorners2->rotateZ(180*deg);
+    
+    G4UnionSolid* doublcorners2a = new G4UnionSolid("2 quarts 4",corners2,corners2,rotcorners2,G4ThreeVector(-70*mm,0*mm,0));
+    G4UnionSolid* doublecorners2b = new G4UnionSolid("4 quarts 4",doublcorners2a,doublcorners2a,rotdoublcorners2,G4ThreeVector(-70*mm,-70*mm,0*mm));
+    G4SubtractionSolid* longcap2 = new G4SubtractionSolid("long cap 2",longpartcap2,doublecorners2b,0,G4ThreeVector(35*mm,35*mm,0*mm));
+    
+    
+    G4SubtractionSolid * longrestcap = new G4SubtractionSolid("long part cap",longcap1,longcap2,0,G4ThreeVector(0,0,0*mm));
+
+    //------------------------------------------------
+
+    G4Box *alplat = new G4Box("al plate", 0.5*92*mm,0.5*92*mm,0.5*10*mm);
+    G4IntersectionSolid *alplat1 = new G4IntersectionSolid("plat taillée",alplat,longcap2,0,G4ThreeVector(0,0,0*mm));
+    
+    Logic_CLOVER_HPGeAluminiumBackingPlate = new G4LogicalVolume(alplat1,alu,"Logic_CLOVER_HPGeAluminiumBackingPlate");
     
     G4cout << "End DefineHPGeCrystal_Walid()" << G4endl;
 }
