@@ -93,6 +93,8 @@
 //#include "G4BlineTracer.hh"
 
 #include "GeometryConstructionDANDELION3.hh"
+#include "GeoConstruct_22_03_18.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -364,11 +366,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CLOVER_Shield_AllAbsent_Override = false;
     
     //--------------------------------
-    useCLOVER_Walid = false;
+    useCLOVER_Walid = true;
     
     if(useCLOVER_Walid)
     {
         DefineHPGeCrystal_Walid();
+        DefineHPGeCrystal_Walid_2();
     }
     
     /*
@@ -633,7 +636,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     */
     
     CLOVER_Presence[0] = true;
-    CLOVER_Shield_Presence[0] = true;
+    CLOVER_Shield_Presence[0] = false;
     CLOVER_Distance[0] = (25.0-7.3)*cm;
     CLOVER_phi[0] = 0*deg;
     CLOVER_theta[0] = 0*deg;
@@ -2729,21 +2732,24 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //              CLOVER HPGeCrystals - CADMesh
         
         //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal1.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal1_10um.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal1_10um.ply");
         //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal1_10um_invertedNormals.ply");
-        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_RoundedCrystal1_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal1 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal1, false);
         
         //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal2.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal2_10um.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal2_10um.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_RoundedCrystal2_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal2 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal2, false);
         
         //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal3.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal3_10um.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal3_10um.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_RoundedCrystal3_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal3 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal3, false);
         
         //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal4.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal4_10um.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal4_10um.ply");
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_RoundedCrystal4_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal4 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal4, false);
         
         G4VSolid * Solid_HPGeCrystal1 = mesh_CLOVERHPGeCrystal1->TessellatedMesh();
@@ -3159,29 +3165,62 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         
             if(useCLOVER_Walid)
             {
+                
                 G4VisAttributes* CLOVER_HPGeCrystals_Walid_VisAtt = new G4VisAttributes(G4Colour(0.9, 0.9, 0.0));
                 CLOVER_HPGeCrystals_Walid_VisAtt->SetForceSolid(true);
                 Logic_HPGeCrystal_Walid->SetVisAttributes(CLOVER_HPGeCrystals_Walid_VisAtt);
+                //Logic_HPGeCrystal_Walid_2->SetVisAttributes(CLOVER_HPGeCrystals_Walid_VisAtt);
                 
                 G4double length_head = (5./atan(7.1*deg)); // 5 = total enlevé vers lavant de la face tapered
+                //G4double walid_crystalBackShift = abs(28.5-length_head-20+1.5);
                 
+                G4cout << "length_head: " << length_head << G4endl;
                 //--------------------
                 //      STANDARD
                 
-                for(int j=0; j<3; j++)
+                bool walidComparison = false;
+                G4int nWalidCrystals = 0;
+                
+                if(walidComparison)
+                {
+                    nWalidCrystals = 3;
+                }
+                else
+                {
+                    nWalidCrystals = 4;
+                }
+                
+                for(int j=0; j<nWalidCrystals; j++)
                 {
                     //------------------------------------------------
                     G4ThreeVector position_HPGeCrystal_Walid;
                     //double offset = (-35.0-20.0); // mm
                     //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
                     
-                    //  Properly centered
-                    double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
+                    //  Properly centered Logic_HPGeCrystal_Walid
+                    //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
                     
+
                     //  Walid's mistake
                     //double offset = (28.5-length_head-20.0)-20.0-(CLOVERtoShield_displacement*10.0); // mm
                     //double offset = (28.5-length_head-20); // mm
+                    
+                    //double offset = (28.5-length_head-20.0)-(CLOVERtoShield_displacement*10.0); // mm
+                    //double offset = (-35.0+length_head-20.0)-(CLOVERtoShield_displacement*10.0); // mm
+                    //double offset = (28.5-length_head-20+1.5)-(CLOVERtoShield_displacement*10.0); // mm
+                    
+                    //------------------------------------------------
+                    //      New working for Logic_HPGeCrystal_Walid_2
+                    
+                    //      This should be the working, but it is slightly off - likely due to the origin not being defined well (clearly) for the volume and/or approximations
+                    //double offset = (-length_head*mm-20.0*mm)-(CLOVERtoShield_displacement*10.0)*mm; // mm
+                    
+                    //      Modified to match by eye - matched with our crystals
+                    double offset = (-length_head*mm-20.0*mm+0.41*mm)-(CLOVERtoShield_displacement*10.0)*mm; // mm
 
+                    //      Modified to match by eye - to match the front face with the X-Y plane
+                    //double offset = (-length_head-(1.5/2.0))*mm; // mm
+                    
                     if(j==0)
                     {
                         position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, 20.501*mm, offset*mm);
@@ -3207,17 +3246,31 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                     G4Transform3D CLOVER_HPGeCrystal_Walid_transform = G4Transform3D(*rm_HPGeCrystal_Walid, position_HPGeCrystal_Walid);
                     
                     //------------------------------------------------
+                    
+                    
                     PhysiCLOVER_HPGeCrystal = new G4PVPlacement(CLOVER_HPGeCrystal_Walid_transform,
-                                                                Logic_HPGeCrystal_Walid,
+                                                                Logic_HPGeCrystal_Walid_2,
                                                                 "CLOVER_HPGeCrystal", // its name
                                                                 Logic_CLOVER_InternalVacuum[i],
                                                                 false,           // no boolean operations
                                                                 i*4 + j,               // copy number
                                                                 fCheckOverlaps); // checking overlaps
                     
+                    
+                    /*
+                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(CLOVER_HPGeCrystal_Walid_transform,
+                                                                Logic_HPGeCrystal_Walid_2,
+                                                                "CLOVER_HPGeCrystal", // its name
+                                                                LogicWorld,
+                                                                false,           // no boolean operations
+                                                                i*4 + j,               // copy number
+                                                                fCheckOverlaps); // checking overlaps
+                    */
+                    
+                    
                 }
 
-                for(int j=3; j<4; j++)
+                for(int j=nWalidCrystals; j<4; j++)
                 {
                     PhysiCLOVER_HPGeCrystal = new G4PVPlacement(0,               // no rotation
                                                                 G4ThreeVector(0,0,0), // at (x,y,z)
