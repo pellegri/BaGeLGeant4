@@ -64,6 +64,7 @@
 
 G4LogicalVolume *Logic_HPGeCrystal_Walid_2;
 G4LogicalVolume *Logic_CLOVER_HPGeAluminiumBackingPlate;
+G4LogicalVolume *Logic_DeadLayer_Lithium_Walid;
 
 void DefineHPGeCrystal_Walid_2()
 {
@@ -656,7 +657,7 @@ void DefineHPGeCrystal_Walid_2()
     //checkOverlaps);          //overlaps checking
     
     
-    
+    Logic_DeadLayer_Lithium_Walid = new G4LogicalVolume(partievideLi700, lithium, "Logic_DeadLayer_Lithium_Walid");
     
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -735,10 +736,17 @@ void DefineHPGeCrystal_Walid_2()
     
     G4SubtractionSolid * cristalGe7015 = new G4SubtractionSolid("cristal 6 g",cristal7015, cylduvid, rotz701, videtransGe7015);
     
+    //------------------------------------------------
+    G4NistManager* nistManager = G4NistManager::Instance();
     
+    //  NIST Material Database - Materials
+    nistManager->FindOrBuildMaterial("G4_Ge");
+    G4Material* G4_Ge_Material = G4Material::GetMaterial("G4_Ge");
+
     //------------------------------------------------
     //      Standard
-    Logic_HPGeCrystal_Walid_2 = new G4LogicalVolume(cristalGe700, world_ger,"cristal2green");
+    //Logic_HPGeCrystal_Walid_2 = new G4LogicalVolume(cristalGe700, world_ger,"cristal2green");
+    Logic_HPGeCrystal_Walid_2 = new G4LogicalVolume(cristalGe700, G4_Ge_Material,"cristal2green");
     
     //Logic_HPGeCrystal_Walid = new G4LogicalVolume(cristal699, world_ger,"cristal2green");
     //Logic_HPGeCrystal_Walid = new G4LogicalVolume(crist2, world_ger,"cristal2green");

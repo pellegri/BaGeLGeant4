@@ -691,8 +691,16 @@ void DefineHPGeCrystal_Walid()
     //G4LogicalVolume *crystal2a = new G4LogicalVolume(cristalGe700, world_ger,"cristal2green");
     
     //------------------------------------------------
+    G4NistManager* nistManager = G4NistManager::Instance();
+    
+    //  NIST Material Database - Materials
+    nistManager->FindOrBuildMaterial("G4_Ge");
+    G4Material* G4_Ge_Material = G4Material::GetMaterial("G4_Ge");
+
+    //------------------------------------------------
     //      Standard
-    Logic_HPGeCrystal_Walid = new G4LogicalVolume(cristalGe700, world_ger,"cristal2green");
+    //Logic_HPGeCrystal_Walid = new G4LogicalVolume(cristalGe700, world_ger,"cristal2green");
+    Logic_HPGeCrystal_Walid = new G4LogicalVolume(cristalGe700, G4_Ge_Material,"cristal2green");
     
     //Logic_HPGeCrystal_Walid = new G4LogicalVolume(cristal699, world_ger,"cristal2green");
     //Logic_HPGeCrystal_Walid = new G4LogicalVolume(crist2, world_ger,"cristal2green");
