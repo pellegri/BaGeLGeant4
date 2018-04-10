@@ -373,8 +373,8 @@ public:
     void GA_SetLineOfSight(G4bool b)	{GA_LineOfSight = b;};
     
     ////    Input Variables
-    G4double    InputDist[2];
-    void SetInputDist(G4int i, G4double a)	{InputDist[i] = a;};
+    G4double    inputDist[2];
+    void SetInputDist(G4int i, G4double a)	{inputDist[i] = a;};
     
     ////    CAKE
     G4int CAKE_No, CAKE_RowNo, CAKE_SectorNo;

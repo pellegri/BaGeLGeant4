@@ -380,7 +380,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     ////////////////////////////////////////////////////
     ////    ISOTROPIC - Inverse Transform Method
-    
+    /*
     G4double theta = acos(1 - (2.0*G4UniformRand()))/deg; // 0.0->180.0
     //G4double theta = acos(1 - (1.0*G4UniformRand()))/deg; // 0.0->90.0 deg
     //G4double theta = acos(1 - (1.0*G4UniformRand() + 1.0))/deg; // 90.0->180.0 deg
@@ -401,7 +401,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
     fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
-    
+    */
     
     //fParticleGun->SetParticleMomentumDirection(direction_gamma1);
     //fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
@@ -578,6 +578,113 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(mx, my, mz));
     */
     
+    
+    //----------------------------
+    //      First select between the multipolarity
+    int multipolarityEDecay = 0;
+    
+    if(G4UniformRand()<0.5)
+    {
+        multipolarityEDecay = 1;
+    }
+    else
+    {
+        multipolarityEDecay = 2;
+    }
+    
+    //----------------------------------
+    //      Gamma decay direction
+    G4bool acceptance = false;
+    
+    G4double theta_gammaDecay;
+    G4double phi_gammaDecay = 360.0*G4UniformRand();
+    
+    while(!acceptance)
+    {
+        //----------------------------
+        theta_gammaDecay = 180.0*G4UniformRand();
+        G4double range = 1.000*G4UniformRand();
+        
+        //----------------------------
+        G4double function = 0.0;
+        
+        if(multipolarityEDecay==1)
+        {
+            function = cos(theta_gammaDecay*deg);
+        }
+        else if(multipolarityEDecay==2)
+        {
+            function = 0.5*(3.0*pow(cos(theta_gammaDecay*deg), 2.0) - 1);
+        }
+        
+        if(range<function)
+        {
+            acceptance = true;
+        }
+    }
+    
+    theta_gammaDecay = 2.0;
+    
+    //----------------------------
+    G4double mx, my, mz;
+    mx = sin(theta_gammaDecay*deg)*cos(phi_gammaDecay*deg);
+    my = sin(theta_gammaDecay*deg)*sin(phi_gammaDecay*deg);
+    mz = cos(theta_gammaDecay*deg);
+    
+    G4ThreeVector gamma_Direction(mx, my, mz);
+    //G4ThreeVector gamma_Direction(0.0, 0.0, 1.0);
+    gamma_Direction.unit();
+    
+    //------------------------------
+    //      Ejectile direction
+    acceptance = false;
+    
+    G4double theta_ejectile;
+    G4double phi_ejectile = 360.0*G4UniformRand();
+    
+    while(!acceptance)
+    {
+        //----------------------------
+        theta_ejectile = 2.0*G4UniformRand();
+        G4double range = 1.000*G4UniformRand();
+        
+        //----------------------------
+        G4double function = sin(theta_ejectile*deg);
+
+        if(range<function)
+        {
+            acceptance = true;
+        }
+    }
+
+    //--------------------------------------------
+    //G4ThreeVector requiredFinalZaxis(0.0, 0.0, 1.0);
+    G4ThreeVector requiredFinalZaxis = G4ThreeVector(cos(theta_ejectile)*cos(phi_ejectile), cos(theta_ejectile)*sin(phi_ejectile), -sin(theta_ejectile)).unit();
+    G4ThreeVector requiredFinalXaxis = requiredFinalZaxis.orthogonal().unit();
+    G4ThreeVector requiredFinalYaxis = requiredFinalZaxis.cross(requiredFinalXaxis).unit();
+    
+    G4RotationMatrix rotMatrixToLabFrame;
+    rotMatrixToLabFrame.rotateAxes(requiredFinalXaxis, requiredFinalYaxis, requiredFinalZaxis);
+
+    //----------------------------
+    G4ThreeVector gammaDirection_lab = rotMatrixToLabFrame*gamma_Direction;
+    
+    //----------------------------
+    fParticleGun->SetParticleMomentumDirection(gammaDirection_lab);
+    
+    //----------------------------
+    G4double theta_lab = acos(gammaDirection_lab.z()/gammaDirection_lab.mag())/deg;
+    G4double phi_lab = atan(gammaDirection_lab.y()/gammaDirection_lab.x())/deg;
+    
+    fEventAction->SetInputDist(0, theta_lab);
+    fEventAction->SetInputDist(1, phi_lab);
+
+
+    //fEventAction->SetInputDist(0, gammaDirection_lab.theta());
+    //fEventAction->SetInputDist(1, gammaDirection_lab.phi());
+    //fEventAction->SetInputDist(0, 2.0);
+    //fEventAction->SetInputDist(1, 50.0);
+
     
     
 

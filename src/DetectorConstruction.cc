@@ -366,7 +366,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CLOVER_Shield_AllAbsent_Override = false;
     
     //--------------------------------
-    useCLOVER_Walid = true;
+    useCLOVER_Walid = false;
     
     if(useCLOVER_Walid)
     {
@@ -961,6 +961,7 @@ void DetectorConstruction::DefineMaterials()
     nistManager->FindOrBuildMaterial("G4_Ar");
     nistManager->FindOrBuildMaterial("G4_Pb");
     nistManager->FindOrBuildMaterial("G4_C");
+    nistManager->FindOrBuildMaterial("G4_Li");
     nistManager->FindOrBuildMaterial("G4_CARBON_DIOXIDE");
     nistManager->FindOrBuildMaterial("G4_SODIUM_IODIDE");
     nistManager->FindOrBuildMaterial("G4_LITHIUM_CARBONATE");
@@ -1023,6 +1024,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     G4Material* G4_W_Material = G4Material::GetMaterial("G4_W");
     G4Material* G4_Ar_Material = G4Material::GetMaterial("G4_Ar");
     G4Material* G4_C_Material = G4Material::GetMaterial("G4_C");
+    G4Material* G4_Li_Material = G4Material::GetMaterial("G4_Li");
     G4Material* G4_Pb_Material = G4Material::GetMaterial("G4_Pb");
     
     ////    NIST Defined Materials and Compounds
@@ -2769,6 +2771,103 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         Logic_CLOVER_HPGeCrystal[1]->SetVisAttributes(CLOVER_HPGeCrystals_VisAtt);
         Logic_CLOVER_HPGeCrystal[2]->SetVisAttributes(CLOVER_HPGeCrystals_VisAtt);
         Logic_CLOVER_HPGeCrystal[3]->SetVisAttributes(CLOVER_HPGeCrystals_VisAtt);
+        
+        //------------------------------------
+        //      Lithium doped layer
+        for(G4int j=0; j<4; j++)
+        {
+            //------------------------------------------------
+            G4Tubs* outerCylinder = new G4Tubs("outerCylinder", 4.0*mm, 5.5*mm, 0.5*55.5*mm, 0.*deg, 360.*deg);
+            G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinder = new G4LogicalVolume(outerCylinder, G4_Li_Material, "Logic_CLOVER_LithiumDeadLayer_cylinder");
+            
+            G4Tubs* flatCylinderCap = new G4Tubs("flatCylinderCap", 0.0*mm, 5.1*mm, 0.5*0.5*mm, 0.*deg, 360.*deg);
+            G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_flatCap = new G4LogicalVolume(flatCylinderCap, G4_Li_Material, "Logic_CLOVER_LithiumDeadLayer_flatCap");
+            
+            G4VisAttributes* CLOVER_DeadLayer_Lithium_VisAtt = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
+            CLOVER_DeadLayer_Lithium_VisAtt->SetForceSolid(true);
+            Logic_CLOVER_LithiumDeadLayer_cylinder->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+            Logic_CLOVER_LithiumDeadLayer_flatCap->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+            
+            //------------------------------------------------
+            G4ThreeVector position_LithiumDeadLayer_cylinder;
+            
+            if(j==0)
+            {
+                position_LithiumDeadLayer_cylinder = G4ThreeVector(-20.5*mm, 20.5*mm, -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 0.5*55.5*mm);
+            }
+            else if(j==1)
+            {
+                position_LithiumDeadLayer_cylinder = G4ThreeVector(-20.5*mm, -20.5*mm, -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 0.5*55.5*mm);
+            }
+            else if(j==2)
+            {
+                position_LithiumDeadLayer_cylinder = G4ThreeVector(20.5*mm, -20.5*mm, -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 0.5*55.5*mm);
+            }
+            else if(j==3)
+            {
+                position_LithiumDeadLayer_cylinder = G4ThreeVector(20.5*mm, 20.5*mm, -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 0.5*55.5*mm);
+            }
+            
+            //------------------------------------------------
+            G4RotationMatrix* rm = new G4RotationMatrix();
+            G4VSolid* CLOVER_LithiumDeadLayer_cylinderAndFlatCap = new G4UnionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap", outerCylinder, flatCylinderCap, rm, G4ThreeVector(0.,0.,0.5*55.5*mm - 0.5*0.5*mm));
+            G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap = new G4LogicalVolume(CLOVER_LithiumDeadLayer_cylinderAndFlatCap, G4_Li_Material, "Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap");
+            Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+            
+            //------------------------------------------------
+            G4VSolid* CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge;
+            
+            if(j==0)
+            {
+                CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal1, rm, -position_LithiumDeadLayer_cylinder);
+            }
+            else if(j==1)
+            {
+                CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal2, rm, -position_LithiumDeadLayer_cylinder);
+            }
+            else if(j==2)
+            {
+                CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal3, rm, -position_LithiumDeadLayer_cylinder);
+            }
+            else if(j==3)
+            {
+                CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal4, rm, -position_LithiumDeadLayer_cylinder);
+            }
+            
+            G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4LogicalVolume(CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge, G4_Li_Material, "Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge");
+            Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+
+            //------------------------------------------------
+            /*
+            static int test = 0;
+            
+            if(test==0)
+            {
+                new G4PVPlacement(0,               // no rotation
+                                  G4ThreeVector(), // at (x,y,z)
+                                  Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge,
+                                  "CLOVER_HPGeLithiumDopedDeadlayer", // its name
+                                  LogicWorld,
+                                  false,           // no boolean operations
+                                  0,               // copy number
+                                  fCheckOverlaps); // checking overlaps
+            }
+            
+            test++;
+            */
+            
+            //------------------------------------------------
+            
+             new G4PVPlacement(0,               // no rotation
+             position_LithiumDeadLayer_cylinder, // at (x,y,z)
+             Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge,
+             "CLOVER_HPGeLithiumDopedDeadlayer", // its name
+             Logic_CLOVER_HPGeCrystal[j],
+             false,           // no boolean operations
+             0,               // copy number
+             fCheckOverlaps); // checking overlaps
+            
+        }
     }
     
     
@@ -3061,7 +3160,71 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     //               CLOVER INITIALIZATION            //
     ////////////////////////////////////////////////////
     
+    //------------------------------------------------------------------------------------
+    //      Offsets for Walid's crystal geometry
+    G4double length_head = (5./atan(7.1*deg)); // 5 = total enlevé vers lavant de la face tapered
+    //double offset = (-35.0-20.0); // mm
+    //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
     
+    //  Properly centered Logic_HPGeCrystal_Walid
+    //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
+    
+    //  Walid's mistake
+    //double offset = (28.5-length_head-20.0)-20.0-(CLOVERtoShield_displacement*10.0); // mm
+    //double offset = (28.5-length_head-20); // mm
+    
+    //double offset = (28.5-length_head-20.0)-(CLOVERtoShield_displacement*10.0); // mm
+    //double offset = (-35.0+length_head-20.0)-(CLOVERtoShield_displacement*10.0); // mm
+    //double offset = (28.5-length_head-20+1.5)-(CLOVERtoShield_displacement*10.0); // mm
+    
+    //------------------------------------------------
+    //      New working for Logic_HPGeCrystal_Walid_2
+    //      This should be the working, but it is slightly off - likely due to the origin not being defined well (clearly) for the volume and/or approximations
+    //double offset = (-length_head*mm-20.0*mm)-(CLOVERtoShield_displacement*10.0)*mm; // mm
+    
+    //      Modified to match by eye - matched with our crystals
+    double walidCrystaloffset = (-length_head*mm-20.0*mm+0.41*mm)-(CLOVERtoShield_displacement*10.0)*mm; // mm
+    
+    //      Modified to match by eye - to match the front face with the X-Y plane
+    //double offset = (-length_head-(1.5/2.0))*mm; // mm
+    
+    //------------------------------------
+    //      Lithium doped layer
+    if(useCLOVER_Walid)
+    {
+        G4Tubs* outerCylinder = new G4Tubs("outerCylinder", 5.0*mm, 5.5*mm, 0.5*55.5*mm, 0.*deg, 360.*deg);
+        G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinder = new G4LogicalVolume(outerCylinder, G4_Li_Material, "Logic_CLOVER_LithiumDeadLayer_cylinder");
+        
+        G4Tubs* flatCylinderCap = new G4Tubs("flatCylinderCap", 0.0*mm, 5.0*mm, 0.5*0.5*mm, 0.*deg, 360.*deg);
+        G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_flatCap = new G4LogicalVolume(flatCylinderCap, G4_Li_Material, "Logic_CLOVER_LithiumDeadLayer_flatCap");
+        
+        G4VisAttributes* CLOVER_DeadLayer_Lithium_VisAtt = new G4VisAttributes(G4Colour(0.7, 0.7, 0.0));
+        CLOVER_DeadLayer_Lithium_VisAtt->SetForceSolid(true);
+        Logic_CLOVER_LithiumDeadLayer_cylinder->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+        Logic_CLOVER_LithiumDeadLayer_flatCap->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+
+        new G4PVPlacement(0,               // no rotation
+                          G4ThreeVector(0,0,-(70.0-length_head)*mm + (0.5*55.5)*mm - 0.41*mm), // at (x,y,z)
+                          Logic_CLOVER_LithiumDeadLayer_cylinder,
+                          "CLOVER_HPGeLithiumDopedDeadlayer", // its name
+                          Logic_HPGeCrystal_Walid_2,
+                          false,           // no boolean operations
+                          0,               // copy number
+                          fCheckOverlaps); // checking overlaps
+        
+        
+        new G4PVPlacement(0,               // no rotation
+                          G4ThreeVector(0,0,-(70.0-length_head)*mm + (0.5*55.5)*mm - 0.41*mm + (0.5*55.5) - (0.5*0.5)*mm), // at (x,y,z)
+                          Logic_CLOVER_LithiumDeadLayer_flatCap,
+                          "CLOVER_HPGeLithiumDopedDeadlayer", // its name
+                          Logic_HPGeCrystal_Walid_2,
+                          false,           // no boolean operations
+                          0,               // copy number
+                          fCheckOverlaps); // checking overlaps
+        
+    }
+
+    //--------------------------------------------------------------------------------
     for(G4int i=0; i<numberOf_CLOVER; i++)
     {
         //--------------------------------------------
@@ -3150,7 +3313,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         CLOVER_transform[i] = G4Transform3D(rotmPrime2, CLOVER_position[i]);
         
         CLOVER_Shield_transform[i] = CLOVER_transform[i];
-        
+
         /////////////////////////////
         //          CLOVER
         if(CLOVER_Presence[i])
@@ -3165,13 +3328,11 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         
             if(useCLOVER_Walid)
             {
-                
                 G4VisAttributes* CLOVER_HPGeCrystals_Walid_VisAtt = new G4VisAttributes(G4Colour(0.9, 0.9, 0.0));
                 CLOVER_HPGeCrystals_Walid_VisAtt->SetForceSolid(true);
                 Logic_HPGeCrystal_Walid->SetVisAttributes(CLOVER_HPGeCrystals_Walid_VisAtt);
                 //Logic_HPGeCrystal_Walid_2->SetVisAttributes(CLOVER_HPGeCrystals_Walid_VisAtt);
                 
-                G4double length_head = (5./atan(7.1*deg)); // 5 = total enlevé vers lavant de la face tapered
                 //G4double walid_crystalBackShift = abs(28.5-length_head-20+1.5);
                 
                 G4cout << "length_head: " << length_head << G4endl;
@@ -3194,48 +3355,22 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                 {
                     //------------------------------------------------
                     G4ThreeVector position_HPGeCrystal_Walid;
-                    //double offset = (-35.0-20.0); // mm
-                    //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
-                    
-                    //  Properly centered Logic_HPGeCrystal_Walid
-                    //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
-                    
-
-                    //  Walid's mistake
-                    //double offset = (28.5-length_head-20.0)-20.0-(CLOVERtoShield_displacement*10.0); // mm
-                    //double offset = (28.5-length_head-20); // mm
-                    
-                    //double offset = (28.5-length_head-20.0)-(CLOVERtoShield_displacement*10.0); // mm
-                    //double offset = (-35.0+length_head-20.0)-(CLOVERtoShield_displacement*10.0); // mm
-                    //double offset = (28.5-length_head-20+1.5)-(CLOVERtoShield_displacement*10.0); // mm
-                    
-                    //------------------------------------------------
-                    //      New working for Logic_HPGeCrystal_Walid_2
-                    
-                    //      This should be the working, but it is slightly off - likely due to the origin not being defined well (clearly) for the volume and/or approximations
-                    //double offset = (-length_head*mm-20.0*mm)-(CLOVERtoShield_displacement*10.0)*mm; // mm
-                    
-                    //      Modified to match by eye - matched with our crystals
-                    double offset = (-length_head*mm-20.0*mm+0.41*mm)-(CLOVERtoShield_displacement*10.0)*mm; // mm
-
-                    //      Modified to match by eye - to match the front face with the X-Y plane
-                    //double offset = (-length_head-(1.5/2.0))*mm; // mm
                     
                     if(j==0)
                     {
-                        position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, 20.501*mm, offset*mm);
+                        position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, 20.501*mm, walidCrystaloffset*mm);
                     }
                     else if(j==1)
                     {
-                        position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, -20.501*mm, offset*mm);
+                        position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, -20.501*mm, walidCrystaloffset*mm);
                     }
                     else if(j==2)
                     {
-                        position_HPGeCrystal_Walid = G4ThreeVector(20.501*mm, -20.501*mm, offset*mm);
+                        position_HPGeCrystal_Walid = G4ThreeVector(20.501*mm, -20.501*mm, walidCrystaloffset*mm);
                     }
                     else if(j==3)
                     {
-                        position_HPGeCrystal_Walid = G4ThreeVector(20.501*mm, 20.501*mm, offset*mm);
+                        position_HPGeCrystal_Walid = G4ThreeVector(20.501*mm, 20.501*mm, walidCrystaloffset*mm);
                     }
                     
                     //------------------------------------------------

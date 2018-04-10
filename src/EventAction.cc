@@ -236,11 +236,14 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
             else{VDC_Observables[j][k] = 0;}
         }
     }
-    
-    ////    Input Variables
-    InputDist[0] = 0;
-    InputDist[1] = 0;
-    
+
+    //------------------------------------------------------------------------------------------------------------------
+    //      Input Variables
+    //      When inputDist is being filled by the PGA, then it must not be zero'd as it is filled before this point
+    /*
+    inputDist[0] = 0;
+    inputDist[1] = 0;
+    */
     
 }
 
@@ -776,15 +779,15 @@ void EventAction::EndOfEventAction(const G4Event* event)
         if(GA_GenInputVar)
         {
             
-            double theta_projX = atan((tan(InputDist[0]*deg)/rad)*rad*(cos(InputDist[1]*deg)/rad)*rad)/deg; // deg
-            double theta_projY = atan((tan(InputDist[0]*deg)/rad)*rad*(sin(InputDist[1]*deg)/rad)*rad)/deg; // deg
+            double theta_projX = atan((tan(inputDist[0]*deg)/rad)*rad*(cos(inputDist[1]*deg)/rad)*rad)/deg; // deg
+            double theta_projY = atan((tan(inputDist[0]*deg)/rad)*rad*(sin(inputDist[1]*deg)/rad)*rad)/deg; // deg
 
-            //if(InputDist[1]>180.0) theta_projY = -theta_projY;
+            //if(inputDist[1]>180.0) theta_projY = -theta_projY;
                 
             ////////////////////////////////
             ////    Input Variables
-            analysisManager->FillNtupleDColumn(2, 0, InputDist[0]);
-            analysisManager->FillNtupleDColumn(2, 1, InputDist[1]);
+            analysisManager->FillNtupleDColumn(2, 0, inputDist[0]);
+            analysisManager->FillNtupleDColumn(2, 1, inputDist[1]);
             analysisManager->FillNtupleDColumn(2, 2, theta_projX);
             analysisManager->FillNtupleDColumn(2, 3, theta_projY);
             
@@ -792,8 +795,8 @@ void EventAction::EndOfEventAction(const G4Event* event)
             
             analysisManager->AddNtupleRow(2);
             
-            //G4cout << "Here is the value of InputDist[0]:    -->     " << InputDist[0] << G4endl;
-            //G4cout << "Here is the value of InputDist[1]:    -->     " << InputDist[1] << G4endl;
+            //G4cout << "Here is the value of inputDist[0]:    -->     " << inputDist[0] << G4endl;
+            //G4cout << "Here is the value of inputDist[1]:    -->     " << inputDist[1] << G4endl;
         }
         
         
@@ -1061,9 +1064,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
         }
     }
     
-    
-    
-    
+
     
     ///////////////////////////////////////////////////////
     //          PRINTING the VDC Values
