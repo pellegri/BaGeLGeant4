@@ -610,11 +610,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         
         if(multipolarityEDecay==1)
         {
-            function = cos(theta_gammaDecay*deg);
+            function = pow(cos(theta_gammaDecay*deg), 2.0);
         }
         else if(multipolarityEDecay==2)
         {
-            function = 0.5*(3.0*pow(cos(theta_gammaDecay*deg), 2.0) - 1);
+            function = pow(0.5*(3.0*pow(cos(theta_gammaDecay*deg), 2.0) - 1), 2.0);
         }
         
         if(range<function)
