@@ -380,7 +380,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     ////////////////////////////////////////////////////
     ////    ISOTROPIC - Inverse Transform Method
-    /*
+    
     G4double theta = acos(1 - (2.0*G4UniformRand()))/deg; // 0.0->180.0
     //G4double theta = acos(1 - (1.0*G4UniformRand()))/deg; // 0.0->90.0 deg
     //G4double theta = acos(1 - (1.0*G4UniformRand() + 1.0))/deg; // 90.0->180.0 deg
@@ -400,11 +400,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //G4ThreeVector direction_gamma1 = -direction_gamma0;
     
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
-    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
-    */
+    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitions given to fParticleGun)
+    
     
     //fParticleGun->SetParticleMomentumDirection(direction_gamma1);
-    //fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
+    //fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitions given to fParticleGun)
     
     
     //--------------------------------------------------------
@@ -421,7 +421,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     G4ThreeVector direction_gamma0(mx, my, mz);
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
-    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
+    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitions given to fParticleGun)
     */
     
     //--------------------------------------------------------
@@ -506,7 +506,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     G4ThreeVector direction_gamma0(mx, my, mz);
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
-    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitons given to fParticleGun)
+    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitions given to fParticleGun)
     */
     
     
@@ -578,7 +578,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(mx, my, mz));
     */
     
-    
+    /*
     //----------------------------
     //      First select between the multipolarity
     int multipolarityEDecay = 0;
@@ -685,7 +685,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //fEventAction->SetInputDist(0, 2.0);
     //fEventAction->SetInputDist(1, 50.0);
 
-    
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+    */
     
 
     ////    Rangefinder

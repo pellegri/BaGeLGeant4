@@ -300,8 +300,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
             //if(fEventAction->Get_PADDLE_Trig(i) == false) fEventAction->Set_PADDLE_Trig(i, true);
         }
     }
-    
-    
+
     
     ////////////////////////////////////////////////
     //                  CLOVERS
