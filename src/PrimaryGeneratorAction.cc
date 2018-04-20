@@ -185,13 +185,13 @@ fEventAction(eventAction)
     //      SetupEventGenerator_DifferentialCrossSection(int distributionNumber);
     //      distributionNumber == 1: 1 minus PDR
     //      distributionNumber == 2: 2 plus PDR
-    //      SetupEventGenerator_DifferentialCrossSection(1);
+          SetupEventGenerator_DifferentialCrossSection(1, 0.0, 2.0);
     
     //--------------------------------------------------------------------------------
     //      SetupEventGenerator_DifferentialCrossSection(double angle)
     //--------------------------------------------------------------------------------
     //      angle: the fixed ejectile angle
-    SetupEventGenerator_SingleEjectileAngle(0.0);
+    //SetupEventGenerator_SingleEjectileAngle(0.0);
 
     //--------------------------------------------------------------------------------
     //      SetupEventGenerator_AngularDistribution_GammaDecay(int distributionNumber)
@@ -199,7 +199,7 @@ fEventAction(eventAction)
     //      distributionNumber == -1: Isotropy
     //      distributionNumber ==  1: E1 decay
     //      distributionNumber ==  2: E2 decay
-    SetupEventGenerator_AngularDistribution_GammaDecay(-1);
+    SetupEventGenerator_AngularDistribution_GammaDecay(1);
     
     //------------------------------------------------------------------------------------------------
     //      SetupEventGenerator_SingleAngle_GammaDecay(double theta)
@@ -249,7 +249,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //      the value of gammaEnergy is then modified to the relativistically doppler shifted value
 
     //--------------------------------------------------------------------------------
-    double gammaRayEnergy = 1.0; // MeV
+    double gammaRayEnergy = 5.0; // MeV
     double thetaGamma_LAB = 0.0;
     double phiGamma_LAB = 360.0*G4UniformRand(); // deg
     double thetaGamma_COM = 0.0;
@@ -257,7 +257,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fEventAction->SetInitialParticleKineticEnergy_COM(gammaRayEnergy);
 
     //Sample_AngularDistribution_GammaDecay_LAB(4.0004090, 12.0, 4.0004090, 12.0, 200.0, 10.0, thetaGamma_LAB, thetaGamma_COM, gammaRayEnergy);
-    Sample_AngularDistribution_GammaDecay_LAB(0.1, 0.0, thetaGamma_LAB, thetaGamma_COM, gammaRayEnergy);
+    Sample_AngularDistribution_GammaDecay_LAB(4.0004090, 139.9054387, 4.0004090, 139.9054387, 120.0, 5.0, thetaGamma_LAB, thetaGamma_COM, gammaRayEnergy);
+    
+    //Sample_AngularDistribution_GammaDecay_LAB(0.1, 0.0, thetaGamma_LAB, thetaGamma_COM, gammaRayEnergy);
     
     G4ThreeVector direction_gamma0(sin(thetaGamma_LAB*deg)*cos(phiGamma_LAB*deg), sin(thetaGamma_LAB*deg)*sin(phiGamma_LAB*deg), cos(thetaGamma_LAB*deg));
     
