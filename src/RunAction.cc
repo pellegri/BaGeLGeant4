@@ -113,6 +113,7 @@ RunAction::RunAction()
     analysisManager->CreateNtuple("DataTreeSim", "K600 Spectrometer - Coincident Events");
     
     analysisManager->CreateNtupleDColumn(0, "InitialParticleKineticEnergy");
+    analysisManager->CreateNtupleDColumn(0, "InitialParticleKineticEnergy_COM");
     
     //--------------------------------
     //      CLOVER Detectors
@@ -172,8 +173,10 @@ RunAction::RunAction()
     ////    Initial Particle Angular Distributions
     analysisManager->CreateNtupleDColumn(2, "ThetaDist");
     analysisManager->CreateNtupleDColumn(2, "PhiDist");
-    analysisManager->CreateNtupleDColumn(2, "ThetaDist_projX");
-    analysisManager->CreateNtupleDColumn(2, "ThetaDist_projY");
+    analysisManager->CreateNtupleDColumn(2, "ThetaDist_COM");
+    
+    //analysisManager->CreateNtupleDColumn(2, "ThetaDist_projX");
+    //analysisManager->CreateNtupleDColumn(2, "ThetaDist_projY");
 
     analysisManager->FinishNtuple(2);
     

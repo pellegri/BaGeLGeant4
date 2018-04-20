@@ -169,7 +169,9 @@ public:
     G4int       evtNb;
     
     G4double initialParticleKineticEnergy;
+    G4double initialParticleKineticEnergy_COM;
     void SetInitialParticleKineticEnergy(G4double a) {initialParticleKineticEnergy = a;};
+    void SetInitialParticleKineticEnergy_COM(G4double a) {initialParticleKineticEnergy_COM = a;};
     
     /////////////////////
     //      CAKE
@@ -373,7 +375,7 @@ public:
     void GA_SetLineOfSight(G4bool b)	{GA_LineOfSight = b;};
     
     ////    Input Variables
-    G4double    inputDist[2];
+    G4double    inputDist[3];
     void SetInputDist(G4int i, G4double a)	{inputDist[i] = a;};
     
     ////    CAKE

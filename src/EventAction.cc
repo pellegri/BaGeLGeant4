@@ -386,6 +386,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
     ////////////////////////////////////////////////////////
 
     analysisManager->FillNtupleDColumn(0, 0, initialParticleKineticEnergy);
+    analysisManager->FillNtupleDColumn(0, 1, initialParticleKineticEnergy_COM);
 
     ////////////////////////////////////////////////////////
     //
@@ -538,7 +539,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     if(eventN_CLOVER>0)
     {
-        analysisManager->FillNtupleIColumn(0, 1, eventN_CLOVER);
+        analysisManager->FillNtupleIColumn(0, 2, eventN_CLOVER);
 
         fRunAction->SetCLOVER_IDs(CLOVER_Number_vec);
         fRunAction->SetCLOVER_NCrystalsTriggered(CLOVER_NCrystalsTriggered_vec);
@@ -660,7 +661,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     if(eventN_LaBr3Ce>0)
     {
-        analysisManager->FillNtupleIColumn(0, 7, eventN_LaBr3Ce);
+        analysisManager->FillNtupleIColumn(0, 11, eventN_LaBr3Ce);
 
         fRunAction->SetLaBr3Ce_IDs(LaBr3Ce_Number_vec);
         fRunAction->SetLaBr3Ce_Energies(LaBr3Ce_Energy_vec);
@@ -788,8 +789,10 @@ void EventAction::EndOfEventAction(const G4Event* event)
             ////    Input Variables
             analysisManager->FillNtupleDColumn(2, 0, inputDist[0]);
             analysisManager->FillNtupleDColumn(2, 1, inputDist[1]);
-            analysisManager->FillNtupleDColumn(2, 2, theta_projX);
-            analysisManager->FillNtupleDColumn(2, 3, theta_projY);
+            analysisManager->FillNtupleDColumn(2, 2, inputDist[2]);
+            
+            //analysisManager->FillNtupleDColumn(2, 2, theta_projX);
+            //analysisManager->FillNtupleDColumn(2, 3, theta_projY);
             
 
             

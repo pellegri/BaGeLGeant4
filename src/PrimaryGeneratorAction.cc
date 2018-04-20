@@ -51,10 +51,11 @@
 
 #include "G4IonTable.hh"
 
-#include "BiRelKin.hh"
+//#include "BiRelKin.hh"
 
 
 ////    Distributions
+/*
 #include "alpha0_0plus_0plus_12049_L0.h"
 #include "alpha0_0plus_0plus_14032_L0.h"
 #include "alpha0_0plus_0plus_15097_L0.h"
@@ -71,7 +72,9 @@
 #include "alpha1_3minus_2plus_15097_L5.h"
 #include "p0_2plus_12minus_14926_L1.h"
 #include "p0_2plus_12minus_14926_L3.h"
+*/
 
+#include "EventGenerator.h"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,6 +105,7 @@ fEventAction(eventAction)
     
     initialiseAngDist_interpolated(angDist_name);
     
+    /*
     ////    Distributions - From AngCor
     initialiseAngCor_alpha0_0plus_0plus_12049_L0();
     initialiseAngCor_alpha0_0plus_0plus_14032_L0();
@@ -119,6 +123,7 @@ fEventAction(eventAction)
     initialiseAngCor_alpha1_3minus_2plus_15097_L5();
     initialiseAngCor_p0_2plus_12minus_14926_L1();
     initialiseAngCor_p0_2plus_12minus_14926_L3();
+    */
     
     
     
@@ -171,6 +176,37 @@ fEventAction(eventAction)
 
     //- gamma energies are 100, 133.2, 200, 400, 700, 1000, 1332, 2000, 4000, 7000, 10000, 13320, 20000 keV
 
+    
+    //================================================================================
+    //      EPHEMERAL EVENT GENERATOR
+    //================================================================================
+    
+    //--------------------------------------------------------------------------------
+    //      SetupEventGenerator_DifferentialCrossSection(int distributionNumber);
+    //      distributionNumber == 1: 1 minus PDR
+    //      distributionNumber == 2: 2 plus PDR
+    //      SetupEventGenerator_DifferentialCrossSection(1);
+    
+    //--------------------------------------------------------------------------------
+    //      SetupEventGenerator_DifferentialCrossSection(double angle)
+    //--------------------------------------------------------------------------------
+    //      angle: the fixed ejectile angle
+    SetupEventGenerator_SingleEjectileAngle(0.0);
+
+    //--------------------------------------------------------------------------------
+    //      SetupEventGenerator_AngularDistribution_GammaDecay(int distributionNumber)
+    //--------------------------------------------------------------------------------
+    //      distributionNumber == -1: Isotropy
+    //      distributionNumber ==  1: E1 decay
+    //      distributionNumber ==  2: E2 decay
+    SetupEventGenerator_AngularDistribution_GammaDecay(-1);
+    
+    //------------------------------------------------------------------------------------------------
+    //      SetupEventGenerator_SingleAngle_GammaDecay(double theta)
+    //------------------------------------------------------------------------------------------------
+    //      angle: the fixed gamma-ray decay angle (in the centre of mass of the parent particle)
+    //SetupEventGenerator_SingleAngle_GammaDecay(45.0);
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -184,6 +220,59 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+    //================================================================================
+    //      EPHEMERAL EVENT GENERATOR
+    //================================================================================
+    
+    //----------------------------------------------------------------------------------------------------
+    //      Sample_AngularDistribution_GammaDecay_LAB(double A0, double A1, double A2, double A3, double beamEnergy, double excitationEnergy, double &thetaGamma_LAB, double &thetaGamma_COM, double &gammaEnergy)
+    //      Provides the angular distribution (LAB) of the gamma-ray decay from the recoil nucleus from a specific defined binary reaction.
+    //----------------------------------------------------------------------------------------------------
+    //      A0: mass of projectile
+    //      A1: mass of target
+    //      A2: mass of ejectile
+    //      A3: mass of recoil
+    //      beamEnergy: the beam energy in MeV
+    //      excitationEnergy: the excitation energy of the recoil nucleus
+    //      gammaEnergy: provide an lvalue double, i.e. a double object which is set to the initial gamma-ray energy in the centre of mass reference frame.
+    //      the value of gammaEnergy is then modified to the relativistically doppler shifted value
+    
+    //----------------------------------------------------------------------------------------------------
+    //      Sample_AngularDistribution_GammaDecay_LAB(double beta, double thetaRecoil_LAB, double &thetaGamma_LAB, double &thetaGamma_COM, double &gammaEnergy)
+    //      Instead of defining a particle reaction, you can use this to define a specific beta (v/c) and angle of the recoil.
+    //----------------------------------------------------------------------------------------------------
+    //      beta: beta (v/c) of the recoil particle in the laboratory reference frame.
+    //      thetaRecoil_LAB: the polar angle of the recoil particle in the laboratory reference frame
+    //      thetaGamma_LAB: the polar angle of gamma-ray decay in the laboratory reference frame, where the polar axis is the beam (z) axis
+    //      thetaGamma_COM: the polar angle of gamma-ray decay in the COM reference frame, where the polar axis is the momentum vector of the recoil nucleus.
+    //      gammaEnergy: provide an lvalue double, i.e. a double object which is set to the initial gamma-ray energy in the centre of mass reference frame.
+    //      the value of gammaEnergy is then modified to the relativistically doppler shifted value
+
+    //--------------------------------------------------------------------------------
+    double gammaRayEnergy = 1.0; // MeV
+    double thetaGamma_LAB = 0.0;
+    double phiGamma_LAB = 360.0*G4UniformRand(); // deg
+    double thetaGamma_COM = 0.0;
+    
+    fEventAction->SetInitialParticleKineticEnergy_COM(gammaRayEnergy);
+
+    //Sample_AngularDistribution_GammaDecay_LAB(4.0004090, 12.0, 4.0004090, 12.0, 200.0, 10.0, thetaGamma_LAB, thetaGamma_COM, gammaRayEnergy);
+    Sample_AngularDistribution_GammaDecay_LAB(0.1, 0.0, thetaGamma_LAB, thetaGamma_COM, gammaRayEnergy);
+    
+    G4ThreeVector direction_gamma0(sin(thetaGamma_LAB*deg)*cos(phiGamma_LAB*deg), sin(thetaGamma_LAB*deg)*sin(phiGamma_LAB*deg), cos(thetaGamma_LAB*deg));
+    
+    //--------------------------------------------------------------------------------
+    fParticleGun->SetParticleMomentumDirection(direction_gamma0);
+    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitions given to fParticleGun)
+    fParticleGun->SetParticleEnergy(gammaRayEnergy);
+    
+    fEventAction->SetInitialParticleKineticEnergy(gammaRayEnergy);
+    fEventAction->SetInputDist(0, thetaGamma_LAB);
+    fEventAction->SetInputDist(1, phiGamma_LAB);
+    fEventAction->SetInputDist(2, thetaGamma_COM);
+
+    
+    
     
     ////////////////////////////////////////////////////////////////
     ////    Definition of states/resonances for 9Be(3He, t)9B
@@ -344,20 +433,10 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     */
     
     //--------------------------------------------------------------------
+    /*
     G4double initialParticleKineticEnergy = 0.0*MeV;
     
     int energyN = (int) GetParticleN()/nParticlesPerEnergy;
-    
-    /*
-    if(energyN>=(int initialKineticEnergies.size()))
-    {
-        initialParticleKineticEnergy = 30.0*MeV;
-    }
-    else
-    {
-        initialParticleKineticEnergy = initialKineticEnergies[energyN];
-    }
-    */
     
     if(energyN<((int) initialKineticEnergies.size()))
     {
@@ -370,6 +449,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     fParticleGun->SetParticleEnergy(initialParticleKineticEnergy);
     fEventAction->SetInitialParticleKineticEnergy(initialParticleKineticEnergy);
+    */
     
     //--------------------------------------------------------------------
     /*
@@ -380,7 +460,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     ////////////////////////////////////////////////////
     ////    ISOTROPIC - Inverse Transform Method
-    
+    /*
     G4double theta = acos(1 - (2.0*G4UniformRand()))/deg; // 0.0->180.0
     //G4double theta = acos(1 - (1.0*G4UniformRand()))/deg; // 0.0->90.0 deg
     //G4double theta = acos(1 - (1.0*G4UniformRand() + 1.0))/deg; // 90.0->180.0 deg
@@ -401,7 +481,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
     fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitions given to fParticleGun)
-    
+    */
     
     //fParticleGun->SetParticleMomentumDirection(direction_gamma1);
     //fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitions given to fParticleGun)
