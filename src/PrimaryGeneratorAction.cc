@@ -264,16 +264,15 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4ThreeVector direction_gamma0(sin(thetaGamma_LAB*deg)*cos(phiGamma_LAB*deg), sin(thetaGamma_LAB*deg)*sin(phiGamma_LAB*deg), cos(thetaGamma_LAB*deg));
     
     //--------------------------------------------------------------------------------
-    fParticleGun->SetParticleMomentumDirection(direction_gamma0);
-    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitions given to fParticleGun)
-    fParticleGun->SetParticleEnergy(gammaRayEnergy);
-    
     fEventAction->SetInitialParticleKineticEnergy(gammaRayEnergy);
     fEventAction->SetInputDist(0, thetaGamma_LAB);
     fEventAction->SetInputDist(1, phiGamma_LAB);
     fEventAction->SetInputDist(2, thetaGamma_COM);
 
-    
+    fParticleGun->SetParticleMomentumDirection(direction_gamma0);
+    fParticleGun->SetParticleEnergy(gammaRayEnergy);
+    fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitions given to fParticleGun)
+
     
     
     ////////////////////////////////////////////////////////////////
