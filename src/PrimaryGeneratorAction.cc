@@ -249,7 +249,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //      the value of gammaEnergy is then modified to the relativistically doppler shifted value
 
     //--------------------------------------------------------------------------------
-    double gammaRayEnergy = 4.0; // MeV
+    double gammaRayEnergy = 0.1; // MeV
     double thetaGamma_LAB = 0.0;
     double phiGamma_LAB = 360.0*G4UniformRand(); // deg
     double thetaGamma_COM = 0.0;

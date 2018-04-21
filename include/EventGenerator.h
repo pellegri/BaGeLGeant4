@@ -358,11 +358,12 @@ void Sample_AngularDistribution_GammaDecay_LAB(double A0, double A1, double A2, 
 
     //------------------------------------------------------------
     //      Calculating the kinematics of the recoil nucleus
-    double v_recoil = (p[3]/E[3]);
+    double v_recoil = sqrt(p[3]/E[3]);
     double beta_recoil = v_recoil/sqrt(c2);
     double gamma_recoil = 1.0/sqrt(1-pow(beta_recoil, 2.0));
     
-    double theta_GammaDecay_LAB_relativeToEjectile = acos((cos(thetaGamma_COM*deg) + beta_recoil)/(1 + beta_recoil*cos(thetaGamma_COM*deg)))/deg; // deg
+    //double theta_GammaDecay_LAB_relativeToEjectile = acos((cos(thetaGamma_COM*deg) + beta_recoil)/(1 + beta_recoil*cos(thetaGamma_COM*deg)))/deg; // deg
+    double theta_GammaDecay_LAB_relativeToEjectile = acos((cos(thetaGamma_COM*deg) - abs(beta_recoil))/(1 - abs(beta_recoil)*cos(thetaGamma_COM*deg)))/deg; // deg
     double phi_GammaDecay_LAB_relativeToEjectile = G4RandFlat::shoot(0.0, 360.0); // deg
 
     G4double mx, my, mz;
@@ -406,7 +407,8 @@ void Sample_AngularDistribution_GammaDecay_LAB(double A0, double A1, double A2, 
     
     //----------------------------
     thetaGamma_LAB = acos(gammaDirection_lab.z()/gammaDirection_lab.mag())/deg;
-    gammaEnergy = gammaEnergy/(gamma_recoil*(1 + beta_recoil*cos(theta_GammaDecay_LAB_relativeToEjectile)));
+    //gammaEnergy = gammaEnergy/(gamma_recoil*(1 + beta_recoil*cos(theta_GammaDecay_LAB_relativeToEjectile)));
+    gammaEnergy = gammaEnergy/(gamma_recoil*(1 + beta_recoil*cos(theta_GammaDecay_LAB_relativeToEjectile*deg)));
 }
 
 //============================================================================================================
@@ -430,9 +432,14 @@ void Sample_AngularDistribution_GammaDecay_LAB(double beta, double thetaRecoil_L
     
     //------------------------------------------------------------
     //      Calculating the kinematics of the recoil nucleus
-    double beta_recoil = beta;
+    double beta_recoil = abs(beta);
+    //if(thetaGamma_Lab) beta_recoil = beta;
+    
     double gamma_recoil = 1.0/sqrt(1-pow(beta_recoil, 2.0));
-    double theta_GammaDecay_LAB_relativeToEjectile = acos((cos(thetaGamma_COM*deg) + beta_recoil)/(1 + beta_recoil*cos(thetaGamma_COM*deg)))/deg; // deg
+    double theta_GammaDecay_LAB_relativeToEjectile = acos((cos(thetaGamma_COM*deg) - abs(beta_recoil))/(1 - abs(beta_recoil)*cos(thetaGamma_COM*deg)))/deg; // deg
+    //double theta_GammaDecay_LAB_relativeToEjectile = atan(sin(thetaGamma_COM*deg)/(cos(thetaGamma_COM*deg) + gamma_recoil))/deg; // deg
+    //double theta_GammaDecay_LAB_relativeToEjectile = acos((gamma_recoil + cos(thetaGamma_COM*deg))/sqrt(1 + pow(gamma_recoil, 2.0) + 2.0*gamma_recoil*cos(thetaGamma_COM*deg)))/deg; // deg
+    //double theta_GammaDecay_LAB_relativeToEjectile = acos((gamma_recoil + cos(thetaGamma_COM*deg))/sqrt(1 + pow(gamma_recoil, 2.0) + 2.0*gamma_recoil*cos(thetaGamma_COM*deg)))/deg; // deg
     double phi_GammaDecay_LAB_relativeToEjectile = G4RandFlat::shoot(0.0, 360.0); // deg
 
     G4double mx, my, mz;
@@ -476,7 +483,8 @@ void Sample_AngularDistribution_GammaDecay_LAB(double beta, double thetaRecoil_L
 
     //----------------------------
     thetaGamma_LAB = acos(gammaDirection_lab.z()/gammaDirection_lab.mag())/deg;
-    gammaEnergy = gammaEnergy/(gamma_recoil*(1 + beta_recoil*cos(theta_GammaDecay_LAB_relativeToEjectile)));
+    gammaEnergy = gammaEnergy/(gamma_recoil*(1 + beta_recoil*cos(theta_GammaDecay_LAB_relativeToEjectile*deg)));
+    //gammaEnergy = gammaEnergy*sqrt((1 - beta_recoil)/(1 + beta_recoil));
 }
 
 //============================================================================================================
