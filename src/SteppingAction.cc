@@ -326,6 +326,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
             edepCLOVER_HPGeCrystal = aStep->GetTotalEnergyDeposit()/keV;
             
             fEventAction->AddEnergyCLOVER_HPGeCrystal(CLOVERNo, CLOVER_HPGeCrystalNo, iTS, edepCLOVER_HPGeCrystal);
+            
+            if(!fEventAction->GetCLOVER_InitialInteractionPointLog(CLOVERNo))
+            {
+                fEventAction->SetCLOVER_InitialInteractionPoint(CLOVERNo, preStepPoint->GetPosition());
+                fEventAction->SetCLOVER_InitialInteractionPointLog(CLOVERNo);
+            }
         }
     }
     

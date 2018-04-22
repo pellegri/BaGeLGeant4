@@ -358,7 +358,7 @@ void Sample_AngularDistribution_GammaDecay_LAB(double A0, double A1, double A2, 
 
     //------------------------------------------------------------
     //      Calculating the kinematics of the recoil nucleus
-    double v_recoil = sqrt(p[3]/E[3]);
+    double v_recoil = sqrt(abs(p[3]/E[3]));
     double beta_recoil = v_recoil/sqrt(c2);
     double gamma_recoil = 1.0/sqrt(1-pow(beta_recoil, 2.0));
     

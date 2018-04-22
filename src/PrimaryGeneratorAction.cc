@@ -181,32 +181,42 @@ fEventAction(eventAction)
     //      EPHEMERAL EVENT GENERATOR
     //================================================================================
     
-    //--------------------------------------------------------------------------------
-    //      SetupEventGenerator_DifferentialCrossSection(int distributionNumber);
-    //      distributionNumber == 1: 1 minus PDR
-    //      distributionNumber == 2: 2 plus PDR
-    SetupEventGenerator_DifferentialCrossSection(1, 0.0, 2.0);
+    mutex_EventGeneratorSetup.lock();
     
-    //--------------------------------------------------------------------------------
-    //      SetupEventGenerator_DifferentialCrossSection(double angle)
-    //--------------------------------------------------------------------------------
-    //      angle: the fixed ejectile angle
-    //SetupEventGenerator_SingleEjectileAngle(0.0);
-
-    //--------------------------------------------------------------------------------
-    //      SetupEventGenerator_AngularDistribution_GammaDecay(int distributionNumber)
-    //--------------------------------------------------------------------------------
-    //      distributionNumber == -1: Isotropy
-    //      distributionNumber ==  1: E1 decay
-    //      distributionNumber ==  2: E2 decay
-    SetupEventGenerator_AngularDistribution_GammaDecay(1);
+    static bool eventGeneratorInitialised = false;
     
-    //------------------------------------------------------------------------------------------------
-    //      SetupEventGenerator_SingleAngle_GammaDecay(double theta)
-    //------------------------------------------------------------------------------------------------
-    //      angle: the fixed gamma-ray decay angle (in the centre of mass of the parent particle)
-    //SetupEventGenerator_SingleAngle_GammaDecay(45.0);
+    if(!eventGeneratorInitialised)
+    {
+        //--------------------------------------------------------------------------------
+        //      SetupEventGenerator_DifferentialCrossSection(int distributionNumber);
+        //      distributionNumber == 1: 1 minus PDR
+        //      distributionNumber == 2: 2 plus PDR
+        SetupEventGenerator_DifferentialCrossSection(1, 0.0, 2.0);
+        
+        //--------------------------------------------------------------------------------
+        //      SetupEventGenerator_DifferentialCrossSection(double angle)
+        //--------------------------------------------------------------------------------
+        //      angle: the fixed ejectile angle
+        //SetupEventGenerator_SingleEjectileAngle(0.0);
+        
+        //--------------------------------------------------------------------------------
+        //      SetupEventGenerator_AngularDistribution_GammaDecay(int distributionNumber)
+        //--------------------------------------------------------------------------------
+        //      distributionNumber == -1: Isotropy
+        //      distributionNumber ==  1: E1 decay
+        //      distributionNumber ==  2: E2 decay
+        SetupEventGenerator_AngularDistribution_GammaDecay(1);
+        
+        //------------------------------------------------------------------------------------------------
+        //      SetupEventGenerator_SingleAngle_GammaDecay(double theta)
+        //------------------------------------------------------------------------------------------------
+        //      angle: the fixed gamma-ray decay angle (in the centre of mass of the parent particle)
+        //SetupEventGenerator_SingleAngle_GammaDecay(45.0);
+    }
     
+    eventGeneratorInitialised = true;
+    
+    mutex_EventGeneratorSetup.unlock();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -264,7 +274,10 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4ThreeVector direction_gamma0(sin(thetaGamma_LAB*deg)*cos(phiGamma_LAB*deg), sin(thetaGamma_LAB*deg)*sin(phiGamma_LAB*deg), cos(thetaGamma_LAB*deg));
     
     //--------------------------------------------------------------------------------
-    fEventAction->SetInitialParticleKineticEnergy(gammaRayEnergy);
+    fEventAction->SetInitialParticleKineticEnergy(gammaRayEnergy*1000.0); // MeV
+    fEventAction->SetInitialParticleTheta(thetaGamma_LAB); // MeV
+    fEventAction->SetInitialParticlePhi(phiGamma_LAB); // MeV
+    
     fEventAction->SetInputDist(0, thetaGamma_LAB);
     fEventAction->SetInputDist(1, phiGamma_LAB);
     fEventAction->SetInputDist(2, thetaGamma_COM);

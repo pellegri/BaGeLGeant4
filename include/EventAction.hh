@@ -173,6 +173,11 @@ public:
     void SetInitialParticleKineticEnergy(G4double a) {initialParticleKineticEnergy = a;};
     void SetInitialParticleKineticEnergy_COM(G4double a) {initialParticleKineticEnergy_COM = a;};
     
+    G4double initialParticleTheta;
+    G4double initialParticlePhi;
+    void SetInitialParticleTheta(G4double a) {initialParticleTheta = a;};
+    void SetInitialParticlePhi(G4double a) {initialParticlePhi = a;};
+
     /////////////////////
     //      CAKE
     G4double GainCAKE;
@@ -202,19 +207,32 @@ public:
     G4double GainCLOVER;
     G4double OffsetCLOVER;
     
-    std::vector<int> CLOVER_Number_vec;
-    std::vector<int> CLOVER_NCrystalsTriggered_vec;
+    std::vector<int>    CLOVER_Number_vec;
+    std::vector<int>    CLOVER_NCrystalsTriggered_vec;
     std::vector<double> CLOVER_Energy_vec;
+    std::vector<double> CLOVER_InitialEnergy_vec;
+    std::vector<double> CLOVER_InitialEnergyCOM_vec;
     std::vector<double> CLOVER_EnergyPerCrystal_vec;
     std::vector<double> CLOVER_DetectorTheta_vec;
     std::vector<double> CLOVER_DetectorPhi_vec;
-    std::vector<int> CLOVER_CrystalReflectionIndex_vec;
+    std::vector<int>    CLOVER_CrystalReflectionIndex_vec;
+    std::vector<double> CLOVER_InitialInteractionTheta_vec;
+    std::vector<double> CLOVER_InitialInteractionPhi_vec;
+    std::vector<double> CLOVER_InitialParticleTheta_vec;
+    std::vector<double> CLOVER_InitialParticlePhi_vec;
 
     G4double    CLOVER_HPGeCrystal_EDep[numberOf_CLOVER][4][CLOVER_TotalTimeSamples];
     G4bool      CLOVER_HPGeCrystal_EDepVETO[numberOf_CLOVER][4][CLOVER_TotalTimeSamples];
     G4double    CLOVER_EDep[numberOf_CLOVER][CLOVER_TotalTimeSamples];
     
+    bool            CLOVER_HPGeCrystal_InitialInteractionPointLog[numberOf_CLOVER];
+    G4ThreeVector   CLOVER_HPGeCrystal_InitialInteractionPoint[numberOf_CLOVER];
+    
     void AddEnergyCLOVER_HPGeCrystal(G4int i, G4int j, G4int k, G4double a)	{CLOVER_HPGeCrystal_EDep[i][j][k] += a;};
+    
+    void SetCLOVER_InitialInteractionPoint(int a, G4ThreeVector b) {CLOVER_HPGeCrystal_InitialInteractionPoint[a] = b;};
+    void SetCLOVER_InitialInteractionPointLog(int a) {CLOVER_HPGeCrystal_InitialInteractionPointLog[a] = true;};
+    bool GetCLOVER_InitialInteractionPointLog(int a) {return CLOVER_HPGeCrystal_InitialInteractionPointLog[a];};
     
     std::vector<std::tuple<int, double, double>> angles_CLOVER;
     

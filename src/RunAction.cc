@@ -115,6 +115,9 @@ RunAction::RunAction()
     analysisManager->CreateNtupleDColumn(0, "InitialParticleKineticEnergy");
     analysisManager->CreateNtupleDColumn(0, "InitialParticleKineticEnergy_COM");
     
+    analysisManager->CreateNtupleDColumn(0, "InitialParticleTheta");
+    analysisManager->CreateNtupleDColumn(0, "InitialParticlePhi");
+
     //--------------------------------
     //      CLOVER Detectors
     analysisManager->CreateNtupleIColumn(0, "CLOVER_EventFold");
@@ -122,9 +125,15 @@ RunAction::RunAction()
     analysisManager->CreateNtupleIColumn(0, "CLOVER_Number", CLOVER_iD);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_EnergyPerCrystal", CLOVER_energyPerCrystal);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_Energy", CLOVER_energy);
+    //analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialParticleEnergy", CLOVER_initialEnergy);
+    //analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialParticleEnergy_COM", CLOVER_initialEnergy);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_DetectorTheta", CLOVER_detectorTheta);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_DetectorPhi", CLOVER_detectorPhi);
     analysisManager->CreateNtupleIColumn(0, "CLOVER_CrystalReflectionIndex", CLOVER_CrystalReflectionIndex);
+    analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialInteractionTheta", CLOVER_initialInteractionTheta);
+    analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialInteractionPhi", CLOVER_initialInteractionPhi);
+    analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialParticleTheta", CLOVER_initialInteractionTheta);
+    analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialParticlePhi", CLOVER_initialInteractionPhi);
 
     analysisManager->CreateNtupleIColumn(0, "CLOVER_BGOCrystalsTriggered", CLOVER_BGOCrystalsTriggered);
 

@@ -54,8 +54,10 @@ class EventAction;
 /// can be changed via the G4 build-in commands of G4ParticleGun class
 /// (see the macros provided with this example).
 
-static std::mutex particleN_mutex;  // protects particleN
+static std::mutex mutex_particleN;  // protects particleN
 static int particleN;
+
+static  std::mutex mutex_EventGeneratorSetup;  // protects particleN
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
@@ -114,7 +116,7 @@ private:
 
 inline int PrimaryGeneratorAction::GetParticleN() {
     
-    std::lock_guard<std::mutex> lock(particleN_mutex);
+    std::lock_guard<std::mutex> lock(mutex_particleN);
     return particleN++;
 }
 

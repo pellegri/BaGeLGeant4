@@ -131,10 +131,16 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     CLOVER_Number_vec.clear();
     CLOVER_NCrystalsTriggered_vec.clear();
     CLOVER_Energy_vec.clear();
+    CLOVER_InitialEnergy_vec.clear();
+    CLOVER_InitialEnergyCOM_vec.clear();
     CLOVER_EnergyPerCrystal_vec.clear();
     CLOVER_DetectorTheta_vec.clear();
     CLOVER_DetectorPhi_vec.clear();
     CLOVER_CrystalReflectionIndex_vec.clear();
+    CLOVER_InitialInteractionTheta_vec.clear();
+    CLOVER_InitialInteractionPhi_vec.clear();
+    CLOVER_InitialParticleTheta_vec.clear();
+    CLOVER_InitialParticlePhi_vec.clear();
     
     CLOVER_BGO_Triggered_vec.clear();
     
@@ -159,6 +165,9 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
                 CLOVER_BGO_EDep[i][l][m] = 0;
             }
         }
+        
+        CLOVER_HPGeCrystal_InitialInteractionPoint[i] = G4ThreeVector(0.0, 0.0, 0.0);
+        CLOVER_HPGeCrystal_InitialInteractionPointLog[i] = false;
     }
     
     for(G4int i=0; i<6; i++)
@@ -388,6 +397,9 @@ void EventAction::EndOfEventAction(const G4Event* event)
     analysisManager->FillNtupleDColumn(0, 0, initialParticleKineticEnergy);
     analysisManager->FillNtupleDColumn(0, 1, initialParticleKineticEnergy_COM);
 
+    analysisManager->FillNtupleDColumn(0, 2, initialParticleTheta);
+    analysisManager->FillNtupleDColumn(0, 3, initialParticlePhi);
+
     ////////////////////////////////////////////////////////
     //
     //                CLOVER DETECTOR ARRAY
@@ -404,12 +416,34 @@ void EventAction::EndOfEventAction(const G4Event* event)
             bool triggered_BGOCrystal = false;
             int HPGeCrystalReflectionIndex = 1;
             
+            double initialInteractionTheta, initialInteractionPhi;
+            
             for(G4int j=0; j<4; j++)
             {
                 //  0.849257 corresponds to a 2 keV FWHM
                 //if(G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 0.849257) >= CLOVER_HPGeCrystal_ThresholdEnergy)
                 if(CLOVER_HPGeCrystal_EDep[i][j][k] >= CLOVER_HPGeCrystal_ThresholdEnergy)
                 {
+                    initialInteractionTheta = acos(CLOVER_HPGeCrystal_InitialInteractionPoint[i].z()/sqrt(pow(CLOVER_HPGeCrystal_InitialInteractionPoint[i].x(), 2.0) + pow(CLOVER_HPGeCrystal_InitialInteractionPoint[i].y(), 2.0) + pow(CLOVER_HPGeCrystal_InitialInteractionPoint[i].z(), 2.0)))/deg;
+                    
+                    //----------------------------
+                    if(CLOVER_HPGeCrystal_InitialInteractionPoint[i].x()==0)
+                    {
+                        if(CLOVER_HPGeCrystal_InitialInteractionPoint[i].y()==0) initialInteractionPhi = 0.0;
+                        if(CLOVER_HPGeCrystal_InitialInteractionPoint[i].y()>0) initialInteractionPhi = 90.0;
+                        if(CLOVER_HPGeCrystal_InitialInteractionPoint[i].y()<0) initialInteractionPhi = 270.0;
+                    }
+                    else
+                    {
+                        initialInteractionPhi = atan(CLOVER_HPGeCrystal_InitialInteractionPoint[i].y()/CLOVER_HPGeCrystal_InitialInteractionPoint[i].x())/deg;
+                        
+                        if(CLOVER_HPGeCrystal_InitialInteractionPoint[i].x()>0 && CLOVER_HPGeCrystal_InitialInteractionPoint[i].y()>0) initialInteractionPhi = initialInteractionPhi; // deg
+                        if(CLOVER_HPGeCrystal_InitialInteractionPoint[i].x()<0 && CLOVER_HPGeCrystal_InitialInteractionPoint[i].y()>0) initialInteractionPhi = initialInteractionPhi + 180.; // deg
+                        if(CLOVER_HPGeCrystal_InitialInteractionPoint[i].x()<0 && CLOVER_HPGeCrystal_InitialInteractionPoint[i].y()<0) initialInteractionPhi = initialInteractionPhi + 180.; // deg
+                        if(CLOVER_HPGeCrystal_InitialInteractionPoint[i].x()>0 && CLOVER_HPGeCrystal_InitialInteractionPoint[i].y()<0) initialInteractionPhi = initialInteractionPhi + 360.; // deg
+                    }
+
+                    //----------------------------
                     nCrystalsTriggered++;
                     triggered = true;
                     
@@ -526,9 +560,19 @@ void EventAction::EndOfEventAction(const G4Event* event)
                 CLOVER_Number_vec.push_back(i);
                 CLOVER_NCrystalsTriggered_vec.push_back(nCrystalsTriggered);
                 CLOVER_Energy_vec.push_back(CLOVER_EDep[i][k]);
+                //CLOVER_InitialEnergy_vec.push_back(initialParticleKineticEnergy);
+                //CLOVER_InitialEnergyCOM_vec.push_back(initialParticleKineticEnergy_COM);
                 CLOVER_DetectorTheta_vec.push_back(std::get<1>(angles_CLOVER[i]));
                 CLOVER_DetectorPhi_vec.push_back(std::get<2>(angles_CLOVER[i]));
                 CLOVER_CrystalReflectionIndex_vec.push_back(HPGeCrystalReflectionIndex);
+                CLOVER_InitialInteractionTheta_vec.push_back(initialInteractionTheta);
+                CLOVER_InitialInteractionPhi_vec.push_back(initialInteractionPhi);
+                CLOVER_InitialParticleTheta_vec.push_back(initialParticleTheta);
+                CLOVER_InitialParticlePhi_vec.push_back(initialParticlePhi);
+                
+                initialInteractionTheta = acos(CLOVER_HPGeCrystal_InitialInteractionPoint[i].z()/CLOVER_HPGeCrystal_InitialInteractionPoint[i].mag());
+                initialInteractionPhi = atan(CLOVER_HPGeCrystal_InitialInteractionPoint[i].y()/CLOVER_HPGeCrystal_InitialInteractionPoint[i].x());
+
                 
                 CLOVER_BGO_Triggered_vec.push_back(triggered_BGOCrystal);
                 
@@ -539,15 +583,21 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     if(eventN_CLOVER>0)
     {
-        analysisManager->FillNtupleIColumn(0, 2, eventN_CLOVER);
+        analysisManager->FillNtupleIColumn(0, 4, eventN_CLOVER);
 
         fRunAction->SetCLOVER_IDs(CLOVER_Number_vec);
         fRunAction->SetCLOVER_NCrystalsTriggered(CLOVER_NCrystalsTriggered_vec);
         fRunAction->SetCLOVER_EnergiesPerCrystal(CLOVER_EnergyPerCrystal_vec);
         fRunAction->SetCLOVER_Energies(CLOVER_Energy_vec);
+        //fRunAction->SetCLOVER_InitialEnergies(CLOVER_InitialEnergy_vec);
+        //fRunAction->SetCLOVER_InitialEnergiesCOM(CLOVER_InitialEnergyCOM_vec);
         fRunAction->SetCLOVER_DetectorThetas(CLOVER_DetectorTheta_vec);
         fRunAction->SetCLOVER_DetectorPhis(CLOVER_DetectorPhi_vec);
         fRunAction->SetCLOVER_CrystalReflectionIndices(CLOVER_CrystalReflectionIndex_vec);
+        fRunAction->SetCLOVER_InitialInteractionThetas(CLOVER_InitialInteractionTheta_vec);
+        fRunAction->SetCLOVER_InitialInteractionPhis(CLOVER_InitialInteractionPhi_vec);
+        fRunAction->SetCLOVER_InitialParticleThetas(CLOVER_InitialParticleTheta_vec);
+        fRunAction->SetCLOVER_InitialParticlePhis(CLOVER_InitialParticlePhi_vec);
 
         fRunAction->SetCLOVER_BGOCrystalsTriggered(CLOVER_BGO_Triggered_vec);
         
@@ -661,7 +711,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     if(eventN_LaBr3Ce>0)
     {
-        analysisManager->FillNtupleIColumn(0, 11, eventN_LaBr3Ce);
+        analysisManager->FillNtupleIColumn(0, 17, eventN_LaBr3Ce);
 
         fRunAction->SetLaBr3Ce_IDs(LaBr3Ce_Number_vec);
         fRunAction->SetLaBr3Ce_Energies(LaBr3Ce_Energy_vec);

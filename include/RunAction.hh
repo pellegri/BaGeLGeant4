@@ -76,9 +76,15 @@ public:
     std::vector<int> CLOVER_nCrystalsTriggered;
     std::vector<double> CLOVER_energyPerCrystal;
     std::vector<double> CLOVER_energy;
+    std::vector<double> CLOVER_initialEnergy;
+    std::vector<double> CLOVER_initialEnergy_COM;
     std::vector<double> CLOVER_detectorTheta;
     std::vector<double> CLOVER_detectorPhi;
-    std::vector<int> CLOVER_CrystalReflectionIndex;
+    std::vector<int>    CLOVER_CrystalReflectionIndex;
+    std::vector<double> CLOVER_initialInteractionTheta;
+    std::vector<double> CLOVER_initialInteractionPhi;
+    std::vector<double> CLOVER_initialParticleTheta;
+    std::vector<double> CLOVER_initialParticlePhi;
 
     std::vector<int> CLOVER_BGOCrystalsTriggered;
 
@@ -86,9 +92,15 @@ public:
     void SetCLOVER_NCrystalsTriggered(std::vector<int> vec) {CLOVER_nCrystalsTriggered = vec;};
     void SetCLOVER_EnergiesPerCrystal(std::vector<double> vec) {CLOVER_energyPerCrystal = vec;};
     void SetCLOVER_Energies(std::vector<double> vec) {CLOVER_energy = vec;};
+    void SetCLOVER_InitialEnergies(std::vector<double> vec) {CLOVER_initialEnergy = vec;};
+    void SetCLOVER_InitialEnergiesCOM(std::vector<double> vec) {CLOVER_initialEnergy_COM = vec;};
     void SetCLOVER_DetectorThetas(std::vector<double> vec) {CLOVER_detectorTheta = vec;};
     void SetCLOVER_DetectorPhis(std::vector<double> vec) {CLOVER_detectorPhi = vec;};
     void SetCLOVER_CrystalReflectionIndices(std::vector<int> vec) {CLOVER_CrystalReflectionIndex = vec;};
+    void SetCLOVER_InitialInteractionThetas(std::vector<double> vec) {CLOVER_initialInteractionTheta = vec;};
+    void SetCLOVER_InitialInteractionPhis(std::vector<double> vec) {CLOVER_initialInteractionPhi = vec;};
+    void SetCLOVER_InitialParticleThetas(std::vector<double> vec) {CLOVER_initialParticleTheta = vec;};
+    void SetCLOVER_InitialParticlePhis(std::vector<double> vec) {CLOVER_initialParticlePhi = vec;};
 
     void SetCLOVER_BGOCrystalsTriggered(std::vector<int> vec) {CLOVER_BGOCrystalsTriggered = vec;};
 
