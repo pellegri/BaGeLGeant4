@@ -158,7 +158,7 @@ fEventAction(eventAction)
     
     
     //----------------------------------------------------
-    nParticlesPerEnergy = 5000000;
+    nParticlesPerEnergy = 20000000;
     
     initialKineticEnergies.push_back(100.0*keV);
     initialKineticEnergies.push_back(133.2*keV);
@@ -259,6 +259,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //      the value of gammaEnergy is then modified to the relativistically doppler shifted value
 
     //--------------------------------------------------------------------------------
+    /*
     double gammaRayEnergy = 0.1; // MeV
     double thetaGamma_LAB = 0.0;
     double phiGamma_LAB = 360.0*G4UniformRand(); // deg
@@ -285,7 +286,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
     fParticleGun->SetParticleEnergy(gammaRayEnergy);
     fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitions given to fParticleGun)
-
+    */
     
     
     ////////////////////////////////////////////////////////////////
@@ -447,7 +448,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     */
     
     //--------------------------------------------------------------------
-    /*
+    
     G4double initialParticleKineticEnergy = 0.0*MeV;
     
     int energyN = (int) GetParticleN()/nParticlesPerEnergy;
@@ -463,7 +464,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     fParticleGun->SetParticleEnergy(initialParticleKineticEnergy);
     fEventAction->SetInitialParticleKineticEnergy(initialParticleKineticEnergy);
-    */
+    
     
     //--------------------------------------------------------------------
     /*
@@ -474,7 +475,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     ////////////////////////////////////////////////////
     ////    ISOTROPIC - Inverse Transform Method
-    /*
+    
     G4double theta = acos(1 - (2.0*G4UniformRand()))/deg; // 0.0->180.0
     //G4double theta = acos(1 - (1.0*G4UniformRand()))/deg; // 0.0->90.0 deg
     //G4double theta = acos(1 - (1.0*G4UniformRand() + 1.0))/deg; // 90.0->180.0 deg
@@ -495,7 +496,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     fParticleGun->SetParticleMomentumDirection(direction_gamma0);
     fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitions given to fParticleGun)
-    */
+    
     
     //fParticleGun->SetParticleMomentumDirection(direction_gamma1);
     //fParticleGun->GeneratePrimaryVertex(anEvent); // This generates a particle vertex (essentially produces the particle with all the previous definitions given to fParticleGun)

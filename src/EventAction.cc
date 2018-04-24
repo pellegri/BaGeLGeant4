@@ -840,6 +840,8 @@ void EventAction::EndOfEventAction(const G4Event* event)
             analysisManager->FillNtupleDColumn(2, 0, inputDist[0]);
             analysisManager->FillNtupleDColumn(2, 1, inputDist[1]);
             analysisManager->FillNtupleDColumn(2, 2, inputDist[2]);
+            analysisManager->FillNtupleDColumn(2, 3, initialParticleKineticEnergy);
+            analysisManager->FillNtupleDColumn(2, 4, initialParticleKineticEnergy_COM);
             
             //analysisManager->FillNtupleDColumn(2, 2, theta_projX);
             //analysisManager->FillNtupleDColumn(2, 3, theta_projY);

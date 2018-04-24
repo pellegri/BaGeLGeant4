@@ -620,23 +620,23 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
         std::cout << "): " << smallestPolarAngleDifference << std::endl;
     }
     
-    /*
+    
     for(G4int i=0; i<numberOf_CLOVER; i++)
     {
         CLOVER_Presence[i] = false;
         CLOVER_Shield_Presence[i] = false;
     }
-    */
+    
     
     //----------------------------------------------------------------------------------------------------------------
     //      Used for 25.0 cm displacement (from target to face of CLOVER detector) for benchmarking against Walid
-    /*
+    
     CLOVER_Presence[0] = true;
     CLOVER_Shield_Presence[0] = false;
     CLOVER_Distance[0] = (25.0-7.3)*cm;
     CLOVER_phi[0] = 0*deg;
     CLOVER_theta[0] = 0*deg;
-    */
+    
     
     
     /*
@@ -2686,6 +2686,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     G4LogicalVolume * Logic_CLOVER_InternalVacuum[numberOf_CLOVER];
     G4LogicalVolume * Logic_CLOVER_Encasement;
     G4LogicalVolume * Logic_CLOVER_HPGeCrystal[4];
+    G4LogicalVolume * Logic_CLOVER_HPGeCrystal_LithiumContact[4];
     
     bool useCLOVER = false;
     
@@ -2771,12 +2772,39 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         Logic_CLOVER_HPGeCrystal[3] = new G4LogicalVolume(Solid_HPGeCrystal4, G4_Ge_Material,"LogicCLOVERHPGeCrystal",0,0,0);
         
         G4VisAttributes* CLOVER_HPGeCrystals_VisAtt = new G4VisAttributes(G4Colour(0.9, 0.9, 0.0));
-        CLOVER_InternalVacuum_VisAtt->SetForceSolid(true);
-        
+        //CLOVER_HPGeCrystals_VisAtt->SetForceSolid(true);
+
         Logic_CLOVER_HPGeCrystal[0]->SetVisAttributes(CLOVER_HPGeCrystals_VisAtt);
         Logic_CLOVER_HPGeCrystal[1]->SetVisAttributes(CLOVER_HPGeCrystals_VisAtt);
         Logic_CLOVER_HPGeCrystal[2]->SetVisAttributes(CLOVER_HPGeCrystals_VisAtt);
         Logic_CLOVER_HPGeCrystal[3]->SetVisAttributes(CLOVER_HPGeCrystals_VisAtt);
+        
+        //////////////////////////////////////////////////////////////////////
+        //              CLOVER HPGeCrystals - Lithium contacts - CADMesh
+
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_LithiumContact1_10um.ply");
+        CADMesh * mesh_CLOVERHPGeCrystal1_LithiumContact = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal1, false);
+
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_LithiumContact2_10um.ply");
+        CADMesh * mesh_CLOVERHPGeCrystal2_LithiumContact = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal2, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_LithiumContact3_10um.ply");
+        CADMesh * mesh_CLOVERHPGeCrystal3_LithiumContact = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal3, false);
+        
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_LithiumContact4_10um.ply");
+        CADMesh * mesh_CLOVERHPGeCrystal4_LithiumContact = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal4, false);
+
+        G4VSolid * Solid_HPGeCrystal1_LithiumContact = mesh_CLOVERHPGeCrystal1_LithiumContact->TessellatedMesh();
+        G4VSolid * Solid_HPGeCrystal2_LithiumContact = mesh_CLOVERHPGeCrystal2_LithiumContact->TessellatedMesh();
+        G4VSolid * Solid_HPGeCrystal3_LithiumContact = mesh_CLOVERHPGeCrystal3_LithiumContact->TessellatedMesh();
+        G4VSolid * Solid_HPGeCrystal4_LithiumContact = mesh_CLOVERHPGeCrystal4_LithiumContact->TessellatedMesh();
+
+        Logic_CLOVER_HPGeCrystal_LithiumContact[0] = new G4LogicalVolume(Solid_HPGeCrystal1_LithiumContact, G4_Li_Material,"LogicCLOVERHPGeCrystal_LithiumContact",0,0,0);
+        Logic_CLOVER_HPGeCrystal_LithiumContact[1] = new G4LogicalVolume(Solid_HPGeCrystal2_LithiumContact, G4_Li_Material,"LogicCLOVERHPGeCrystal_LithiumContact",0,0,0);
+        Logic_CLOVER_HPGeCrystal_LithiumContact[2] = new G4LogicalVolume(Solid_HPGeCrystal3_LithiumContact, G4_Li_Material,"LogicCLOVERHPGeCrystal_LithiumContact",0,0,0);
+        Logic_CLOVER_HPGeCrystal_LithiumContact[3] = new G4LogicalVolume(Solid_HPGeCrystal4_LithiumContact, G4_Li_Material,"LogicCLOVERHPGeCrystal_LithiumContact",0,0,0);
+
+        
         
         //------------------------------------
         //      Lithium doped layer
@@ -2793,6 +2821,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
             CLOVER_DeadLayer_Lithium_VisAtt->SetForceSolid(true);
             Logic_CLOVER_LithiumDeadLayer_cylinder->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
             Logic_CLOVER_LithiumDeadLayer_flatCap->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+            Logic_CLOVER_HPGeCrystal_LithiumContact[j]->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
             
             //------------------------------------------------
             G4ThreeVector position_LithiumDeadLayer_cylinder;
@@ -2862,7 +2891,8 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
             test++;
             */
             
-            //------------------------------------------------
+            //----------------------------------------------------------------------------
+            //      Placement for lithium contact created through boolean operations
             /*
              new G4PVPlacement(0,               // no rotation
              position_LithiumDeadLayer_cylinder, // at (x,y,z)
@@ -2873,6 +2903,17 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
              0,               // copy number
              fCheckOverlaps); // checking overlaps
              */
+            
+            //----------------------------------------------------------------
+            //      Placement for lithium contact created through CADMesh
+            new G4PVPlacement(0,               // no rotation
+                              G4ThreeVector(), // at (x,y,z)
+                              Logic_CLOVER_HPGeCrystal_LithiumContact[j],
+                              "CLOVER_HPGeLithiumDopedDeadlayer", // its name
+                              Logic_CLOVER_HPGeCrystal[j],
+                              false,           // no boolean operations
+                              0,               // copy number
+                              fCheckOverlaps); // checking overlaps
         }
     }
     

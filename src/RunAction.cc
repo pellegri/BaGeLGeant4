@@ -183,7 +183,9 @@ RunAction::RunAction()
     analysisManager->CreateNtupleDColumn(2, "ThetaDist");
     analysisManager->CreateNtupleDColumn(2, "PhiDist");
     analysisManager->CreateNtupleDColumn(2, "ThetaDist_COM");
-    
+    analysisManager->CreateNtupleDColumn(2, "InitialParticleKineticEnergy");
+    analysisManager->CreateNtupleDColumn(2, "InitialParticleKineticEnergy_COM");
+
     //analysisManager->CreateNtupleDColumn(2, "ThetaDist_projX");
     //analysisManager->CreateNtupleDColumn(2, "ThetaDist_projY");
 
