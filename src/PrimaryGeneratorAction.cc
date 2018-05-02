@@ -448,7 +448,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     */
     
     //--------------------------------------------------------------------
-    
+    /*
     G4double initialParticleKineticEnergy = 0.0*MeV;
     
     int energyN = (int) GetParticleN()/nParticlesPerEnergy;
@@ -464,13 +464,13 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     fParticleGun->SetParticleEnergy(initialParticleKineticEnergy);
     fEventAction->SetInitialParticleKineticEnergy(initialParticleKineticEnergy);
-    
+    */
     
     //--------------------------------------------------------------------
-    /*
+    
     fParticleGun->SetParticleEnergy(1.0*MeV);
     fEventAction->SetInitialParticleKineticEnergy(1.0*MeV);
-    */
+    
     
 
     ////////////////////////////////////////////////////

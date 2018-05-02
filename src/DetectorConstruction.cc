@@ -630,14 +630,24 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     
     //----------------------------------------------------------------------------------------------------------------
     //      Used for 25.0 cm displacement (from target to face of CLOVER detector) for benchmarking against Walid
-    
+    /*
     CLOVER_Presence[0] = true;
     CLOVER_Shield_Presence[0] = false;
     CLOVER_Distance[0] = (25.0-7.3)*cm;
     CLOVER_phi[0] = 0*deg;
     CLOVER_theta[0] = 0*deg;
+    */
     
     
+    //----------------------------------------------------------------------------------------------------------------
+    //      Used for 10.6 cm displacement (from the front face of the HEAVIMET collimator to the source)
+    
+    CLOVER_Presence[0] = true;
+    CLOVER_Shield_Presence[0] = false;
+    CLOVER_Distance[0] = 10.6*cm;
+    CLOVER_phi[0] = 0*deg;
+    CLOVER_theta[0] = 0*deg;
+
     
     /*
     CLOVER_Presence[0] = true;
