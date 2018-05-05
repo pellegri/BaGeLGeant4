@@ -363,7 +363,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CLOVER_AllAbsent_Override = false;
     
     CLOVER_Shield_AllPresent_Override = false;
-    CLOVER_Shield_AllAbsent_Override = true;
+    CLOVER_Shield_AllAbsent_Override = false;
     
     //--------------------------------
     useCLOVER_Walid = false;
@@ -643,7 +643,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //      Used for 10.6 cm displacement (from the front face of the HEAVIMET collimator to the source)
     
     CLOVER_Presence[0] = true;
-    CLOVER_Shield_Presence[0] = false;
+    CLOVER_Shield_Presence[0] = true;
     CLOVER_Distance[0] = 10.6*cm;
     CLOVER_phi[0] = 0*deg;
     CLOVER_theta[0] = 0*deg;
@@ -2981,8 +2981,29 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         ///////////////////////////////////////////////////////
         
         //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield.ply");
+        
+        //--------------------------------------------------------------------------------------------------------------------
+        //      The "original" HEAVIMET shield for the AFRODITE array.
+        //      The "_Modified" suffix of the .ply filename is because it is has been negligibly altered to avoid geometry overlaps (with a tolerance of 10um)
         //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield_Modified.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_40mm_mod_10um.ply");
+        
+        //--------------------------------------------------------------------------------------------------------------------
+        //      The "40mm" HEAVIMET shield Paul drew before 05/05/18
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_40mm_mod_10um.ply");
+        
+        //--------------------------------------------------------------------------------------------------------------------
+        //      The new HEAVIMET drawings to optomize the HEAVIMET acceptance with respec to the peak-to-total ratios
+        //      Models implemented on 05/05/18 and range from 30mm to 50mm in 2.5mm steps
+        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_30mm.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_32_5mm.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_35mm.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_37_5mm.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_40mm.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_42_5mm.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_45mm.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_47_5mm.ply");
+        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_50mm.ply");
+        
         CADMesh * mesh_CLOVER_Shield_Heavimet = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_Heavimet, false);
         
         G4VSolid * Solid_CLOVER_Shield_Heavimet = mesh_CLOVER_Shield_Heavimet->TessellatedMesh();
