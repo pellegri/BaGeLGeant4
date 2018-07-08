@@ -360,10 +360,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     ////    CLOVER SETUP
     
     CLOVER_AllPresent_Override = false;
-    CLOVER_AllAbsent_Override = false;
+    CLOVER_AllAbsent_Override = true;
     
     CLOVER_Shield_AllPresent_Override = false;
-    CLOVER_Shield_AllAbsent_Override = false;
+    CLOVER_Shield_AllAbsent_Override = true;
     
     //--------------------------------
     useCLOVER_Walid = false;
@@ -620,13 +620,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
         std::cout << "): " << smallestPolarAngleDifference << std::endl;
     }
     
-    
+    /*
     for(G4int i=0; i<numberOf_CLOVER; i++)
     {
         CLOVER_Presence[i] = false;
         CLOVER_Shield_Presence[i] = false;
     }
-    
+    */
     
     //----------------------------------------------------------------------------------------------------------------
     //      Used for 25.0 cm displacement (from target to face of CLOVER detector) for benchmarking against Walid
@@ -641,13 +641,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     
     //----------------------------------------------------------------------------------------------------------------
     //      Used for 10.6 cm displacement (from the front face of the HEAVIMET collimator to the source)
-    
+    /*
     CLOVER_Presence[0] = true;
     CLOVER_Shield_Presence[0] = true;
     CLOVER_Distance[0] = 10.6*cm;
     CLOVER_phi[0] = 0*deg;
     CLOVER_theta[0] = 0*deg;
-
+    */
     
     /*
     CLOVER_Presence[0] = true;
@@ -754,7 +754,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     
     
     LaBr3Ce_AllPresent_Override = false;
-    LaBr3Ce_AllAbsent_Override = true;
+    LaBr3Ce_AllAbsent_Override = false;
     
     /*
     LaBr3CeSetupVersion = 1;
@@ -772,9 +772,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     LaBr3Ce_Distance[0] = 0.0*cm;
     */
     
+    
     //------------------------------------------------
     //      PRECONFIGURED SETUPS
     
+    //      Work for Christiaan/Mathis/Katarzyna
+    SetupPreconfiguredVersion(-1);
+
     //  No tapering
     //  LaBR3Ce_GlobalDistance = 13.2*cm;
     //SetupPreconfiguredVersion(0);
@@ -3851,6 +3855,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     ////        LaBr3Ce DEFINITION          ////
     ////////////////////////////////////////////
 
+    
     double LaBr3Ce_encasement_innerRadius = 45.0; // mm
     double LaBr3Ce_encasement_outerRadius = 50.0; // mm
 
@@ -3862,12 +3867,40 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     
     double crystalBase_outerRadius = 45.0; // mm
     double LaBr3Ce_window_axialLength = 5.0; // mm
-
+    
+    
+    //----------------------------------------------------
+    //      Work for Christiaan/Mathis/Katarzyna
+    /*
+    double LaBr3Ce_encasement_innerRadius = 45.1; // mm
+    double LaBr3Ce_encasement_outerRadius = 50.0; // mm
+    
+    double LaBe3CeCrystal_cone_innerRadius;
+    double LaBe3CeCrystal_cone_outerRadius;
+    
+    double LaBr3Ce_encasement_cone_innerRadius;
+    double LaBr3Ce_encasement_cone_outerRadius = LaBr3Ce_encasement_outerRadius;
+    
+    double crystalBase_outerRadius = 45.0; // mm
+    double LaBr3Ce_window_axialLength = 5.0; // mm
+    */
+    
+    /*
+    LaBr3Ce_encasement_innerRadius = ;
+    LaBr3Ce_encasement_outerRadius = (89.0/2.0) + 5.0;; // mm
+    crystalBase_outerRadius = (89.0/2.0); // mm
+    */
+    
     //----------------------------------------------------
     //  This sets the tapering
     //----------------------------------------------------
     
-    if(LaBr3CeSetupVersion==0)
+    if(LaBr3CeSetupVersion==-1)
+    {
+        //      No tapering
+        LaBe3CeCrystal_cone_outerRadius = crystalBase_outerRadius; // mm
+    }
+    else if(LaBr3CeSetupVersion==0)
     {
         //      No tapering
         LaBe3CeCrystal_cone_outerRadius = crystalBase_outerRadius; // mm
@@ -3907,7 +3940,12 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     //////////////////////////////////////////////////////
     double LaBr3Ce_crystal_axialLength = 203.0; // mm
     double LaBr3Ce_crystalCone_axialLength;
-    if(LaBr3CeSetupVersion==0)
+
+    if(LaBr3CeSetupVersion==-1)
+    {
+        LaBr3Ce_crystalCone_axialLength = 20.0; // mm
+    }
+    else if(LaBr3CeSetupVersion==0)
     {
         LaBr3Ce_crystalCone_axialLength = 20.0; // mm
     }
@@ -3969,7 +4007,11 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     }
     
     G4LogicalVolume* Logic_LaBr3Ce_Window;
-    if(LaBr3CeSetupVersion==0)
+    if(LaBr3CeSetupVersion==-1)
+    {
+        Logic_LaBr3Ce_Window = new G4LogicalVolume(Solid_LaBr3Ce_Window, G4_Al_Material, "Logic_LaBr3Ce_Window", 0, 0, 0);
+    }
+    else if(LaBr3CeSetupVersion==0)
     {
         Logic_LaBr3Ce_Window = new G4LogicalVolume(Solid_LaBr3Ce_Window, G4_Al_Material, "Logic_LaBr3Ce_Window", 0, 0, 0);
     }
@@ -4001,6 +4043,10 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     {
         if(setPreconfiguredVersion)
         {
+            if(LaBr3CeSetupVersion==-1)
+            {
+                Logic_LaBr3Ce_InternalVacuum[i] = new G4LogicalVolume(Solid_LaBr3Ce_InternalVacuum, G4_Galactic_Material, "LogicLaBr3CeInternalVacuum", 0, 0, 0);
+            }
             if(LaBr3CeSetupVersion==0)
             {
                 Logic_LaBr3Ce_InternalVacuum[i] = new G4LogicalVolume(Solid_LaBr3Ce_InternalVacuum, G4_Galactic_Material, "LogicLaBr3CeInternalVacuum", 0, 0, 0);
@@ -4072,7 +4118,42 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //LaBr3Ce_InternalVacuum_position[i] = (13.2*cm + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*G4ThreeVector(std::sin(LaBr3Ce_theta[i]) * std::cos(LaBr3Ce_phi[i]), std::sin(LaBr3Ce_theta[i]) * std::sin(LaBr3Ce_phi[i]), std::cos(LaBr3Ce_theta[i]));
         //LaBr3Ce_InternalVacuum_position[i] = (8.9632*cm + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*G4ThreeVector(std::sin(LaBr3Ce_theta[i]) * std::cos(LaBr3Ce_phi[i]), std::sin(LaBr3Ce_theta[i]) * std::sin(LaBr3Ce_phi[i]), std::cos(LaBr3Ce_theta[i]));
         
-        if(i>=20)
+        if(setPreconfiguredVersion && LaBr3CeSetupVersion==-1)
+        {
+            //  LaBr3Ce 1
+            LaBr3Ce_Presence[0] = true;
+            LaBr3Ce_Distance[0] = 246.4*mm;
+            LaBr3Ce_theta[0] = 90.0*deg;
+            LaBr3Ce_phi[0] = 151.0*deg;
+            
+            //  LaBr3Ce 2
+            LaBr3Ce_Presence[1] = true;
+            LaBr3Ce_Distance[1] = 247.65*mm;
+            LaBr3Ce_theta[1] = 135.0*deg;
+            LaBr3Ce_phi[1] = 180.0*deg;
+            
+            //  LaBr3Ce 3
+            LaBr3Ce_Presence[2] = true;
+            LaBr3Ce_Distance[2] = 217.8*mm;
+            LaBr3Ce_theta[2] = 135.0*deg;
+            LaBr3Ce_phi[2] = 0.0*deg;
+            
+            //  LaBr3Ce 4
+            LaBr3Ce_Presence[3] = true;
+            LaBr3Ce_Distance[3] = 236.8*mm;
+            LaBr3Ce_theta[3] = 90.0*deg;
+            LaBr3Ce_phi[3] = 62.0*deg;
+            
+            double x = std::sin(LaBr3Ce_theta[i])*std::cos(LaBr3Ce_phi[i]);
+            double y = std::sin(LaBr3Ce_theta[i])*std::sin(LaBr3Ce_phi[i]);
+            double z = std::cos(LaBr3Ce_theta[i]);
+            G4ThreeVector positionDetector(x, y, z);
+            
+            LaBr3Ce_InternalVacuum_position[i] = (LaBr3Ce_Distance[i] + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*positionDetector.unit();
+            
+            //LaBr3Ce_InternalVacuum_position[i] = (LaBr3Ce_Distance[i] + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*G4ThreeVector(std::sin(LaBr3Ce_theta[i]) * std::cos(LaBr3Ce_phi[i]), std::sin(LaBr3Ce_theta[i]) * std::sin(LaBr3Ce_phi[i]), std::cos(LaBr3Ce_theta[i]));
+        }
+        else if(setPreconfiguredVersion && LaBr3CeSetupVersion>=0 && i>=20)
         {
             G4double pentagonalDistance;
             
@@ -5004,7 +5085,12 @@ void DetectorConstruction::SetupPreconfiguredVersion(int a)
     LaBR3Ce_automaticOrientation = true;
     configuration_truncatedIcosahedron_hexagons = true;
 
-    if(LaBr3CeSetupVersion==0)
+    if(LaBr3CeSetupVersion==-1)
+    {
+        //--------------------------------
+        //      Work for Christiaan/Mathis/Katarzyna
+    }
+    else if(LaBr3CeSetupVersion==0)
     {
         //  Full cylindrical crystal (untapered)
         LaBR3Ce_GlobalDistance = 13.2*cm;

@@ -102,7 +102,8 @@ const G4int     numberOf_PADDLE = 3;
 const G4int     numberOf_LEPS = 6;
 
 ///////////////     LEPS LaBr3Ce     ///////////////////
-const G4int     numberOf_LaBr3Ce = 20;
+//const G4int     numberOf_LaBr3Ce = 20;
+const G4int     numberOf_LaBr3Ce = 4;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

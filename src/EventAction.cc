@@ -726,12 +726,12 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     //--------------------------------------------------------------------------------
     //      Combined data taking for both the LaBr3Ce and CLOVER detectors
-    /*
+    
     if(eventN_LaBr3Ce>0 || eventN_CLOVER>0)
     {
         analysisManager->AddNtupleRow(0);
     }
-    */
+    
     
 
     

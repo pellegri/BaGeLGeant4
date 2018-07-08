@@ -158,6 +158,7 @@ fEventAction(eventAction)
     
     
     //----------------------------------------------------
+    /*
     nParticlesPerEnergy = 20000000;
     
     initialKineticEnergies.push_back(100.0*keV);
@@ -173,9 +174,24 @@ fEventAction(eventAction)
     initialKineticEnergies.push_back(10.0*MeV);
     initialKineticEnergies.push_back(13.32*MeV);
     initialKineticEnergies.push_back(20.0*MeV);
-
+    */
+    
     //- gamma energies are 100, 133.2, 200, 400, 700, 1000, 1332, 2000, 4000, 7000, 10000, 13320, 20000 keV
 
+    
+    //----------------------------------------------------
+    nEnergies += 200;
+    nParticlesPerEnergy = 2000000; // 400000000 particles to be simulated
+    
+    double energyMin = 0.0;
+    double energyMax = 10.0;
+    double energyDivision = ((energyMax-energyMin)/nEnergies);
+    
+    for(int i=0; i<nEnergies; i++)
+    {
+        initialKineticEnergies.push_back(((i+1)*energyDivision)*MeV);
+    }
+    
     
     //================================================================================
     //      EPHEMERAL EVENT GENERATOR
@@ -448,7 +464,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     */
     
     //--------------------------------------------------------------------
-    /*
+    
     G4double initialParticleKineticEnergy = 0.0*MeV;
     
     int energyN = (int) GetParticleN()/nParticlesPerEnergy;
@@ -464,12 +480,12 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     fParticleGun->SetParticleEnergy(initialParticleKineticEnergy);
     fEventAction->SetInitialParticleKineticEnergy(initialParticleKineticEnergy);
-    */
+    
     
     //--------------------------------------------------------------------
     
-    fParticleGun->SetParticleEnergy(1.0*MeV);
-    fEventAction->SetInitialParticleKineticEnergy(1.0*MeV);
+    //fParticleGun->SetParticleEnergy(1.0*MeV);
+    //fEventAction->SetInitialParticleKineticEnergy(1.0*MeV);
     
     
 
