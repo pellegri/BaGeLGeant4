@@ -359,11 +359,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     ////////////////////////////
     ////    CLOVER SETUP
     
-    CLOVER_AllPresent_Override = true;
+    CLOVER_AllPresent_Override = false;
     CLOVER_AllAbsent_Override = false;
     
     CLOVER_Shield_AllPresent_Override = false;
-    CLOVER_Shield_AllAbsent_Override = true;
+    CLOVER_Shield_AllAbsent_Override = false;
     
     //--------------------------------
     useCLOVER_Walid = false;
@@ -753,7 +753,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //      MANUAL SETUP: Unneccesary if SetupPreconfiguredVersion() is used
     
     
-    LaBr3Ce_AllPresent_Override = false;
+    LaBr3Ce_AllPresent_Override = true;
     LaBr3Ce_AllAbsent_Override = false;
     
     /*
@@ -772,6 +772,31 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     LaBr3Ce_Distance[0] = 0.0*cm;
     */
     
+    /*
+    //  LaBr3Ce 1
+    LaBr3Ce_Presence[0] = true;
+    LaBr3Ce_Distance[0] = 246.4*mm;
+    LaBr3Ce_theta[0] = 90.0*deg;
+    LaBr3Ce_phi[0] = 151.0*deg;
+    
+    //  LaBr3Ce 2
+    LaBr3Ce_Presence[1] = true;
+    LaBr3Ce_Distance[1] = 247.65*mm;
+    LaBr3Ce_theta[1] = 135.0*deg;
+    LaBr3Ce_phi[1] = 180.0*deg;
+    
+    //  LaBr3Ce 3
+    LaBr3Ce_Presence[2] = true;
+    LaBr3Ce_Distance[2] = 217.8*mm;
+    LaBr3Ce_theta[2] = 135.0*deg;
+    LaBr3Ce_phi[2] = 0.0*deg;
+    
+    //  LaBr3Ce 4
+    LaBr3Ce_Presence[3] = true;
+    LaBr3Ce_Distance[3] = 236.8*mm;
+    LaBr3Ce_theta[3] = 90.0*deg;
+    LaBr3Ce_phi[3] = 62.0*deg;
+    */
     
     //------------------------------------------------
     //      PRECONFIGURED SETUPS
@@ -810,8 +835,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //  LaBR3Ce_GlobalDistance = 10.0*cm;
     //SetupPreconfiguredVersion(9);
 
+    //  LaBR3Ce_GlobalDistance = 12.0*cm;
+    SetupPreconfiguredVersion(10);
+
     //------------------------------------------------
-    
     
     for(G4int i=0; i<numberOf_LaBr3Ce; i++)
     {
@@ -5184,7 +5211,10 @@ void DetectorConstruction::SetupPreconfiguredVersion(int a)
     {
         LaBR3Ce_GlobalDistance = 10.0*cm;
     }
-
+    else if(LaBr3CeSetupVersion==10)
+    {
+        LaBR3Ce_GlobalDistance = 12.0*cm;
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
