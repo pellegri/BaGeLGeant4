@@ -359,8 +359,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     ////////////////////////////
     ////    CLOVER SETUP
     
-    CLOVER_AllPresent_Override = false;
-    CLOVER_AllAbsent_Override = true;
+    CLOVER_AllPresent_Override = true;
+    CLOVER_AllAbsent_Override = false;
     
     CLOVER_Shield_AllPresent_Override = false;
     CLOVER_Shield_AllAbsent_Override = true;
@@ -777,7 +777,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //      PRECONFIGURED SETUPS
     
     //      Work for Christiaan/Mathis/Katarzyna
-    SetupPreconfiguredVersion(-1);
+    //SetupPreconfiguredVersion(-1);
 
     //  No tapering
     //  LaBR3Ce_GlobalDistance = 13.2*cm;
@@ -954,6 +954,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //  K600 Target Backing
     K600_TargetBacking_Presence = false;
     
+    ////////////////////////////////////////////////
+    ////    New AFRODITE Target Chamber by Mathis
+    AFRODITE_MathisTC_Presence = false;
+
     
     // Define materials
     DefineMaterials();
@@ -1248,7 +1252,56 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     }
     
     
+    //////////////////////////////////////////////////////////
+    //              Scattering Chamber - CADMesh
+    //////////////////////////////////////////////////////////
     
+    if(AFRODITE_MathisTC_Presence)
+    {
+        G4ThreeVector offset_MathisTC = G4ThreeVector(0*cm, 0*cm, 0*cm);
+        
+        CADMesh * mesh_MathisTC = new CADMesh("../K600-ALBA/Mesh-Models/STRUCTURES/MathisTC/MathisTC.ply", "PLY", mm, offset_MathisTC, false);
+        
+        G4VSolid * SolidMathisTC = mesh_MathisTC->TessellatedMesh();
+        
+        G4LogicalVolume* LogicMathisTC = new G4LogicalVolume(SolidMathisTC, G4_Al_Material, "BACTAR", 0, 0, 0);
+        
+        /*
+        new G4PVPlacement(0,               // no rotation
+                          G4ThreeVector(), // at (x,y,z)
+                          LogicMathisTC,       // its logical volume
+                          "BACTAR",       // its name
+                          LogicVacuumChamber,         // its mother  volume
+                          false,           // no boolean operations
+                          0,               // copy number
+                          fCheckOverlaps); // checking overlaps
+        */
+        
+        //------------------------------------------------
+        //      Work for Christiaan/Mathis/Katarzyna
+
+        G4RotationMatrix    AFRODITE_MathisTC_rotm;
+        G4ThreeVector       AFRODITE_MathisTC_position = G4ThreeVector();
+
+        AFRODITE_MathisTC_rotm.rotateZ(-90.0*deg);
+        
+        G4Transform3D AFRODITE_MathisTC_transform = G4Transform3D(AFRODITE_MathisTC_rotm, AFRODITE_MathisTC_position);
+
+        new G4PVPlacement(AFRODITE_MathisTC_transform,
+                          LogicMathisTC,       // its logical volume
+                          "BACTAR",       // its name
+                          LogicVacuumChamber,         // its mother  volume
+                          false,           // no boolean operations
+                          0,               // copy number
+                          fCheckOverlaps); // checking overlaps
+        
+        
+        //  Visualisation
+        G4VisAttributes* AFRODITE_MathisTC_VisAtt = new G4VisAttributes(G4Colour(0.8,0.8,0.8));
+        AFRODITE_MathisTC_VisAtt->SetForceSolid(true);
+        LogicMathisTC->SetVisAttributes(AFRODITE_MathisTC_VisAtt);
+    }
+
     
     //////////////////////////////////////////////////////////
     //                  TARGET DEFINITION
@@ -3855,7 +3908,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     ////        LaBr3Ce DEFINITION          ////
     ////////////////////////////////////////////
 
-    
+    /*
     double LaBr3Ce_encasement_innerRadius = 45.0; // mm
     double LaBr3Ce_encasement_outerRadius = 50.0; // mm
 
@@ -3867,11 +3920,11 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     
     double crystalBase_outerRadius = 45.0; // mm
     double LaBr3Ce_window_axialLength = 5.0; // mm
-    
+    */
     
     //----------------------------------------------------
     //      Work for Christiaan/Mathis/Katarzyna
-    /*
+    
     double LaBr3Ce_encasement_innerRadius = 45.1; // mm
     double LaBr3Ce_encasement_outerRadius = 50.0; // mm
     
@@ -3883,7 +3936,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     
     double crystalBase_outerRadius = 45.0; // mm
     double LaBr3Ce_window_axialLength = 5.0; // mm
-    */
+    
     
     /*
     LaBr3Ce_encasement_innerRadius = ;

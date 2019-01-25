@@ -180,11 +180,11 @@ fEventAction(eventAction)
 
     
     //----------------------------------------------------
-    nEnergies += 200;
-    nParticlesPerEnergy = 2000000; // 400000000 particles to be simulated
+    nEnergies += 30;
+    nParticlesPerEnergy = 1000000; // 50000000 particles to be simulated
     
     double energyMin = 0.0;
-    double energyMax = 10.0;
+    double energyMax = 6.0;
     double energyDivision = ((energyMax-energyMin)/nEnergies);
     
     for(int i=0; i<nEnergies; i++)

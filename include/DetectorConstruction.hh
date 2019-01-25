@@ -479,6 +479,9 @@ private:
     //  K600 Target Backing
     G4bool      K600_TargetBacking_Presence;
     
+    /////////////////////////////////////
+    //  K600 AFRODITE "Mathis" Target Chamber
+    G4bool      AFRODITE_MathisTC_Presence;
 };
 
 // inline functions
