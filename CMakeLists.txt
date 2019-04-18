@@ -33,14 +33,19 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 # CADMesh
-find_package(cadmesh)
+#find_package(cadmesh REQUIRED)
+include_directories(${cadmesh_DIR}/include)
+
+get_property(inc_dirs DIRECTORY PROPERTY INCLUDE_DIRECTORIES)
+message(“inc_dirs = ” ${inc_dirs})
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(ALBA K600.cc ${sources} ${headers})
 target_link_libraries(ALBA ${Geant4_LIBRARIES})
-target_link_libraries(ALBA ${cadmesh_LIBRARIES})
+#target_link_libraries(ALBA ${cadmesh_LIBRARIES})
+target_link_libraries(ALBA -L${cadmesh_DIR}/lib cadmesh assimp tet)
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
