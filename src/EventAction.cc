@@ -583,6 +583,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     if(eventN_CLOVER>0)
     {
+        //G4cout << "EvAct - line 586" << G4endl;
         analysisManager->FillNtupleIColumn(0, 4, eventN_CLOVER);
 
         fRunAction->SetCLOVER_IDs(CLOVER_Number_vec);
