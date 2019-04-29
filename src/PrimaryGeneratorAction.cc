@@ -180,16 +180,16 @@ fEventAction(eventAction)
 
     
     //----------------------------------------------------
-    nEnergies += 30;
-    nParticlesPerEnergy = 1000000; // 50000000 particles to be simulated
+    nEnergies += 20;
+    nParticlesPerEnergy = 2000000; // 20000000 particles to be simulated
     
-    double energyMin = 0.0;
-    double energyMax = 6.0;
-    double energyDivision = ((energyMax-energyMin)/nEnergies);
+    double energyMin = 0.5;
+    double energyMax = 10.0;
+    double energyDivision = ((energyMax-energyMin)/(nEnergies-1));
     
     for(int i=0; i<nEnergies; i++)
     {
-        initialKineticEnergies.push_back(((i+1)*energyDivision)*MeV);
+        initialKineticEnergies.push_back(((i*energyDivision) + energyMin)*MeV);
     }
     
     

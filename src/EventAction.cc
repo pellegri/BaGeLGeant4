@@ -602,7 +602,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
 
         fRunAction->SetCLOVER_BGOCrystalsTriggered(CLOVER_BGO_Triggered_vec);
         
-        analysisManager->AddNtupleRow(0);
+      //  analysisManager->AddNtupleRow(0);
     }
     
 
