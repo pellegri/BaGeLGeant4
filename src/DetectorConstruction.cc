@@ -439,6 +439,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CLOVER_theta[8] = 90*deg;
     */
     
+    /*
+    /////////////////// PR251 configuration ////////////////////////
+
     //  CLOVER 1 - R1
     CLOVER_Presence[0] = true;
     CLOVER_Shield_Presence[0] = false;
@@ -557,7 +560,131 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CLOVER_Distance[16] = 10.6*cm;
     CLOVER_phi[16] = 216*deg;
     CLOVER_theta[16] = 30.63*deg;
-
+*/
+    
+    
+    /////////////////// PR298 configuration ////////////////////////
+    
+     //  CLOVER 1 - R1
+     CLOVER_Presence[0] = true;
+     CLOVER_Shield_Presence[0] = false;
+     CLOVER_Distance[0] = 18.5*cm;
+     CLOVER_phi[0] = 149*deg;
+     CLOVER_theta[0] = 90*deg;
+ 
+     //  CLOVER 2 - R2
+     CLOVER_Presence[1] = true;
+     CLOVER_Shield_Presence[1] = false;
+     CLOVER_Distance[1] = 18.5*cm;
+     CLOVER_phi[1] = 180*deg;
+     CLOVER_theta[1] = 90*deg;
+     
+     //  CLOVER 3 - R3
+     CLOVER_Presence[2] = true;
+     CLOVER_Shield_Presence[2] = false;
+     CLOVER_Distance[2] = 18.5*cm;
+     CLOVER_phi[2] = 211*deg;
+     CLOVER_theta[2] = 90*deg;
+     
+     //  CLOVER 4 - R4
+     CLOVER_Presence[3] = true;
+     CLOVER_Shield_Presence[3] = false;
+     CLOVER_Distance[3] = 18.5*cm;
+     CLOVER_phi[3] = 155*deg;
+     CLOVER_theta[3] = 120*deg;
+     
+     //  CLOVER 5 - R5
+     CLOVER_Presence[4] = true;
+     CLOVER_Shield_Presence[4] = false;
+     CLOVER_Distance[4] = 18.5*cm;
+     CLOVER_phi[4] = 205*deg;
+     CLOVER_theta[4] = 120*deg;
+     
+     //  CLOVER 6 - R6
+     CLOVER_Presence[5] = true;
+     CLOVER_Shield_Presence[5] = false;
+     CLOVER_Distance[5] = 18.0*cm;
+     CLOVER_phi[5] = 180*deg;
+     CLOVER_theta[5] = 155*deg;
+ 
+     //  CLOVER 7 - L1
+     CLOVER_Presence[6] = true;
+     CLOVER_Shield_Presence[6] = false;
+     CLOVER_Distance[6] = 18.5*cm;
+     CLOVER_phi[6] = 30*deg;
+     CLOVER_theta[6] = 90*deg;
+ 
+     //  CLOVER 8 - L2
+     CLOVER_Presence[7] = true;
+     CLOVER_Shield_Presence[7] = false;
+     CLOVER_Distance[7] = 18.5*cm;
+     CLOVER_phi[7] = 0*deg;
+     CLOVER_theta[7] = 90*deg;
+     
+     //  CLOVER 9 - L3
+     CLOVER_Presence[8] = true;
+     CLOVER_Shield_Presence[8] = false;
+     CLOVER_Distance[8] = 18.5*cm;
+     CLOVER_phi[8] = 330*deg;
+     CLOVER_theta[8] = 90*deg;
+     
+     //  CLOVER 10 - L4
+     CLOVER_Presence[9] = true;
+     CLOVER_Shield_Presence[9] = false;
+     CLOVER_Distance[9] = 18.5*cm;
+     CLOVER_phi[9] = 25*deg;
+     CLOVER_theta[9] = 120*deg;
+     
+     //  CLOVER 11 - L5
+     CLOVER_Presence[10] = true;
+     CLOVER_Shield_Presence[10] = false;
+     CLOVER_Distance[10] = 18.5*cm;
+     CLOVER_phi[10] = 335*deg;
+     CLOVER_theta[10] = 120*deg;
+     
+     //  CLOVER 12 - L6
+     CLOVER_Presence[11] = true;
+     CLOVER_Shield_Presence[11] = false;
+     CLOVER_Distance[11] = 18.0*cm;
+     CLOVER_phi[11] = 0*deg;
+     CLOVER_theta[11] = 155.0*deg;
+  
+     //  CLOVER 13
+     CLOVER_Presence[12] = false;
+     CLOVER_Shield_Presence[12] = false;
+     CLOVER_Distance[12] = 10.6*cm;
+     CLOVER_phi[12] = 108*deg;
+     CLOVER_theta[12] = 153,0*deg;
+     
+     //  CLOVER 14
+     CLOVER_Presence[13] = false;
+     CLOVER_Shield_Presence[13] = false;
+     CLOVER_Distance[13] = 10.6*cm;
+     CLOVER_phi[13] = 180.*deg;
+     CLOVER_theta[13] = 149.37*deg;
+     
+     //  CLOVER 15
+     CLOVER_Presence[14] = false;
+     CLOVER_Shield_Presence[14] = false;
+     CLOVER_Distance[14] = 10.6*cm;
+     CLOVER_phi[14] = 252*deg;
+     CLOVER_theta[14] = 135.62*deg;
+     
+     //  CLOVER 16
+     CLOVER_Presence[15] = false;
+     CLOVER_Shield_Presence[15] = false;
+     CLOVER_Distance[15] = 10.6*cm;
+     CLOVER_phi[15] = 324*deg;
+     CLOVER_theta[15] = 149.37*deg;
+     
+     //  CLOVER 17
+     CLOVER_Presence[16] = false;
+     CLOVER_Shield_Presence[16] = false;
+     CLOVER_Distance[16] = 10.6*cm;
+     CLOVER_phi[16] = 216*deg;
+     CLOVER_theta[16] = 30.63*deg;
+   
+    //////////////////////////////////////////////////////////////
     
     for(G4int i=0; i<numberOf_CLOVER; i++)
     {
@@ -773,6 +900,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     */
     
     
+    /*
+    /////////////////// PR251 configuration ////////////////////////
+    
     //  LaBr3Ce 1
     LaBr3Ce_Presence[0] = true;
     LaBr3Ce_Distance[0] = 281.0*mm;
@@ -796,6 +926,35 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     LaBr3Ce_Distance[3] = 236.8*mm;
     LaBr3Ce_theta[3] = 90.0*deg;
     LaBr3Ce_phi[3] = 62.0*deg;
+   */
+    
+    
+     /////////////////// PR298 configuration ////////////////////////
+
+     //  LaBr3Ce 1
+     LaBr3Ce_Presence[0] = false;
+     LaBr3Ce_Distance[0] = 281.0*mm;
+     LaBr3Ce_theta[0] = 315*deg;
+     LaBr3Ce_phi[0] = 0.0*deg;
+     
+     //  LaBr3Ce 2
+     LaBr3Ce_Presence[1] = false;
+     LaBr3Ce_Distance[1] = 243.0*mm;
+     LaBr3Ce_theta[1] = 270.0*deg;
+     LaBr3Ce_phi[1] = 35.0*deg;
+     
+     //  LaBr3Ce 3
+     LaBr3Ce_Presence[2] = false;
+     LaBr3Ce_Distance[2] = 217.8*mm;
+     LaBr3Ce_theta[2] = 135.0*deg;
+     LaBr3Ce_phi[2] = 0.0*deg;
+     
+     //  LaBr3Ce 4
+     LaBr3Ce_Presence[3] = false;
+     LaBr3Ce_Distance[3] = 236.8*mm;
+     LaBr3Ce_theta[3] = 90.0*deg;
+     LaBr3Ce_phi[3] = 62.0*deg;
+  
     
     
     //------------------------------------------------
@@ -955,11 +1114,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     
     ////////////////////////////////////////////////
     ////    New K600 Target Chamber - New scattering chamber, both sides on
-    K600_BACTAR_sidesOn_Presence = true;
+    K600_BACTAR_sidesOn_Presence = false;
     
     ////////////////////////////////////////////////
     ////    New K600 Target Chamber - New scattering chamber, both sides off
-    K600_BACTAR_sidesOff_Presence = false;
+    K600_BACTAR_sidesOff_Presence = true;
     
     ////////////////////////////////////////////////
     ////    New K600 Target Chamber - New scattering chamber, beam left side side off
@@ -3417,13 +3576,14 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         G4ThreeVector requiredFinalXaxis;
         
         //      Sides of the detector to be parallel to the vertical axis
-        requiredFinalXaxis = positionVector.cross(initialYAxis).unit();
+ //------> //   requiredFinalXaxis = positionVector.cross(initialYAxis).unit();
         //      Detector orientated to be along constant-phi lines
-        //requiredFinalXaxis = G4ThreeVector(-sin(CLOVER_phi[i]*deg), cos(CLOVER_phi[i]*deg), 0.0); // Unit vector of phi
-       // requiredFinalXaxis = G4ThreeVector(cos(CLOVER_theta[i])*cos(CLOVER_phi[i]), cos(CLOVER_theta[i])*sin(CLOVER_phi[i]), -sin(CLOVER_theta[i])); // unit vector of theta
+       // requiredFinalXaxis = G4ThreeVector(-sin(CLOVER_phi[i]*deg), cos(CLOVER_phi[i]*deg), 0.0); // Unit vector of phi
+        requiredFinalXaxis = G4ThreeVector(cos(CLOVER_theta[i])*cos(CLOVER_phi[i]), cos(CLOVER_theta[i])*sin(CLOVER_phi[i]), -sin(CLOVER_theta[i])); // unit vector of theta
 
         G4double requiredRotationAngle = rotatedXAxis.angle(requiredFinalXaxis)/deg;
-        
+        G4double requiredRotationAngle_L9 = -30;
+        G4double requiredRotationAngle_L10 = 30;
         
         
         if(CLOVER_Presence[i])
@@ -3439,8 +3599,18 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         
         G4RotationMatrix rotm_AlongDetectorAxis(positionVector, (requiredRotationAngle)*deg);
         
+        
         //CLOVER_rotm[i] = rotm_AlongDetectorAxis*rotmPrime;
         CLOVER_rotm[i] = rotmPrime.transform(rotm_AlongDetectorAxis);
+        if(CLOVER_rotm[i]==CLOVER_rotm[9]){
+        G4RotationMatrix rotm_AlongDetectorAxis(positionVector, (requiredRotationAngle_L9)*deg);
+        CLOVER_rotm[9] = rotmPrime.transform(rotm_AlongDetectorAxis);
+        }
+        if(CLOVER_rotm[i]==CLOVER_rotm[10]){
+            G4RotationMatrix rotm_AlongDetectorAxis(positionVector, (requiredRotationAngle_L10)*deg);
+            CLOVER_rotm[10] = rotmPrime.transform(rotm_AlongDetectorAxis);
+        }
+        
         
         
         //--------------------------------------------
