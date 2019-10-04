@@ -931,30 +931,36 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     
      /////////////////// PR298 configuration ////////////////////////
 
-     //  LaBr3Ce 1
-     LaBr3Ce_Presence[0] = false;
-     LaBr3Ce_Distance[0] = 281.0*mm;
-     LaBr3Ce_theta[0] = 315*deg;
-     LaBr3Ce_phi[0] = 0.0*deg;
+     //  LaBr3Ce 1 - #51
+     LaBr3Ce_Presence[0] = true;
+     LaBr3Ce_Distance[0] = 200.0*mm;
+     LaBr3Ce_phi[0] = 159.0*deg;
+     LaBr3Ce_theta[0] = 45.0*deg;
+    
      
-     //  LaBr3Ce 2
-     LaBr3Ce_Presence[1] = false;
-     LaBr3Ce_Distance[1] = 243.0*mm;
-     LaBr3Ce_theta[1] = 270.0*deg;
-     LaBr3Ce_phi[1] = 35.0*deg;
+     //  LaBr3Ce 2 - #52
+     LaBr3Ce_Presence[1] = true;
+     LaBr3Ce_Distance[1] = 200.0*mm;
+     LaBr3Ce_phi[1] = 205.0*deg;
+     LaBr3Ce_theta[1] = 45.0*deg;
+    
+     //  LaBr3Ce 3 - #48
+     LaBr3Ce_Presence[2] = true;
+     LaBr3Ce_Distance[2] = 250.0*mm;
+     LaBr3Ce_phi[2] = 90.0*deg;
+     LaBr3Ce_theta[2] = 90.0*deg;
      
-     //  LaBr3Ce 3
-     LaBr3Ce_Presence[2] = false;
-     LaBr3Ce_Distance[2] = 217.8*mm;
-     LaBr3Ce_theta[2] = 135.0*deg;
-     LaBr3Ce_phi[2] = 0.0*deg;
-     
-     //  LaBr3Ce 4
-     LaBr3Ce_Presence[3] = false;
-     LaBr3Ce_Distance[3] = 236.8*mm;
-     LaBr3Ce_theta[3] = 90.0*deg;
-     LaBr3Ce_phi[3] = 62.0*deg;
+     //  LaBr3Ce 4 - #49
+     LaBr3Ce_Presence[3] = true;
+     LaBr3Ce_Distance[3] = 200.0*mm;
+     LaBr3Ce_phi[3] = 90.0*deg;
+     LaBr3Ce_theta[3] = 135.0*deg;
   
+     //  LaBr3Ce 5 - #50
+     LaBr3Ce_Presence[4] = true;
+     LaBr3Ce_Distance[4] = 200.0*mm;
+     LaBr3Ce_phi[4] = 270.0*deg;
+     LaBr3Ce_theta[4] = 135.0*deg;
     
     
     //------------------------------------------------
